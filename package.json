@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.6",
     "daisyui": "^5.0.35",
     "firebase": "^11.7.1",
     "gadgtzone1": "file:",
@@ -17,6 +18,7 @@
     "match-sorter": "^8.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.56.3",
     "react-router-dom": "^7.6.0",
     "sort-by": "^1.2.0"
   },
