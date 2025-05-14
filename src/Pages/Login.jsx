@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"; // ✅ v2 style
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+
+
 
 
 
@@ -15,7 +17,7 @@ export default function Login() {
     const onSubmit = (data) => {
         // Handle login here
         console.log("Login Data:", data);
-        const name = data.name 
+        const name = data.name
         const email = data.email
     };
 
