@@ -1,12 +1,65 @@
-# React + Vite
+# ⚡ ElectroShop – Electronics E-Commerce Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ElectroShop is a full-stack e-commerce platform built for selling electronics such as PC components, mobile phones, laptops, and accessories. It features a customer-facing storefront and powerful admin dashboard for managing products, orders, and users.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live Demo
 
-## Expanding the ESLint configuration
+🔗 [Coming Soon](#)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 📌 Features
+
+### 🛒 User Dashboard
+- User registration & login (JWT-based)
+- Profile management
+- Add to cart & wishlist
+- Place orders & track status
+- View order history
+- Product reviews & ratings
+
+### 🧑‍💼 Admin Dashboard
+- Admin authentication
+- Manage products (add, edit, delete)
+- Category & brand management
+- View and manage all user accounts
+- Order processing with status updates
+- Sales and product reports
+
+### 🧰 General Features
+- Mobile responsive design
+- Product filtering & search
+- Multiple payment options (COD, Stripe, etc.)
+- Product discount system
+- SEO-friendly pages
+- Secure API with role-based access
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend:
+- React.js
+- Tailwind CSS
+- Axios
+- React Router
+
+### Backend:
+- Node.js
+- Express.js
+- MongoDB (Mongoose)
+- JWT (Authentication)
+- Cloudinary (Image storage)
+
+### Others:
+- Stripe / SSLCommerz (Payments)
+- Vercel (Frontend Hosting)
+- Render / Railway (Backend Hosting)
+- Firebase / Cloudinary (Image upload)
+
+---
+
+## 📁 Project Structure (Basic)
+
