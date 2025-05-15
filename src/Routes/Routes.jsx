@@ -1,7 +1,4 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "../Layouts/MainLayout";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
@@ -13,18 +10,18 @@ export const router = createBrowserRouter([
     element: <MainLayout></MainLayout>,
     children: [
       {
-        path: '/',
-        element: <Home></Home>, 
-        loader: ()=> fetch('FeaturedCategory.json')
-      }
-    ]
+        path: "/",
+        element: <Home></Home>,
+        loader: () => fetch("FeaturedCategory.json"),
+      },
+      {
+        path: "account/login",
+        element: <Login></Login>,
+      },
+      {
+        path: "account/register",
+        element: <Register></Register>,
+      },
+    ],
   },
-  {
-    path: '/login',
-    element: <Login></Login>
-  }, 
-  {
-    path: '/register', 
-    element: <Register></Register>
-  }
 ]);

@@ -32,7 +32,7 @@ function Login() {
   };
 
   const handleGoogleSign = async () => {
-    try {
+    try {a
       const res = await GoogleLogin();
       console.log(res.user);
       toast.success("Logged in with Google");
@@ -44,76 +44,94 @@ function Login() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md space-y-4 bg-white p-10 shadow-lg mt-10">
-      <h1 className="text-3xl font-semibold">Login</h1>
+    <div>
+    {/* left side er route */}
+    <div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Email */}
-        <div className="space-y-2 text-sm text-zinc-800">
-          <label htmlFor="email" className="block font-medium">
-            Email*
-          </label>
+    </div>
+      <div className="mx-auto w-full max-w-md  bg-white p-10 shadow-lg my-28">
+        <h1 className="text-xl ">Account Login</h1>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Email */}
+          <div className="space-y-2 text-sm text-zinc-800">
+            <label htmlFor="email" className="block font-medium">
+              Email*
+            </label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              {...register("email", { required: true })}
+              className="w-full rounded-md border px-3 py-2 focus:ring-1 focus:outline-none"
+            />
+            {errors.email && (
+              <span className="text-red-600">Email is required</span>
+            )}
+          </div>
+
+          {/* Password */}
+          <div className="space-y-2 text-sm text-zinc-800">
+            <label htmlFor="password" className="block font-medium">
+              Password*
+            </label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              {...register("password", { required: true })}
+              className="w-full rounded-md border px-3 py-2 focus:ring-1 focus:outline-none"
+            />
+            {errors.password && (
+              <span className="text-red-600">Password is required</span>
+            )}
+          </div>
+
           <input
-            id="email"
-            type="email"
-            placeholder="Enter your email"
-            {...register("email", { required: true })}
-            className="w-full rounded-md border px-3 py-2 focus:ring-1 focus:outline-none"
+            type="submit"
+            value={loading ? "Logging in..." : "Login"}
+            disabled={loading}
+            className={`w-full rounded-md bg-teal-600 hover:bg-teal-700 px-4 py-2 text-white transition-colors ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           />
-          {errors.email && <span className="text-red-600">Email is required</span>}
+        </form>
+
+        <p className="text-center text-sm text-zinc-800">
+          Don’t have an account?{" "}
+          <Link to="/account/register" className="font-semibold underline">
+            Register
+          </Link>
+        </p>
+
+        <div className="my-8 flex items-center">
+          <hr className="flex-1 border-gray-400" />
+          <div className="mx-4 text-gray-400">OR</div>
+          <hr className="flex-1 border-gray-400" />
         </div>
 
-        {/* Password */}
-        <div className="space-y-2 text-sm text-zinc-800">
-          <label htmlFor="password" className="block font-medium">
-            Password*
-          </label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Enter your password"
-            {...register("password", { required: true })}
-            className="w-full rounded-md border px-3 py-2 focus:ring-1 focus:outline-none"
-          />
-          {errors.password && <span className="text-red-600">Password is required</span>}
+        <div className="flex justify-center space-x-4">
+          <button
+            onClick={handleGoogleSign}
+            aria-label="Log in with Google"
+            className="rounded-full p-3 border hover:bg-gray-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 32 32"
+              className="h-5 w-5"
+            >
+              <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z" />
+            </svg>
+          </button>
         </div>
 
-        <input
-          type="submit"
-          value={loading ? "Logging in..." : "Login"}
-          disabled={loading}
-          className={`w-full rounded-md bg-teal-600 hover:bg-teal-700 px-4 py-2 text-white transition-colors ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+        <ToastContainer
+          position="top-center"
+          autoClose={1500}
+          hideProgressBar
         />
-      </form>
-
-      <p className="text-center text-sm text-zinc-800">
-        Don’t have an account?{" "}
-        <Link to="/register" className="font-semibold underline">
-          Register
-        </Link>
-      </p>
-
-      <div className="my-8 flex items-center">
-        <hr className="flex-1 border-gray-400" />
-        <div className="mx-4 text-gray-400">OR</div>
-        <hr className="flex-1 border-gray-400" />
       </div>
-
-      <div className="flex justify-center space-x-4">
-        <button
-          onClick={handleGoogleSign}
-          aria-label="Log in with Google"
-          className="rounded-full p-3 border hover:bg-gray-200"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="h-5 w-5">
-            <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z" />
-          </svg>
-        </button>
-      </div>
-
-      <ToastContainer position="top-center" autoClose={1500} hideProgressBar />
     </div>
   );
 }

@@ -73,8 +73,8 @@ function Register() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md space-y-4 bg-white p-10 shadow-lg mt-10">
-      <h1 className="text-3xl font-semibold">Create Account</h1>
+    <div className="mx-auto w-full max-w-md  bg-white p-10 shadow-lg my-28">
+      <h1 className="text-xl space-y-2">Register Account</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Name */}
         <div className="space-y-2 text-sm text-zinc-800">
@@ -166,7 +166,7 @@ function Register() {
 
       <p className="text-center text-sm text-zinc-800">
         Already have an account?{' '}
-        <Link to="/login" className="font-semibold underline">
+        <Link to="/account/login" className="font-semibold underline">
           Sign In
         </Link>
       </p>

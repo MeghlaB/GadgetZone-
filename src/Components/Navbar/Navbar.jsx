@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { FaSearch, FaUser, FaGift, FaBolt } from 'react-icons/fa';
 import { HiMenu, HiX } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -43,10 +44,10 @@ const Navbar = () => {
             <FaBolt />
             <span className="text-sm">Happy Hour</span>
           </div>
-          <div className="hidden md:flex items-center gap-1">
+          <Link to={'/account/login'} className="hidden md:flex items-center gap-1">
             <FaUser />
             <span className="text-sm">Account</span>
-          </div>
+          </Link>
           <button className="bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-1 rounded-md text-sm font-semibold">
             PC Builder
           </button>
