@@ -10,7 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 
-import UseAxiosPublic from "../Hooks/UseAxiosPublic";
+
 import { auth } from "../Firebase/firebase.config";
 
 export const AuthContext = createContext(null);
@@ -19,7 +19,7 @@ export const AuthContext = createContext(null);
 const provider = new GoogleAuthProvider();
 
 function AuthProvider({ children }) {
-  const axiosPublic = UseAxiosPublic()
+
   const [user, setuser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -80,39 +80,10 @@ useEffect(() => {
   });
 
   return () => unsubscribe();
-}, [axiosPublic]);
+}, []);
 
 
  
-
-  //   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-  //     setIsLoading(false)
-  //     if (currentUser) {
-
-  //       setUser(currentUser);
-  //       // get token and store client
-  //       const userInfo = { email: currentUser.email }
-  //       axiosPublic.post('/jwt', userInfo)
-  //         .then(res => {
-  //           // console.log(res.data)
-  //           if (res.data.token) {
-  //             setIsLoading(false)
-  //             localStorage.setItem('access-token', res.data.token)
-  //           }
-  //         })
-  //     }
-  //     else {
-  //       // TODO: remove token (if token stored in the client side: Local storage, caching, in memory)
-  //       setIsLoading(false)
-  //       localStorage.removeItem('access-token');
-  //     }
-  //     // console.log('Current User ==>', currentUser);
-  //     setIsLoading(false)
-  //   });
-
-  //   // Cleanup function for onAuthStateChanged
-  //   return () => unsubscribe();
-  // }, [axiosPublic]);
   const authInfo = {
     user,
     loading,
@@ -124,13 +95,14 @@ useEffect(() => {
   };
   return (
     <AuthContext.Provider value={authInfo}>
-    {loading ? (
+    {children}
+    {/* {loading ? (
       <div className="fixed inset-0 flex justify-center items-center bg-accent bg-opacity-50">
         <span className="loading loading-dots loading-lg"></span>
       </div>
     ) : (
       children
-    )}
+    )} */}
   </AuthContext.Provider>
   );
 }
