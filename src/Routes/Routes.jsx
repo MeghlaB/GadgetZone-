@@ -5,6 +5,7 @@ import {
 import MainLayout from "../Layouts/MainLayout";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
+import Home from "../Pages/Home";
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +14,8 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-
+        element: <Home></Home>, 
+        loader: ()=> fetch('FeaturedCategory.json')
       }
     ]
   },

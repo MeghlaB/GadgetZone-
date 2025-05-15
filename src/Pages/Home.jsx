@@ -1,0 +1,18 @@
+import React from 'react';
+import Banner from '../Components/Banner/Banner';
+import FeaturedCategory from '../Components/FeaturedCategory/FeaturedCategory';
+
+const Home = () => {
+    return (
+        <div>
+            <div>
+                <Banner></Banner>
+            </div>
+            <div>
+                <FeaturedCategory></FeaturedCategory>
+            </div>
+        </div>
+    );
+};
+
+export default Home;
