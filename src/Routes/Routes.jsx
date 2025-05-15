@@ -3,6 +3,21 @@ import MainLayout from "../Layouts/MainLayout";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import Home from "../Pages/Home";
+import Desktop from "../Shared/Desktop/Desktop";
+import Laptop from "../Shared/Laptop/Laptop";
+import Component from "../Shared/Component/Component";
+import Monitor from "../Shared/Monitor/Monitor";
+import UPS from "../Shared/UPS/UPS";
+import Phone from "../Shared/Phone/Phone";
+import Tablet from "../Shared/Tablet/Tablet";
+import OfficeEqupment from "../Shared/Office_Equpement/OfficeEqupment";
+import Camera from "../Shared/Camera/Camera";
+import Sequrity from "../Shared/Sequrity/Sequrity";
+import Networking from "../Shared/Networking/Networking";
+import Tv from "../Shared/Tv/Tv";
+import Gamming from "../Shared/Gamming/Gamming";
+import Software from "../Shared/Software/Software";
+import Gadget from "../Shared/Gadget/Gadget";
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +36,67 @@ export const router = createBrowserRouter([
       {
         path: "account/register",
         element: <Register></Register>,
+      },
+      // submenu category
+      {
+        path:'/desktop',
+        element:<Desktop/>
+      },
+      {
+        path:'/laptop',
+        element:<Laptop/>
+      },
+      {
+        path:'/component',
+        element:<Component/>
+      },
+      {
+        path:'/monitor',
+        element:<Monitor/>
+      },
+      {
+        path:'/ups',
+        element:<UPS/>
+      },
+      {
+        path:'/phone',
+        element:<Phone/>
+      },
+      {
+        path:'/tablet',
+        element:<Tablet/>
+      },
+      {
+        path:'/office-equipment',
+        element:<OfficeEqupment/>
+      },
+      {
+        path:'/camera',
+        element:<Camera/>
+      },
+      {
+        path:'/security',
+        element:<Sequrity/>
+      },
+      {
+        path:'/networking',
+        element:<Networking/>
+      },
+      {
+        path:'/tv',
+        element:<Tv/>
+      },
+      {
+        path:'/gaming',
+        element:<Gamming/>
+      },
+      {
+        path:'/software',
+        element:<Software/>
+      },
+      {
+        path:'/gadget',
+        element:<Gadget/>
       },
     ],
   },

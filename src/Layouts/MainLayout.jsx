@@ -11,7 +11,9 @@ const MainLayout = () => {
   return (
     <div>
       {noHeaderFooter || <Navbar></Navbar>}
-      <Outlet></Outlet>
+       <div className="min-h-[calc(100vh-288px)] mb-20">
+        <Outlet />
+      </div>
       {noHeaderFooter || <Footer></Footer>}
     </div>
   );

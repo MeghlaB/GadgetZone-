@@ -7,11 +7,28 @@ import { Link } from 'react-router-dom';
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const categories = [
-    'Desktop', 'Laptop', 'Component', 'Monitor', 'UPS', 'Phone',
-    'Tablet', 'Office Equipment', 'Camera', 'Security', 'Networking',
-    'Software', 'Server & Storage', 'Accessories', 'Gadget', 'Gaming', 'TV', 'Appliance'
-  ];
+const categories = [
+  { name: 'Desktop', path: '/desktop' },
+  { name: 'Laptop', path: '/laptop' },
+  { name: 'Component', path: '/component' },
+  { name: 'Monitor', path: '/monitor' },
+  { name: 'UPS', path: '/ups' },
+  { name: 'Phone', path: '/phone' },
+  { name: 'Tablet', path: '/tablet' },
+  { name: 'Office Equipment', path: '/office-equipment' },
+  { name: 'Camera', path: '/camera' },
+  { name: 'Security', path: '/security' },
+  { name: 'Networking', path: '/networking' },
+  { name: 'Software', path: '/software' },
+  { name: 'Server & Storage', path: '/server-storage' },
+  { name: 'Accessories', path: '/accessories' },
+  { name: 'Gadget', path: '/gadget' },
+  { name: 'Gaming', path: '/gaming' },
+  { name: 'TV', path: '/tv' },
+  { name: 'Appliance', path: '/appliance' },
+ 
+];
+
 
   return (
     <div className="w-full fixed z-50 top-0">
@@ -72,19 +89,18 @@ const Navbar = () => {
       </div>
 
       {/* Sticky Categories */}
-      <div className="bg-white px-4 py-2 shadow-md sticky top-0 z-40">
-        <div className={`overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${menuOpen ? 'block' : 'hidden'} md:flex`}>
-          {categories.map((cat, index) => (
-            <a
-              href="#"
-              key={index}
-              className="text-sm font-medium hover:text-blue-500 whitespace-nowrap"
-            >
-              {cat}
-            </a>
-          ))}
-        </div>
-      </div>
+      <div className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${menuOpen ? 'block' : 'hidden'} md:flex`}>
+  {categories.map((cat, index) => (
+    <Link
+      to={cat.path}
+      key={index}
+      className="text-sm font-medium hover:text-blue-500 whitespace-nowrap"
+    >
+      {cat.name}
+    </Link>
+  ))}
+</div>
+
     </div>
   );
 };
