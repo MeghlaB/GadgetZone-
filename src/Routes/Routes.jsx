@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
-        loader: () => fetch("FeaturedCategory.json"),
+    
       },
       {
         path: "account/login",
@@ -39,64 +39,64 @@ export const router = createBrowserRouter([
       },
       // submenu category
       {
-        path:'/desktop',
-        element:<Desktop/>
+        path: "/desktop",
+        element: <Desktop />,
       },
       {
-        path:'/laptop',
-        element:<Laptop/>
+        path: "/laptop",
+        element: <Laptop />,
       },
       {
-        path:'/component',
-        element:<Component/>
+        path: "/component",
+        element: <Component />,
       },
       {
-        path:'/monitor',
-        element:<Monitor/>
+        path: "/monitor",
+        element: <Monitor />,
       },
       {
-        path:'/ups',
-        element:<UPS/>
+        path: "/ups",
+        element: <UPS />,
       },
       {
-        path:'/phone',
-        element:<Phone/>
+        path: "/phone",
+        element: <Phone />,
       },
       {
-        path:'/tablet',
-        element:<Tablet/>
+        path: "/tablet",
+        element: <Tablet />,
       },
       {
-        path:'/office-equipment',
-        element:<OfficeEqupment/>
+        path: "/office-equipment",
+        element: <OfficeEqupment />,
       },
       {
-        path:'/camera',
-        element:<Camera/>
+        path: "/camera",
+        element: <Camera />,
       },
       {
-        path:'/security',
-        element:<Sequrity/>
+        path: "/security",
+        element: <Sequrity />,
       },
       {
-        path:'/networking',
-        element:<Networking/>
+        path: "/networking",
+        element: <Networking />,
       },
       {
-        path:'/tv',
-        element:<Tv/>
+        path: "/tv",
+        element: <Tv />,
       },
       {
-        path:'/gaming',
-        element:<Gamming/>
+        path: "/gaming",
+        element: <Gamming />,
       },
       {
-        path:'/software',
-        element:<Software/>
+        path: "/software",
+        element: <Software />,
       },
       {
-        path:'/gadget',
-        element:<Gadget/>
+        path: "/gadget",
+        element: <Gadget />,
       },
     ],
   },

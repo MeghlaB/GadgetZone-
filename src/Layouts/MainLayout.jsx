@@ -10,11 +10,13 @@ const MainLayout = () => {
     console.log(noHeaderFooter)
   return (
     <div>
-      {noHeaderFooter || <Navbar></Navbar>}
+    <Navbar></Navbar>
+      {/* {noHeaderFooter || <Navbar></Navbar>} */}
        <div className="min-h-[calc(100vh-288px)] mb-20">
         <Outlet />
       </div>
-      {noHeaderFooter || <Footer></Footer>}
+      <Footer></Footer>
+      {/* {noHeaderFooter || <Footer></Footer>} */}
     </div>
   );
 };

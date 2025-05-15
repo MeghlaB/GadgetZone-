@@ -8,6 +8,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
 const categories = [
+  { name: 'Home', path: '/' },
   { name: 'Desktop', path: '/desktop' },
   { name: 'Laptop', path: '/laptop' },
   { name: 'Component', path: '/component' },
