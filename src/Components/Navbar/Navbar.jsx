@@ -1,50 +1,109 @@
 
-import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { useState } from 'react';
+import { FaSearch, FaUser, FaGift, FaBolt } from 'react-icons/fa';
+import { HiMenu, HiX } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-    const links = <>
-        <Link>Desktop</Link>
-        <Link>Laptop</Link>
-        <Link>Mobile</Link>
-        <Link>Monitor</Link>
-        <Link>Camera</Link>
-        <Link>Tablet</Link>
-        <Link>Security</Link>
-        <Link>TV</Link>
-    </>
-    return (
-        <div className="navbar bg-base-100 shadow-sm">
-                <div className="navbar-start">
-                    <div className="dropdown">
-                        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
-                        </div>
-                        <ul
-                            tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            {
-                                links
-                            }
-                        </ul>
-                    </div>
-                </div>
-                <div className="navbar-center">
-                    <h1 className="btn btn-ghost text-purple-600  md:text-3xl text-xl">GadgetZone</h1>
-                </div>
-                <div className="navbar-end">
-                    <button className="btn btn-ghost btn-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> </svg>
-                    </button>
-                    <button className="btn btn-ghost btn-circle">
-                        <div className="indicator">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> </svg>
-                            <span className="badge badge-xs badge-primary indicator-item"></span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-    );
+  const [menuOpen, setMenuOpen] = useState(false);
+
+const categories = [
+  { name: 'Home', path: '/' },
+  { name: 'Desktop', path: '/desktop' },
+  { name: 'Laptop', path: '/laptop' },
+  { name: 'Component', path: '/component' },
+  { name: 'Monitor', path: '/monitor' },
+  { name: 'UPS', path: '/ups' },
+  { name: 'Phone', path: '/phone' },
+  { name: 'Tablet', path: '/tablet' },
+  { name: 'Office Equipment', path: '/office-equipment' },
+  { name: 'Camera', path: '/camera' },
+  { name: 'Security', path: '/security' },
+  { name: 'Networking', path: '/networking' },
+  { name: 'Software', path: '/software' },
+  { name: 'Server & Storage', path: '/server-storage' },
+  { name: 'Accessories', path: '/accessories' },
+  { name: 'Gadget', path: '/gadget' },
+  { name: 'Gaming', path: '/gaming' },
+  { name: 'TV', path: '/tv' },
+  { name: 'Appliance', path: '/appliance' },
+ 
+];
+
+
+  return (
+    <div className="w-full fixed z-50 top-0">
+      {/* Top Bar */}
+      <div className="bg-[#071c2b] text-white px-4 py-2 flex flex-wrap items-center justify-between">
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          <img src="GadgetZone Logo - Gradient Design without Text.png" alt="Star Tech Logo" className="h-10" />
+        </div>
+
+        {/* Search Bar - Desktop */}
+        <div className="flex-1 mx-4 hidden md:flex">
+          <input
+            type="text"
+            placeholder="Search"
+            className="w-full px-4 py-2 rounded-l-md outline-none text-black"
+          />
+          <button className="bg-white text-black px-4 rounded-r-md">
+            <FaSearch />
+          </button>
+        </div>
+
+        {/* Icons */}
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-1">
+            <FaGift />
+            <span className="text-sm">Offers</span>
+          </div>
+          <div className="hidden md:flex items-center gap-1">
+            <FaBolt />
+            <span className="text-sm">Happy Hour</span>
+          </div>
+          <Link to={'/account/login'} className="hidden md:flex items-center gap-1">
+            <FaUser />
+            <span className="text-sm">Account</span>
+          </Link>
+          <button className="bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-1 rounded-md text-sm font-semibold">
+            PC Builder
+          </button>
+
+          {/* Mobile menu toggle */}
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-xl">
+            {menuOpen ? <HiX /> : <HiMenu />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Search */}
+      <div className="md:hidden flex px-4 py-2 items-center gap-2 bg-gray-100">
+        <input
+          type="text"
+          placeholder="Search"
+          className="w-full px-3 py-2 rounded-md border"
+        />
+        <button className="bg-blue-500 text-white px-3 py-2 rounded-md">
+          <FaSearch />
+        </button>
+      </div>
+
+      {/* Sticky Categories */}
+      <div className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${menuOpen ? 'block' : 'hidden'} md:flex`}>
+  {categories.map((cat, index) => (
+    <Link
+      to={cat.path}
+      key={index}
+      className="text-sm font-medium hover:text-blue-500 whitespace-nowrap"
+    >
+      {cat.name}
+    </Link>
+  ))}
+</div>
+
+    </div>
+  );
 };
 
 export default Navbar;
