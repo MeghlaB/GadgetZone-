@@ -18,6 +18,10 @@ import Tv from "../Shared/Tv/Tv";
 import Gamming from "../Shared/Gamming/Gamming";
 import Software from "../Shared/Software/Software";
 import Gadget from "../Shared/Gadget/Gadget";
+import Privetroutes from "./Privetroute";
+import Dashboard from "../Dashboard/Dashboard";
+import AdminHome from "../Dashboard/AdminDashboard/AdminFeauter/AdminHome";
+
 
 export const router = createBrowserRouter([
   {
@@ -100,4 +104,29 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/dashboard",
+    element: (
+      <Privetroutes>
+        <Dashboard/>
+      </Privetroutes>
+    ),
+     children: [
+      // admin dashboard
+      {
+        path: "adminhome",
+        element: <AdminHome />,
+      },
+   
+
+
+
+
+
+
+
+     
+
+    ],
+  }
 ]);

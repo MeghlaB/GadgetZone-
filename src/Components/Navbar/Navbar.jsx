@@ -54,10 +54,10 @@ const categories = [
 
         {/* Icons */}
         <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center gap-1">
+          <Link to={'/dashboard'} className="hidden md:flex items-center gap-1">
             <FaGift />
-            <span className="text-sm">Offers</span>
-          </div>
+            <span className="text-sm">Dashboard</span>
+          </Link>
           <div className="hidden md:flex items-center gap-1">
             <FaBolt />
             <span className="text-sm">Happy Hour</span>
