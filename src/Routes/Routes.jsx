@@ -1,11 +1,28 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "../Layouts/MainLayout";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import Home from "../Pages/Home";
+import Desktop from "../Shared/Desktop/Desktop";
+import Laptop from "../Shared/Laptop/Laptop";
+import Component from "../Shared/Component/Component";
+import Monitor from "../Shared/Monitor/Monitor";
+import UPS from "../Shared/UPS/UPS";
+import Phone from "../Shared/Phone/Phone";
+import Tablet from "../Shared/Tablet/Tablet";
+import OfficeEqupment from "../Shared/Office_Equpement/OfficeEqupment";
+import Camera from "../Shared/Camera/Camera";
+import Sequrity from "../Shared/Sequrity/Sequrity";
+import Networking from "../Shared/Networking/Networking";
+import Tv from "../Shared/Tv/Tv";
+import Gamming from "../Shared/Gamming/Gamming";
+import Software from "../Shared/Software/Software";
+import Gadget from "../Shared/Gadget/Gadget";
+import Privetroutes from "./Privetroute";
+import Dashboard from "../Dashboard/Dashboard";
+import AdminHome from "../Dashboard/AdminDashboard/AdminFeauter/AdminHome";
+import AddProduct from "../Dashboard/AdminDashboard/AdminFeauter/AddProduct";
+
 
 export const router = createBrowserRouter([
   {
@@ -13,18 +30,108 @@ export const router = createBrowserRouter([
     element: <MainLayout></MainLayout>,
     children: [
       {
-        path: '/',
-        element: <Home></Home>, 
-        loader: ()=> fetch('FeaturedCategory.json')
-      }
-    ]
+        path: "/",
+        element: <Home></Home>,
+    
+      },
+      {
+        path: "account/login",
+        element: <Login></Login>,
+      },
+      {
+        path: "account/register",
+        element: <Register></Register>,
+      },
+      // submenu category
+      {
+        path: "/desktop",
+        element: <Desktop />,
+      },
+      {
+        path: "/laptop",
+        element: <Laptop />,
+      },
+      {
+        path: "/component",
+        element: <Component />,
+      },
+      {
+        path: "/monitor",
+        element: <Monitor />,
+      },
+      {
+        path: "/ups",
+        element: <UPS />,
+      },
+      {
+        path: "/phone",
+        element: <Phone />,
+      },
+      {
+        path: "/tablet",
+        element: <Tablet />,
+      },
+      {
+        path: "/office-equipment",
+        element: <OfficeEqupment />,
+      },
+      {
+        path: "/camera",
+        element: <Camera />,
+      },
+      {
+        path: "/security",
+        element: <Sequrity />,
+      },
+      {
+        path: "/networking",
+        element: <Networking />,
+      },
+      {
+        path: "/tv",
+        element: <Tv />,
+      },
+      {
+        path: "/gaming",
+        element: <Gamming />,
+      },
+      {
+        path: "/software",
+        element: <Software />,
+      },
+      {
+        path: "/gadget",
+        element: <Gadget />,
+      },
+    ],
   },
   {
-    path: '/login',
-    element: <Login></Login>
-  }, 
-  {
-    path: '/register', 
-    element: <Register></Register>
+    path: "/dashboard",
+    element: (
+      <Privetroutes>
+        <Dashboard/>
+      </Privetroutes>
+    ),
+     children: [
+      // admin dashboard
+      {
+        path: "adminhome",
+        element: <AdminHome />,
+      },
+      {
+        path: "addproduct",
+        element: <AddProduct></AddProduct>,
+      },
+   
+
+
+
+
+
+
+
+     
+
+    ],
   }
 ]);
