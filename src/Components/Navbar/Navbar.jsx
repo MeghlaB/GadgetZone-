@@ -1,11 +1,14 @@
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { FaSearch, FaUser, FaGift, FaBolt } from 'react-icons/fa';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../Provider/AuthProvider';
+import { MdLogout } from "react-icons/md";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user } = useContext(AuthContext)
 
   const categories = [
     { name: 'Home', path: '/' },
@@ -53,19 +56,28 @@ const Navbar = () => {
         </div>
 
         {/* Icons */}
+
         <div className="flex items-center gap-4">
-          <Link to={'/dashboard'} className="hidden md:flex items-center gap-1">
-            <FaGift />
-            <span className="text-sm">Dashboard</span>
-          </Link>
-          <div className="hidden md:flex items-center gap-1">
-            <FaBolt />
-            <span className="text-sm">Happy Hour</span>
-          </div>
-          <Link to={'/account/login'} className="hidden md:flex items-center gap-1">
-            <FaUser />
-            <span className="text-sm">Account</span>
-          </Link>
+          {
+            user ? <div className='flex items-center gap-4'>
+              <Link to={'/dashboard'} className="hidden md:flex items-center gap-1">
+                <FaGift />
+                <span className="text-sm">Dashboard</span>
+              </Link>
+              <div className="hidden md:flex items-center gap-1">
+                <FaBolt />
+                <span className="text-sm">Happy Hour</span>
+              </div>
+              <Link to={'/account/login'} className="hidden md:flex items-center gap-1">
+                <MdLogout />
+                <span className="text-sm">LogOut</span>
+              </Link>
+            </div> : 
+            <div>
+
+            </div>
+          }
+
           <button className="bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-1 rounded-md text-sm font-semibold">
             PC Builder
           </button>
