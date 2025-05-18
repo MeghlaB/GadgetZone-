@@ -32,7 +32,7 @@ function Login() {
   };
 
   const handleGoogleSign = async () => {
-    try {a
+    try {
       const res = await GoogleLogin();
       console.log(res.user);
       toast.success("Logged in with Google");
