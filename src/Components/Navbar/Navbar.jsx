@@ -180,7 +180,7 @@ const Navbar = () => {
           <Link
             to={cat.path}
             key={index}
-            className="text-sm font-medium hover:text-blue-500 whitespace-nowrap"
+            className="text-sm font-medium hover:text-purple-600 whitespace-nowrap"
           >
             {cat.name}
           </Link>
