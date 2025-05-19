@@ -2,10 +2,11 @@ import { useContext, useState } from 'react';
 import { FaSearch, FaUser, FaGift, FaBolt } from 'react-icons/fa';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../Provider/AuthProvider';
+
 import { MdLogout } from "react-icons/md";
 import { useRef, useEffect } from 'react';
 import { MdDashboard } from "react-icons/md";
+import { AuthContext } from '../Provider/AuthProvider';
 
 
 const Navbar = () => {
