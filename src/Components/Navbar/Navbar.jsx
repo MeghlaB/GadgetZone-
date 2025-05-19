@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
-import { FaSearch, FaUser, FaGift, FaBolt } from 'react-icons/fa';
+import { FaSearch, FaUser, FaBolt } from 'react-icons/fa';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Provider/AuthProvider';
 import { MdLogout } from "react-icons/md";
 import { useRef, useEffect } from 'react';
-import { MdDashboard } from "react-icons/md";
+import { LuLayoutDashboard } from "react-icons/lu";
 
 
 const Navbar = () => {
@@ -92,7 +92,7 @@ const Navbar = () => {
 
                 {/* Dashboard & Logout - Desktop only */}
                 <Link to={'/dashboard'} className="hidden md:flex items-center gap-1">
-                  <FaGift />
+                  <LuLayoutDashboard />
                   <span className="text-sm">Dashboard</span>
                 </Link>
 
@@ -141,7 +141,7 @@ const Navbar = () => {
                   <div className="absolute right-0 mt-2 w-32 text-black bg-white shadow-md rounded-md py-2 z-50">
                     <Link to="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-200">
                       <div className='flex items-center gap-1'>
-                        <MdDashboard />
+                        <LuLayoutDashboard />
                         <p>Dashboard</p>
                       </div>
                     </Link>

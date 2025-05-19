@@ -24,6 +24,7 @@ import AddProduct from "../Dashboard/AdminDashboard/AdminFeauter/AddProduct";
 import PrivateRoutes from "./PrivateRoutes";
 import ProductDetails from "../Components/ProductDetails/ProductDetails";
 import ErrorPage from "../Components/ErrorPage.jsx/ErrorPage";
+import EditProduct from "../Dashboard/AdminDashboard/AdminFeauter/EditProduct";
 
 
 export const router = createBrowserRouter([
@@ -123,10 +124,15 @@ export const router = createBrowserRouter([
       {
         path: "adminhome",
         element: <AdminHome />,
+        loader: ()=> fetch('http://localhost:5000/products')
       },
       {
         path: "addproduct",
         element: <AddProduct></AddProduct>,
+      },
+      {
+        path: "editproduct",
+        element: <EditProduct></EditProduct>
       },
 
     ],
