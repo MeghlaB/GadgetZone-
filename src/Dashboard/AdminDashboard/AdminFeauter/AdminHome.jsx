@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   FaBox,
   FaUser,
@@ -12,11 +12,13 @@ import {
 } from "react-icons/fa";
 import { Link, useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 function AdminHome() {
 
   const loadedProducts = useLoaderData()
   const [products, setProduct] = useState(loadedProducts)
+  const {user} = useContext(AuthContext)
 
   const handleDeleteProduct = (_id) => {
     Swal.fire({
@@ -59,12 +61,12 @@ function AdminHome() {
             </label>
           </div>
           <div className="flex-1">
-            <h2 className="text-xl font-bold">GadgetZone Admin</h2>
+            <h2 className="text-xl font-bold">ORYON Admin</h2>
           </div>
           <div className="flex-none">
             <div className="avatar">
               <div className="w-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src="https://i.pravatar.cc/100" />
+                <img src={user.photoURL} />
               </div>
             </div>
           </div>
@@ -76,7 +78,7 @@ function AdminHome() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="card bg-base-200 p-4">
               <h2 className="text-xl font-bold">Products</h2>
-              <p className="text-lg">24</p>
+              <p className="text-lg">{products.length}</p>
             </div>
             <div className="card bg-base-200 p-4">
               <h2 className="text-xl font-bold">Orders</h2>
@@ -132,7 +134,7 @@ function AdminHome() {
       <div className="drawer-side">
         <label htmlFor="admin-drawer" className="drawer-overlay"></label>
         <aside className="w-64 bg-base-200 p-4">
-          <h2 className="text-2xl font-bold mb-6 text-primary">GadgetZone</h2>
+          <h2 className="text-2xl font-bold mb-6 text-primary">ORYON</h2>
           <ul className="menu">
             <li><a><FaBox /> Products</a></li>
             <li><a><FaShoppingCart /> Orders</a></li>

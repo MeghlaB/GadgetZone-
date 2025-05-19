@@ -97,8 +97,8 @@ const onSubmit = async (data) => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-xl rounded-2xl">
-      <h2 className="text-2xl font-bold mb-6 text-center">
-        Add New  Product
+      <h2 className="text-2xl font-bold mb-6  text-center">
+        Edit Product
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Title */}
@@ -106,6 +106,7 @@ const onSubmit = async (data) => {
           <label className="block mb-1 font-semibold">Title</label>
           <input
             type="text"
+            defaultValues={'Hello'}
             {...register("title", { required: "Title is required" })}
             className="w-full px-4 py-2 border rounded-lg"
           />

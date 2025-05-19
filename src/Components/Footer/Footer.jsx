@@ -13,7 +13,7 @@ function Footer() {
               <FaPhone className="text-xl" />
               <div>
                 <p className="text-sm text-gray-400">9 AM - 8.30 PM</p>
-                <p className="text-xl font-bold text-[#FF4C4C]">16793</p>
+                <p className="text-xl font-bold text-[#FF4C4C]">23312</p>
               </div>
             </div>
             <div className="bg-[#101F30] rounded-xl p-4 flex items-center gap-4">
@@ -48,26 +48,27 @@ function Footer() {
         {/* Stay Connected */}
         <div>
           <h3 className="text-sm font-semibold mb-4">STAY CONNECTED</h3>
-          <p className="text-white font-bold mb-2">Star Tech Ltd</p>
+          <p className="text-white font-bold mb-2">ORYON Ltd</p>
           <p className="text-sm text-gray-300 mb-2">
             Head Office: 28 Kazi Nazrul Islam Ave,<br />Navana Zohura Square, Dhaka 1000
           </p>
-          <p className="text-sm text-gray-300 mb-2">Email:</p>
+          <p className="text-sm text-gray-300 mb-2">Developer: Joy Halder</p>
+          <p className="text-sm text-gray-300 mb-2">Email: joyhalder00113355@gmail.com</p>
           <p className="text-sm text-red-400 mb-4">webteam@startechbd.com</p>
 
           {/* Social Icons */}
           <div className="flex gap-4 text-xl text-white">
-            <FaWhatsapp />
-            <FaFacebookF />
-            <FaYoutube />
-            <FaInstagram />
+            <a href=""><FaWhatsapp /></a>
+            <a href="https://www.facebook.com/joy.halder.215371"><FaFacebookF /></a>
+            <a href=""><FaYoutube /></a>
+            <a href=""><FaInstagram /></a>
           </div>
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto mt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
-        <p>Experience Star Tech App on your mobile:</p>
+        <p>Experience ORYON App on your mobile:</p>
         <div className="flex gap-4">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
