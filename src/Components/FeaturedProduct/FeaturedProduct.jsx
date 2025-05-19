@@ -1,20 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import useAxiosPublic from "../../Hooks/UseAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 function FeaturedProduct() {
-  const [products, setProducts] = useState([]);
+  const axiosPublic = useAxiosPublic()
+ 
 
-  useEffect(() => {
-    fetch("/FeaturedProduct.json")
-      .then((res) => {
+   const {
+    isLoading,
+    error,
+    isError,
+    data: Products = [],
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const res = await axiosPublic.get("/products");
+      return res.data;
+    },
+  });
+
+
+
+
+
+  // useEffect(() => {
+  //   fetch("/FeaturedProduct.json")
+  //     .then((res) => {
         
-        return res.json();
-      })
-      .then((data) => {
-        setProducts(data);
-      })
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       setProducts(data);
+  //     })
      
-  }, []);
+  // }, []);
 
   return (
     <div className="my-10 w-11/12 mx-auto relative top-16">
@@ -25,11 +44,11 @@ function FeaturedProduct() {
         Get Your Desired Product from Featured Products!
       </p>
 
-      {products.length === 0 ? (
+      { Products.length === 0 ? (
         <p className="text-center text-gray-500">Loading products…</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {products.map((product, idx) => (
+          { Products.map((product, idx) => (
             <div
               key={idx}
               className="relative bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300"

@@ -1,7 +1,10 @@
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import useAxiosPublic from "../../../Hooks/UseAxiosPublic";
+import Swal from "sweetalert2";
 
 const AddProduct = () => {
+  const axiosPublic = useAxiosPublic();
   const {
     register,
     handleSubmit,
@@ -19,16 +22,85 @@ const AddProduct = () => {
     name: "key_features",
   });
 
-  const onSubmit = (data) => {
-    console.log("Submitted Data:", data);
-    // You can send `data` to your API here
+  // const onSubmit = (data) => {
+  //   // console.log("Submitted Data:", data);
+  //   // You can send `data` to your API here
+  //   const productsData = {
+  //     title: data?.title,
+  //     category: data?.category,
+  //     price: data?.price,
+  //     previous_price: data?.previous_price,
+  //     regular_price: data?.regular_price,
+  //     discount: data?.discount,
+  //     save_amount: data?.save_amount,
+  //     status: data?.status,
+  //     brand: data?.brand,
+
+  //     key_features: data?.key_features,
+  //     image: data?.image,
+  //   };
+  //   console.log(productsData)
+  
+  // // Post doctor information to the backend
+  //       const productsRes =  axiosPublic.post(
+  //         "/addproduct",
+  //         productsData
+  //       );
+
+  //       if (productsRes.data.insertedId) {
+  //         reset();
+  //         Swal.fire({
+  //           title: "Product Added Successfully",
+  //           icon: "success",
+  //           draggable: true,
+  //         });
+  //         navigate("/addproduct");
+  //       }
+
+  // };
+const onSubmit = async (data) => {
+  const productsData = {
+    title: data?.title,
+    category: data?.category,
+    price: data?.price,
+    previous_price: data?.previous_price,
+    regular_price: data?.regular_price,
+    discount: data?.discount,
+    save_amount: data?.save_amount,
+    status: data?.status,
+    brand: data?.brand,
+    key_features: data?.key_features,
+    image: data?.image,
   };
+
+  try {
+    const productsRes = await axiosPublic.post("/add-products", productsData);
+
+    if (productsRes.data.insertedId) {
+      reset();
+      Swal.fire({
+        title: "Product Added Successfully",
+        icon: "success",
+        draggable: true,
+      });
+      // Navigate if needed
+      // navigate("/addproduct");
+    }
+  } catch (error) {
+    console.error("Product submission failed", error);
+    Swal.fire({
+      title: "Something went wrong!",
+      icon: "error",
+    });
+  }
+};
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-xl rounded-2xl">
-      <h2 className="text-2xl font-bold mb-6 text-center">Add New Desktop Product</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">
+        Add New  Product
+      </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
         {/* Title */}
         <div>
           <label className="block mb-1 font-semibold">Title</label>
@@ -37,13 +109,18 @@ const AddProduct = () => {
             {...register("title", { required: "Title is required" })}
             className="w-full px-4 py-2 border rounded-lg"
           />
-          {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
+          {errors.title && (
+            <p className="text-red-500 text-sm">{errors.title.message}</p>
+          )}
         </div>
 
         {/* Category */}
         <div>
           <label className="block mb-1 font-semibold">Category</label>
-          <select {...register("category", { required: true })} className="w-full px-4 py-2 border rounded-lg">
+          <select
+            {...register("category", { required: true })}
+            className="w-full px-4 py-2 border rounded-lg"
+          >
             <option value="Desktop">Desktop</option>
             <option value="Laptop">Laptop</option>
             <option value="Accessories">Accessories</option>
@@ -54,15 +131,27 @@ const AddProduct = () => {
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="block mb-1 font-semibold">Price</label>
-            <input type="number" {...register("price", { required: true })} className="w-full px-4 py-2 border rounded-lg" />
+            <input
+              type="number"
+              {...register("price", { required: true })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
           </div>
           <div>
             <label className="block mb-1 font-semibold">Previous Price</label>
-            <input type="number" {...register("previous_price")} className="w-full px-4 py-2 border rounded-lg" />
+            <input
+              type="number"
+              {...register("previous_price")}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
           </div>
           <div>
             <label className="block mb-1 font-semibold">Regular Price</label>
-            <input type="number" {...register("regular_price")} className="w-full px-4 py-2 border rounded-lg" />
+            <input
+              type="number"
+              {...register("regular_price")}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
           </div>
         </div>
 
@@ -70,18 +159,29 @@ const AddProduct = () => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block mb-1 font-semibold">Discount</label>
-            <input type="text" {...register("discount")} className="w-full px-4 py-2 border rounded-lg" />
+            <input
+              type="text"
+              {...register("discount")}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
           </div>
           <div>
             <label className="block mb-1 font-semibold">Save Amount</label>
-            <input type="number" {...register("save_amount")} className="w-full px-4 py-2 border rounded-lg" />
+            <input
+              type="number"
+              {...register("save_amount")}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
           </div>
         </div>
 
         {/* Status */}
         <div>
           <label className="block mb-1 font-semibold">Status</label>
-          <select {...register("status")} className="w-full px-4 py-2 border rounded-lg">
+          <select
+            {...register("status")}
+            className="w-full px-4 py-2 border rounded-lg"
+          >
             <option value="In Stock">In Stock</option>
             <option value="Out of Stock">Out of Stock</option>
           </select>
@@ -91,11 +191,19 @@ const AddProduct = () => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block mb-1 font-semibold">Brand</label>
-            <input type="text" {...register("brand")} className="w-full px-4 py-2 border rounded-lg" />
+            <input
+              type="text"
+              {...register("brand")}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
           </div>
           <div>
             <label className="block mb-1 font-semibold">Model</label>
-            <input type="text" {...register("model")} className="w-full px-4 py-2 border rounded-lg" />
+            <input
+              type="text"
+              {...register("model")}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
           </div>
         </div>
 
@@ -138,18 +246,21 @@ const AddProduct = () => {
         </div>
 
         {/* Image Preview */}
-        <div>
+        {/* <div>
           <label className="block mb-1 font-semibold">Image Preview</label>
           <img
             src="https://www.startech.com.bd/image/cache/catalog/desktop-pc/ryzen-pc/ryzen-7-7700/ryzen-7-7700-01-200x200.webp"
             alt="Preview"
             className="w-32 h-32 object-contain border p-1 rounded"
           />
-        </div>
+        </div> */}
 
         {/* Submit */}
         <div className="pt-4">
-          <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700">
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700"
+          >
             Submit Product
           </button>
         </div>

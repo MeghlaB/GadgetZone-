@@ -50,6 +50,7 @@ function Register() {
       };
 
       const dbRes = await axios.post("http://localhost:5000/users", userInfo);
+      console.log(dbRes.data)
 
       if (dbRes.data.insertedId) {
         toast.success("Account created successfully!");
