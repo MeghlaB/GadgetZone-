@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaBox,
   FaUser,
@@ -11,13 +11,40 @@ import {
   FaBars,
 } from "react-icons/fa";
 import { Link, useLoaderData } from "react-router-dom";
-
-
+import Swal from "sweetalert2";
 
 function AdminHome() {
 
-  const products = useLoaderData()
-  
+  const loadedProducts = useLoaderData()
+  const [products, setProduct] = useState(loadedProducts)
+
+  const handleDeleteProduct = (_id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5000/products/${_id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data)
+            if (data.deletedCount > 0) {
+              Swal.fire("Deleted!", "Product has been deleted.", "success");
+              const remaining = products.filter((p) => p._id !== _id);
+              setProduct(remaining);
+              console.log(remaining)
+            }
+          });
+      }
+    });
+  };
 
   return (
     <div data-theme="dark" className="drawer lg:drawer-open min-h-screen">
@@ -86,12 +113,12 @@ function AdminHome() {
                     </td>
                     <td>{p.title}</td>
                     <td>{p.price}</td>
-                    <td>{p.status=='In Stock'?"True":"False"}</td>
+                    <td>{p.status == 'In Stock' ? "True" : "False"}</td>
                     <td>{p.addedAt}</td>
                     <td className="flex gap-2 justify-center flex-wrap">
                       <Link to={`/product/${p._id}`} className="btn btn-sm btn-info"><FaEye /></Link>
                       <Link to='/dashboard/editproduct' className="btn btn-sm btn-warning"><FaEdit /></Link>
-                      <button className="btn btn-sm btn-error"><FaTrash /></button>
+                      <button onClick={() => handleDeleteProduct(p._id)} className="btn btn-sm btn-error"><FaTrash /></button>
                     </td>
                   </tr>
                 ))}
