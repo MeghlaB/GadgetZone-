@@ -20,7 +20,7 @@ export default function BannerCarousel() {
     progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
   };
   return (
-    <div className='container mx-auto h-[250px] md:h-[400px] my-4 md:mt-28'>
+    <div className='w-8/12 mx-auto my-4'>
       <Swiper
         spaceBetween={30}
         centeredSlides={true}

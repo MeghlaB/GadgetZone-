@@ -1,149 +1,194 @@
-// Login.jsx
-import React, { useContext, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../Provider/AuthProvider";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useContext, useState } from 'react';
+import { FaSearch, FaUser, FaGift, FaBolt } from 'react-icons/fa';
+import { HiMenu, HiX } from 'react-icons/hi';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../Provider/AuthProvider';
+import { MdLogout } from "react-icons/md";
+import { useRef, useEffect } from 'react';
+import { MdDashboard } from "react-icons/md";
 
-function Login() {
-  const { signIn, GoogleLogin } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { user, logOut } = useContext(AuthContext)
+  const navigate = useNavigate()
 
-  const onSubmit = async (data) => {
-    setLoading(true);
-    try {
-      await signIn(data.email, data.password);
-      toast.success("Logged in successfully!");
-      navigate("/");
-    } catch (error) {
-      console.error("Login error:", error);
-      toast.error(error.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [showDropdown, setShowDropdown] = useState(false);
+  const profileRef = useRef();
 
-  const handleGoogleSign = async () => {
-  try {
-    const result = await GoogleLogin();
-    const user = result.user;
-
-    const userInfo = {
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-      role: "user",
-      status: "active",
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
     };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
-    await axios.post("http://localhost:5000/users", userInfo); 
 
-    toast.success("Logged in with Google");
-    navigate("/");
-  } catch (error) {
-    toast.error("Google login failed");
-  }
-};
+  const categories = [
+    { name: 'Home', path: '/' },
+    { name: 'Desktop', path: '/desktop' },
+    { name: 'Laptop', path: '/laptop' },
+    { name: 'Component', path: '/component' },
+    { name: 'Monitor', path: '/monitor' },
+    { name: 'UPS', path: '/ups' },
+    { name: 'Phone', path: '/phone' },
+    { name: 'Tablet', path: '/tablet' },
+    { name: 'Office Equipment', path: '/office-equipment' },
+    { name: 'Camera', path: '/camera' },
+    { name: 'Security', path: '/security' },
+    { name: 'Networking', path: '/networking' },
+    { name: 'Software', path: '/software' },
+    { name: 'Server & Storage', path: '/server-storage' },
+    { name: 'Accessories', path: '/accessories' },
+    { name: 'Gadget', path: '/gadget' },
+    { name: 'Gaming', path: '/gaming' },
+    { name: 'TV', path: '/tv' },
+    { name: 'Appliance', path: '/appliance' },
+
+  ];
+
 
   return (
-    <div>
-    {/* left side er route */}
-    <div>
+    <div className="w-full fixed z-50 top-0">
+      {/* Top Bar */}
+      <div className="bg-[#071c2b] text-white px-4 py-2 flex flex-wrap items-center justify-between">
+        {/* Logo */}
+        <Link to='/' className="flex items-center gap-2">
+          <img className='h-8 md:h-10 rounded-lg ' src="https://i.ibb.co/7Jp64HMt/Whats-App-Image-2025-05-19-at-01-03-05-a47959b3.jpg" />
+        </Link>
 
-    </div>
-      <div className="mx-auto w-full max-w-md  bg-white p-10 shadow-lg my-28">
-        <h1 className="text-xl ">Account Login</h1>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Email */}
-          <div className="space-y-2 text-sm text-zinc-800">
-            <label htmlFor="email" className="block font-medium">
-              Email*
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              {...register("email", { required: true })}
-              className="w-full rounded-md border px-3 py-2 focus:ring-1 focus:outline-none"
-            />
-            {errors.email && (
-              <span className="text-red-600">Email is required</span>
-            )}
-          </div>
-
-          {/* Password */}
-          <div className="space-y-2 text-sm text-zinc-800">
-            <label htmlFor="password" className="block font-medium">
-              Password*
-            </label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              {...register("password", { required: true })}
-              className="w-full rounded-md border px-3 py-2 focus:ring-1 focus:outline-none"
-            />
-            {errors.password && (
-              <span className="text-red-600">Password is required</span>
-            )}
-          </div>
-
+        {/* Search Bar - Desktop */}
+        <div className="flex-1 mx-4 hidden md:flex">
           <input
-            type="submit"
-            value={loading ? "Logging in..." : "Login"}
-            disabled={loading}
-            className={`w-full rounded-md bg-teal-600 hover:bg-teal-700 px-4 py-2 text-white transition-colors ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            type="text"
+            placeholder="Search"
+            className="w-full px-4 py-2 rounded-l-md outline-none text-black"
           />
-        </form>
-
-        <p className="text-center text-sm text-zinc-800">
-          Don’t have an account?{" "}
-          <Link to="/account/register" className="font-semibold underline">
-            Register
-          </Link>
-        </p>
-
-        <div className="my-8 flex items-center">
-          <hr className="flex-1 border-gray-400" />
-          <div className="mx-4 text-gray-400">OR</div>
-          <hr className="flex-1 border-gray-400" />
-        </div>
-
-        <div className="flex justify-center space-x-4">
-          <button
-            onClick={handleGoogleSign}
-            aria-label="Log in with Google"
-            className="rounded-full p-3 border hover:bg-gray-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 32 32"
-              className="h-5 w-5"
-            >
-              <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z" />
-            </svg>
+          <button className="bg-white text-black px-4 rounded-r-md">
+            <FaSearch />
           </button>
         </div>
 
-        <ToastContainer
-          position="top-center"
-          autoClose={1500}
-          hideProgressBar
-        />
+        {/* Icons */}
+
+        <div className="flex items-center gap-4">
+          {
+            user ? (
+              <div className='flex items-center gap-4'>
+                {/* Profile Picture */}
+                <img
+                  src={user.photoURL}
+                  alt="profile"
+                  className="w-8 h-8 rounded-full hidden md:block"
+                />
+
+                {/* Dashboard & Logout - Desktop only */}
+                <Link to={'/dashboard'} className="hidden md:flex items-center gap-1">
+                  <FaGift />
+                  <span className="text-sm">Dashboard</span>
+                </Link>
+
+                <div className="hidden md:flex items-center gap-1">
+                  <FaBolt />
+                  <span className="text-sm">Happy Hour</span>
+                </div>
+
+                <Link onClick={logOut} className="hidden md:flex items-center gap-1">
+                  <MdLogout />
+                  <span className="text-sm">LogOut</span>
+                </Link>
+              </div>
+            ) : (
+              <div className='flex items-center gap-4'>
+                <div className="hidden md:flex items-center gap-1">
+                  <FaBolt />
+                  <span className="text-sm">Happy Hour</span>
+                </div>
+
+                {/* Login Button Between PC Builder and Menu */}
+                <Link to={'/account/login'} className=" md:block bg-gradient-to-r from-green-500 to-blue-500 px-4 py-1 rounded-md text-sm font-semibold text-white">
+                  Login
+                </Link>
+              </div>
+            )
+          }
+
+          {/* PC Builder Button */}
+          <button className="bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-1 rounded-md text-sm font-semibold">
+            PC Builder
+          </button>
+
+          {/* Mobile Profile Dropdown */}
+          {
+            user &&
+            <div className="relative md:hidden" ref={profileRef}>
+              <img
+                src={user.photoURL}
+                alt="profile"
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="w-8 h-8 rounded-full cursor-pointer"
+              />
+              {
+                showDropdown && (
+                  <div className="absolute right-0 mt-2 w-32 text-black bg-white shadow-md rounded-md py-2 z-50">
+                    <Link to="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-200">
+                      <div className='flex items-center gap-1'>
+                        <MdDashboard />
+                        <p>Dashboard</p>
+                      </div>
+                    </Link>
+                    <button onClick={logOut} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-200">
+                      <div className='flex items-center gap-1'>
+                        <MdLogout />
+                        <span>Logout</span>
+                      </div>
+                    </button>
+                  </div>
+                )
+              }
+            </div>
+          }
+
+          {/* Mobile Menu Icon */}
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-xl">
+            {menuOpen ? <HiX /> : <HiMenu />}
+          </button>
+        </div>
+
       </div>
+
+      {/* Mobile Search */}
+      <div className="md:hidden flex px-4 py-2 items-center gap-2 bg-gray-100">
+        <input
+          type="text"
+          placeholder="Search"
+          className="w-full px-3 py-2 rounded-md border"
+        />
+        <button className="bg-blue-500 text-white px-3 py-2 rounded-md">
+          <FaSearch />
+        </button>
+      </div>
+
+      {/* Sticky Categories */}
+      <div className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${menuOpen ? 'block' : 'hidden'} md:flex`}>
+        {categories.map((cat, index) => (
+          <Link
+            to={cat.path}
+            key={index}
+            className="text-sm font-medium hover:text-purple-600 whitespace-nowrap"
+          >
+            {cat.name}
+          </Link>
+        ))}
+      </div>
+
     </div>
   );
-}
+};
 
-export default Login;
+export default Navbar;
