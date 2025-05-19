@@ -17,7 +17,7 @@ function FeaturedProduct() {
   }, []);
 
   return (
-    <div className="my-10 w-11/12 mx-auto">
+    <div className="my-10 w-11/12 mx-auto relative top-16">
       <h1 className="text-lg text-center md:text-2xl font-bold">
         Featured Products
       </h1>

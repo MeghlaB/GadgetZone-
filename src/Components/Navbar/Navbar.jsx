@@ -1,14 +1,33 @@
-
 import { useContext, useState } from 'react';
 import { FaSearch, FaUser, FaGift, FaBolt } from 'react-icons/fa';
 import { HiMenu, HiX } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Provider/AuthProvider';
 import { MdLogout } from "react-icons/md";
+import { useRef, useEffect } from 'react';
+import { MdDashboard } from "react-icons/md";
+
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user } = useContext(AuthContext)
+  const { user, logOut } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  const [showDropdown, setShowDropdown] = useState(false);
+  const profileRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
 
   const categories = [
     { name: 'Home', path: '/' },
@@ -40,7 +59,7 @@ const Navbar = () => {
       <div className="bg-[#071c2b] text-white px-4 py-2 flex flex-wrap items-center justify-between">
         {/* Logo */}
         <Link to='/' className="flex items-center gap-2">
-          <img className=' h-10 rounded-lg ' src="https://i.ibb.co/7Jp64HMt/Whats-App-Image-2025-05-19-at-01-03-05-a47959b3.jpg" />
+          <img className='h-8 md:h-10 rounded-lg ' src="https://i.ibb.co/7Jp64HMt/Whats-App-Image-2025-05-19-at-01-03-05-a47959b3.jpg" />
         </Link>
 
         {/* Search Bar - Desktop */}
@@ -59,34 +78,88 @@ const Navbar = () => {
 
         <div className="flex items-center gap-4">
           {
-            user ? <div className='flex items-center gap-4'>
-              <Link to={'/dashboard'} className="hidden md:flex items-center gap-1">
-                <FaGift />
-                <span className="text-sm">Dashboard</span>
-              </Link>
-              <div className="hidden md:flex items-center gap-1">
-                <FaBolt />
-                <span className="text-sm">Happy Hour</span>
-              </div>
-              <Link to={'/account/login'} className="hidden md:flex items-center gap-1">
-                <MdLogout />
-                <span className="text-sm">LogOut</span>
-              </Link>
-            </div> : 
-            <div>
+            user ? (
+              <div className='flex items-center gap-4'>
+                {/* Profile Picture */}
+                <img
+                  src={user.photoURL}
+                  alt="profile"
+                  className="w-8 h-8 rounded-full hidden md:block"
+                />
 
-            </div>
+                {/* Dashboard & Logout - Desktop only */}
+                <Link to={'/dashboard'} className="hidden md:flex items-center gap-1">
+                  <FaGift />
+                  <span className="text-sm">Dashboard</span>
+                </Link>
+
+                <div className="hidden md:flex items-center gap-1">
+                  <FaBolt />
+                  <span className="text-sm">Happy Hour</span>
+                </div>
+
+                <Link onClick={logOut} className="hidden md:flex items-center gap-1">
+                  <MdLogout />
+                  <span className="text-sm">LogOut</span>
+                </Link>
+              </div>
+            ) : (
+              <div className='flex items-center gap-4'>
+                <div className="hidden md:flex items-center gap-1">
+                  <FaBolt />
+                  <span className="text-sm">Happy Hour</span>
+                </div>
+
+                {/* Login Button Between PC Builder and Menu */}
+                <Link to={'/account/login'} className=" md:block bg-gradient-to-r from-green-500 to-blue-500 px-4 py-1 rounded-md text-sm font-semibold text-white">
+                  Login
+                </Link>
+              </div>
+            )
           }
 
+          {/* PC Builder Button */}
           <button className="bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-1 rounded-md text-sm font-semibold">
             PC Builder
           </button>
 
-          {/* Mobile menu toggle */}
+          {/* Mobile Profile Dropdown */}
+          {
+            user &&
+            <div className="relative md:hidden" ref={profileRef}>
+              <img
+                src={user.photoURL}
+                alt="profile"
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="w-8 h-8 rounded-full cursor-pointer"
+              />
+              {
+                showDropdown && (
+                  <div className="absolute right-0 mt-2 w-32 text-black bg-white shadow-md rounded-md py-2 z-50">
+                    <Link to="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-200">
+                      <div className='flex items-center gap-1'>
+                        <MdDashboard />
+                        <p>Dashboard</p>
+                      </div>
+                    </Link>
+                    <button onClick={logOut} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-200">
+                      <div className='flex items-center gap-1'>
+                        <MdLogout />
+                        <span>Logout</span>
+                      </div>
+                    </button>
+                  </div>
+                )
+              }
+            </div>
+          }
+
+          {/* Mobile Menu Icon */}
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-xl">
             {menuOpen ? <HiX /> : <HiMenu />}
           </button>
         </div>
+
       </div>
 
       {/* Mobile Search */}
