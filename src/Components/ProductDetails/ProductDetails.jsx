@@ -20,12 +20,13 @@ const ProductDetails = () => {
         },
         enabled: !!id,
     });
+    console.log(product)
 
     if (isLoading) return <div className="text-center mt-32 text-xl font-semibold">Loading...</div>;
     if (isError) return <div className="text-center mt-32 text-red-500">Error loading product</div>;
 
     return (
-        <div className="mt-28 max-w-6xl mx-auto px-4">
+        <div className="mt-28 max-w-6xl mx-auto px-4 py-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                 <motion.div
                     initial={{ opacity: 0, x: -100 }}
@@ -44,23 +45,33 @@ const ProductDetails = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <h1 className="text-3xl font-bold text-primary">{product?.model}</h1>
+                    <h1 className=" text-xl md:text-2xl lg:text-3xl font-bold text-primary">{product?.title}</h1>
                     <p className="text-gray-500 text-lg mt-2">{product?.resolution}</p>
 
-                    <div className="my-4">
+                    {/* <div className="my-4">
                         <p><span className="font-semibold">Display:</span> {product?.display}</p>
                         <p><span className="font-semibold">Ports:</span> {product?.ports}</p>
                         <p><span className="font-semibold">Features:</span> {product?.features}</p>
-                    </div>
+                    </div> */}
 
                     <div className="mt-4 space-y-2">
+                        <p className='border btn text-gray-900 rounded-2xl'>Brand : {product.brand}</p>
                         <p className="text-xl font-bold text-green-600">
-                            Discount Price: ৳{product?.discountPrice}
+                            Discount Price: ৳{product?.price}
                         </p>
-                        <p className="line-through text-gray-400">Old Price: ৳{product?.oldPrice}</p>
-                        <p className="text-lg">Regular Price: <span className="font-semibold text-neutral">৳{product?.regularPrice}</span></p>
-                        <p className="text-sm text-success">Status: In Stock</p>
-                        <p className="text-sm text-gray-400">Product Code: {product?.productCode}</p>
+                        <p className="line-through text-gray-400">Old Price: ৳{product?.regular_price}</p>
+                        <p className="text-lg">Regular Price: <span className="font-semibold text-neutral">৳{product?.regular_price}</span></p>
+                        <p className="text-sm text-success">Status: {product.status=='In Stock'?<span className=''>In Stock</span>:<span className='text-red-600'>Out of Stock</span>}</p>
+                        {/* <p className="text-sm text-gray-400">Product Code: {product?.productCode}</p> */}
+                        <div>
+                            <h1 className='text-xl'>Key Feature</h1>
+                            <div>
+                                {
+                                    product.key_features.map(feat=> <p className='text-gray-600 pb-1'>{feat}</p>)
+
+                                }
+                            </div>
+                        </div>
                     </div>
 
                     <motion.button

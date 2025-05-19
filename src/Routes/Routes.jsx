@@ -23,6 +23,7 @@ import AdminHome from "../Dashboard/AdminDashboard/AdminFeauter/AdminHome";
 import AddProduct from "../Dashboard/AdminDashboard/AdminFeauter/AddProduct";
 import PrivateRoutes from "./PrivateRoutes";
 import ProductDetails from "../Components/ProductDetails/ProductDetails";
+import ErrorPage from "../Components/ErrorPage.jsx/ErrorPage";
 
 
 export const router = createBrowserRouter([
@@ -128,15 +129,10 @@ export const router = createBrowserRouter([
         element: <AddProduct></AddProduct>,
       },
 
-
-
-
-
-
-
-
-
-
     ],
+  }, 
+  {
+    path:'*', 
+    element: <ErrorPage></ErrorPage>
   }
 ]);
