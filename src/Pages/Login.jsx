@@ -32,16 +32,26 @@ function Login() {
   };
 
   const handleGoogleSign = async () => {
-    try {
-      const res = await GoogleLogin();
-      console.log(res.user);
-      toast.success("Logged in with Google");
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      toast.error("Google login failed");
-    }
-  };
+  try {
+    const result = await GoogleLogin();
+    const user = result.user;
+
+    const userInfo = {
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+      role: "user",
+      status: "active",
+    };
+
+    await axios.post("http://localhost:5000/users", userInfo); 
+
+    toast.success("Logged in with Google");
+    navigate("/");
+  } catch (error) {
+    toast.error("Google login failed");
+  }
+};
 
   return (
     <div>
