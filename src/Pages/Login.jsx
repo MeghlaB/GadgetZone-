@@ -43,7 +43,7 @@ function Login() {
         status: "active",
       };
 
-      await axios.post("http://localhost:5000/users", userInfo);
+      await axios.post("https://gadget-zone-server-ashy.vercel.app/users", userInfo);
 
       toast.success("Logged in with Google");
       navigate("/");

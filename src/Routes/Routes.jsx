@@ -22,6 +22,7 @@ import Dashboard from "../Dashboard/Dashboard";
 import AdminHome from "../Dashboard/AdminDashboard/AdminFeauter/AdminHome";
 import AddProduct from "../Dashboard/AdminDashboard/AdminFeauter/AddProduct";
 import PrivateRoutes from "./PrivateRoutes";
+import ProductDetails from "../Components/ProductDetails/ProductDetails";
 
 
 export const router = createBrowserRouter([
@@ -103,6 +104,10 @@ export const router = createBrowserRouter([
         path: "/gadget",
         element: <Gadget />,
       },
+      {
+        path:'/product/:id',
+        element:<ProductDetails/>
+      }
     ],
   },
   {

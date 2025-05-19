@@ -86,6 +86,9 @@ const Navbar = () => {
                   alt="profile"
                   className="w-8 h-8 rounded-full hidden md:block"
                 />
+                {
+                  console.log(user.photoURL)
+                }
 
                 {/* Dashboard & Logout - Desktop only */}
                 <Link to={'/dashboard'} className="hidden md:flex items-center gap-1">

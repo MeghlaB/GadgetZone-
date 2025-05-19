@@ -59,7 +59,7 @@ function FeaturedProduct() {
               </div>
 
               {/* Product Image */}
-              <Link to={`/product/${product.id}`}>
+              <Link to={`/product/${product._id}`}>
                 <div className="p-4 flex justify-center items-center h-40">
                   <img
                     src={product.image}
