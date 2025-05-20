@@ -17,6 +17,7 @@ import { AuthContext } from "../../../Provider/AuthProvider";
 function AdminHome() {
 
   const loadedProducts = useLoaderData()
+  console.log(loadedProducts)
   const [products, setProduct] = useState(loadedProducts)
   const {user} = useContext(AuthContext)
 
@@ -108,8 +109,8 @@ function AdminHome() {
                 </tr>
               </thead>
               <tbody>
-                {products.map((p) => (
-                  <tr key={p.id}>
+                {products.map((p, idx) => (
+                  <tr key={p._id}>
                     <td>
                       <img src={p.image} alt={p.name} className="w-12 h-12 rounded" />
                     </td>
