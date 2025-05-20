@@ -117,7 +117,7 @@ function AdminHome() {
                     <td>{p.title}</td>
                     <td>{p.price}</td>
                     <td>{p.status == 'In Stock' ? "True" : "False"}</td>
-                    <td>{p.addedAt}</td>
+                    <td>{p?.time}</td>
                     <td className="flex gap-2 justify-center flex-wrap">
                       <Link to={`/product/${p._id}`} className="btn btn-sm btn-info"><FaEye /></Link>
                       <Link to='/dashboard/editproduct' className="btn btn-sm btn-warning"><FaEdit /></Link>

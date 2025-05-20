@@ -22,42 +22,6 @@ const EditProduct = () => {
     name: "key_features",
   });
 
-  // const onSubmit = (data) => {
-  //   // console.log("Submitted Data:", data);
-  //   // You can send `data` to your API here
-  //   const productsData = {
-  //     title: data?.title,
-  //     category: data?.category,
-  //     price: data?.price,
-  //     previous_price: data?.previous_price,
-  //     regular_price: data?.regular_price,
-  //     discount: data?.discount,
-  //     save_amount: data?.save_amount,
-  //     status: data?.status,
-  //     brand: data?.brand,
-
-  //     key_features: data?.key_features,
-  //     image: data?.image,
-  //   };
-  //   console.log(productsData)
-  
-  // // Post doctor information to the backend
-  //       const productsRes =  axiosPublic.post(
-  //         "/addproduct",
-  //         productsData
-  //       );
-
-  //       if (productsRes.data.insertedId) {
-  //         reset();
-  //         Swal.fire({
-  //           title: "Product Added Successfully",
-  //           icon: "success",
-  //           draggable: true,
-  //         });
-  //         navigate("/addproduct");
-  //       }
-
-  // };
 const onSubmit = async (data) => {
   const productsData = {
     title: data?.title,

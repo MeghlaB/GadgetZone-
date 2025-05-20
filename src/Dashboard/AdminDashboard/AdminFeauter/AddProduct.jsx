@@ -2,6 +2,7 @@ import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import useAxiosPublic from "../../../Hooks/UseAxiosPublic";
 import Swal from "sweetalert2";
+import { time } from "framer-motion";
 
 const AddProduct = () => {
   const axiosPublic = useAxiosPublic();
@@ -22,78 +23,51 @@ const AddProduct = () => {
     name: "key_features",
   });
 
-  // const onSubmit = (data) => {
-  //   // console.log("Submitted Data:", data);
-  //   // You can send `data` to your API here
-  //   const productsData = {
-  //     title: data?.title,
-  //     category: data?.category,
-  //     price: data?.price,
-  //     previous_price: data?.previous_price,
-  //     regular_price: data?.regular_price,
-  //     discount: data?.discount,
-  //     save_amount: data?.save_amount,
-  //     status: data?.status,
-  //     brand: data?.brand,
+  const date = new Date();
+  const showTime = date.getHours()
+    + ':' + date.getMinutes()
+    + ":" + date.getSeconds();
 
-  //     key_features: data?.key_features,
-  //     image: data?.image,
-  //   };
-  //   console.log(productsData)
-  
-  // // Post doctor information to the backend
-  //       const productsRes =  axiosPublic.post(
-  //         "/addproduct",
-  //         productsData
-  //       );
+  console.log(showTime)
 
-  //       if (productsRes.data.insertedId) {
-  //         reset();
-  //         Swal.fire({
-  //           title: "Product Added Successfully",
-  //           icon: "success",
-  //           draggable: true,
-  //         });
-  //         navigate("/addproduct");
-  //       }
+  const onSubmit = async (data) => {
+    const productsData = {
+      title: data?.title,
+      category: data?.category,
+      price: data?.price,
+      previous_price: data?.previous_price,
+      regular_price: data?.regular_price,
+      discount: data?.discount,
+      save_amount: data?.save_amount,
+      status: data?.status,
+      brand: data?.brand,
+      key_features: data?.key_features,
+      image: data?.image,
+      time: showTime, 
+    };
+    console.log(productsData)
 
-  // };
-const onSubmit = async (data) => {
-  const productsData = {
-    title: data?.title,
-    category: data?.category,
-    price: data?.price,
-    previous_price: data?.previous_price,
-    regular_price: data?.regular_price,
-    discount: data?.discount,
-    save_amount: data?.save_amount,
-    status: data?.status,
-    brand: data?.brand,
-    key_features: data?.key_features,
-    image: data?.image,
-  };
+    try {
+      const productsRes = await axiosPublic.post("/add-products", productsData);
 
-  try {
-    const productsRes = await axiosPublic.post("/add-products", productsData);
-
-    if (productsRes.data.insertedId) {
-      reset();
+      if (productsRes.data.insertedId) {
+        reset();
+        Swal.fire({
+          title: "Product Added Successfully",
+          icon: "success",
+          draggable: true,
+        });
+        // Navigate if needed
+        // navigate("/addproduct");
+      }
+    } catch (error) {
+      console.error("Product submission failed", error);
       Swal.fire({
-        title: "Product Added Successfully",
-        icon: "success",
-        draggable: true,
+        title: "Something went wrong!",
+        icon: "error",
       });
-      // Navigate if needed
-      // navigate("/addproduct");
     }
-  } catch (error) {
-    console.error("Product submission failed", error);
-    Swal.fire({
-      title: "Something went wrong!",
-      icon: "error",
-    });
-  }
-};
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-xl rounded-2xl">

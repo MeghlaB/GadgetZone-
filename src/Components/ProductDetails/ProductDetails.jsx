@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import useAxiosPublic from '../../Hooks/UseAxiosPublic';
 import { motion } from 'framer-motion';
+import { MdOutlineShoppingCart } from "react-icons/md";
 
 const ProductDetails = () => {
     const axiosPublic = useAxiosPublic();
@@ -79,6 +80,13 @@ const ProductDetails = () => {
                         className="btn btn-primary mt-6"
                     >
                         Buy Now
+                    </motion.button>
+                    <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        className="btn btn-primary mt-6 ml-4"
+                    >   
+                        <MdOutlineShoppingCart size={20} />
+                        Add to cart
                     </motion.button>
                 </motion.div>
             </div>
