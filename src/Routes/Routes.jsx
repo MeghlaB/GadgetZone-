@@ -25,6 +25,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import ProductDetails from "../Components/ProductDetails/ProductDetails";
 import ErrorPage from "../Components/ErrorPage.jsx/ErrorPage";
 import EditProduct from "../Dashboard/AdminDashboard/AdminFeauter/EditProduct";
+import Accessories from "../Shared/Accessories/Accessories";
 
 
 export const router = createBrowserRouter([
@@ -106,6 +107,11 @@ export const router = createBrowserRouter([
         path: "/gadget",
         element: <Gadget />,
       },
+      {
+        path:'/accessories',
+        element:<Accessories/>
+      }
+      ,
       {
         path:'/product/:id',
         element:<ProductDetails/>

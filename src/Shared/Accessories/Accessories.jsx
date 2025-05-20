@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
-function Camera() {
+function Accessories() {
   const axiosPublic = useAxiosPublic();
 
   const {
@@ -84,7 +84,7 @@ function Camera() {
   };
 
   // Filter only laptops
-  const desktopPCs = products.filter((product) => product.category === "Camera");
+  const desktopPCs = products.filter((product) => product.category === "Accessories");
 
   // Handle checkbox filter change
   const handleChange = (type, value) => {
@@ -132,7 +132,7 @@ function Camera() {
 
   return (
     <div className="mt-28 min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold mb-6 text-center">💻 Camera Catalog</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">💻 Accessories Catalog</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Filter Sidebar */}
@@ -252,4 +252,4 @@ function Camera() {
   );
 }
 
-export default Camera;
+export default Accessories;
