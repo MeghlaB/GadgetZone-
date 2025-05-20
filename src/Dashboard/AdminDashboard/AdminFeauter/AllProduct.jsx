@@ -14,7 +14,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../Provider/AuthProvider";
 
-function AdminHome() {
+function AllProduct() {
 
   const loadedProducts = useLoaderData()
   console.log(loadedProducts)
@@ -56,11 +56,7 @@ function AdminHome() {
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
         <div className="w-full navbar bg-base-200 ">
-          <div className="flex-none">
-            {/* <label htmlFor="admin-drawer" className="btn btn-square btn-ghost">
-              <FaBars />
-            </label> */}
-          </div>
+          
           <div className="flex-1">
             <h2 className="text-xl font-bold">ORYON Admin</h2>
           </div>
@@ -76,27 +72,9 @@ function AdminHome() {
         {/* Main Content */}
         <main className="p-4 space-y-6">
           {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="card bg-base-200 p-4">
-              <h2 className="text-xl font-bold">Products</h2>
-              <p className="text-lg">{products.length}</p>
-            </div>
-            <div className="card bg-base-200 p-4">
-              <h2 className="text-xl font-bold">Orders</h2>
-              <p className="text-lg">12</p>
-            </div>
-            <div className="card bg-base-200 p-4">
-              <h2 className="text-xl font-bold">Revenue</h2>
-              <p className="text-lg">$3,240</p>
-            </div>
-            <div className="card bg-base-200 p-4">
-              <h2 className="text-xl font-bold">Users</h2>
-              <p className="text-lg">57</p>
-            </div>
-          </div>
-
+         
           {/* Product Table */}
-          {/* <div className="overflow-x-auto bg-base-200 rounded-lg shadow">
+          <div className="overflow-x-auto bg-base-200 rounded-lg shadow">
             <table className="table table-zebra w-full">
               <thead>
                 <tr>
@@ -127,7 +105,7 @@ function AdminHome() {
                 ))}
               </tbody>
             </table>
-          </div> */}
+          </div>
         </main>
       </div>
 
@@ -149,4 +127,4 @@ function AdminHome() {
   );
 }
 
-export default AdminHome;
+export default AllProduct;
