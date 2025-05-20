@@ -22,42 +22,45 @@ const EditProduct = () => {
     name: "key_features",
   });
 
-const onSubmit = async (data) => {
-  const productsData = {
-    title: data?.title,
-    category: data?.category,
-    price: data?.price,
-    previous_price: data?.previous_price,
-    regular_price: data?.regular_price,
-    discount: data?.discount,
-    save_amount: data?.save_amount,
-    status: data?.status,
-    brand: data?.brand,
-    key_features: data?.key_features,
-    image: data?.image,
+  const onSubmit = async (data) => {
+    const productsData = {
+      title: data?.title,
+      category: data?.category,
+      price: data?.price,
+      previous_price: data?.previous_price,
+      regular_price: data?.regular_price,
+      discount: data?.discount,
+      save_amount: data?.save_amount,
+      status: data?.status,
+      brand: data?.brand,
+      key_features: data?.key_features,
+      image: data?.image,
+      product_code: data?.product_code
+    };
+
+    try {
+      const productsRes = await axiosPublic.post("/add-products", productsData);
+
+      if (productsRes.data.insertedId) {
+        reset();
+        Swal.fire({
+          title: "Product Added Successfully",
+          icon: "success",
+          draggable: true,
+        });
+        // Navigate if needed
+        // navigate("/addproduct");
+      }
+    } catch (error) {
+      console.error("Product submission failed", error);
+      Swal.fire({
+        title: "Something went wrong!",
+        icon: "error",
+      });
+    }
   };
 
-  try {
-    const productsRes = await axiosPublic.post("/add-products", productsData);
-
-    if (productsRes.data.insertedId) {
-      reset();
-      Swal.fire({
-        title: "Product Added Successfully",
-        icon: "success",
-        draggable: true,
-      });
-      // Navigate if needed
-      // navigate("/addproduct");
-    }
-  } catch (error) {
-    console.error("Product submission failed", error);
-    Swal.fire({
-      title: "Something went wrong!",
-      icon: "error",
-    });
-  }
-};
+  const categoryOption = ['Desktop', 'Laptop', 'Mobile', 'Camera', 'Monitor', 'UPS', 'Tablet', 'Component', 'Sever & Storage', 'Accessories']
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-xl rounded-2xl">
@@ -86,9 +89,12 @@ const onSubmit = async (data) => {
             {...register("category", { required: true })}
             className="w-full px-4 py-2 border rounded-lg"
           >
-            <option value="Desktop">Desktop</option>
+            {/* <option value="Desktop">Desktop</option>
             <option value="Laptop">Laptop</option>
-            <option value="Accessories">Accessories</option>
+            <option value="Accessories">Accessories</option> */}
+            {
+              categoryOption.map(ctOption => <option value={ctOption}>{ctOption}</option>)
+            }
           </select>
         </div>
 
@@ -167,6 +173,14 @@ const onSubmit = async (data) => {
             <input
               type="text"
               {...register("model")}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 font-semibold">Product Code</label>
+            <input
+              type="text"
+              {...register("product_code")}
               className="w-full px-4 py-2 border rounded-lg"
             />
           </div>

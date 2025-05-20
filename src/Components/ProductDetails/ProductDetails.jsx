@@ -47,7 +47,6 @@ const ProductDetails = () => {
                     transition={{ duration: 0.5 }}
                 >
                     <h1 className=" text-xl md:text-2xl lg:text-3xl font-bold text-primary">{product?.title}</h1>
-                    <p className="text-gray-500 text-lg mt-2">{product?.resolution}</p>
 
                     {/* <div className="my-4">
                         <p><span className="font-semibold">Display:</span> {product?.display}</p>
@@ -56,19 +55,25 @@ const ProductDetails = () => {
                     </div> */}
 
                     <div className="mt-4 space-y-2">
-                        <p className='border btn text-gray-900 rounded-2xl'>Brand : {product.brand}</p>
+                        <div className='flex gap-2'>
+                            <p className='border btn text-gray-900 text-sm rounded-2xl'>Brand : {product.brand}</p>
+                            {
+                                product?.product_code ?
+                                <p className='border btn text-gray-900 text-sm rounded-2xl'>Product Code : {product?.product_code}</p>:''
+                            }
+                        </div>
                         <p className="text-xl font-bold text-green-600">
                             Discount Price: ৳{product?.price}
                         </p>
                         <p className="line-through text-gray-400">Old Price: ৳{product?.regular_price}</p>
                         <p className="text-lg">Regular Price: <span className="font-semibold text-neutral">৳{product?.regular_price}</span></p>
-                        <p className="text-sm text-success">Status: {product.status=='In Stock'?<span className=''>In Stock</span>:<span className='text-red-600'>Out of Stock</span>}</p>
+                        <p className="text-sm text-success">Status: {product.status == 'In Stock' ? <span className=''>In Stock</span> : <span className='text-red-600'>Out of Stock</span>}</p>
                         {/* <p className="text-sm text-gray-400">Product Code: {product?.productCode}</p> */}
                         <div>
                             <h1 className='text-xl'>Key Feature</h1>
                             <div>
                                 {
-                                    product.key_features.map(feat=> <p className='text-gray-600 pb-1'>{feat}</p>)
+                                    product.key_features.map(feat => <p className='text-gray-600 pb-1'>{feat}</p>)
 
                                 }
                             </div>
@@ -84,7 +89,7 @@ const ProductDetails = () => {
                     <motion.button
                         whileTap={{ scale: 0.95 }}
                         className="btn btn-primary mt-6 ml-4"
-                    >   
+                    >
                         <MdOutlineShoppingCart size={20} />
                         Add to cart
                     </motion.button>
