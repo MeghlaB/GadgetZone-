@@ -1,245 +1,145 @@
-import React, { useState } from 'react';
-
-const desktopPCs = [
-  {
-    id: 1,
-    name: "AMD Ryzen 5 5600G PC",
-    processor: "Ryzen 5",
-    ram: "8GB",
-    ssd: "256GB",
-    price: "21600",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-7-7700x-gaming-desktop-pc-36343-002-228x228.webp"
-  },
-  {
-    id: 2,
-    name: "Intel Core i3 12100 PC",
-    processor: "Core i3",
-    ram: "8GB",
-    ssd: "512GB",
-    price: "31785",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/ryzen-7-5800x-gaming-desktop-pc-0001-228x228.webp"
-  },
-  {
-    id: 3,
-    name: "Ryzen 7 5700X Gaming PC",
-    processor: "Ryzen 7",
-    ram: "16GB",
-    ssd: "512GB",
-    price: "42000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-8400f-desktop-pc-004-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-  {
-    id: 4,
-    name: "AMD Ryzen 5 Custom Build",
-    processor: "Ryzen 5",
-    ram: "16GB",
-    ssd: "256GB",
-    price: "37000",
-    image: "https://www.startech.com.bd/image/cache/catalog/desktop-pc/desktop-offer/amd-ryzen-5-5500-gaming-pc-228x228.webp"
-  },
-];
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 function Desktop() {
+  const axiosPublic = useAxiosPublic();
+
+  const {
+    isLoading,
+    isError,
+    data: products = [],
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const res = await axiosPublic.get("/products");
+      return res.data;
+    },
+  });
+
+  // Filter states
   const [filters, setFilters] = useState({
     processor: "",
     ram: "",
-    ssd: ""
+    ssd: "",
   });
 
   const [priceRange, setPriceRange] = useState({
-    min: '',
-    max: 50000
+    min: 0,
+    max: 500000,
   });
 
+  // Extract processor, RAM, SSD info from key_features array
+  const extractSpecs = (keyFeatures) => {
+    let processor = "";
+    let ram = "";
+    let ssd = "";
+
+    keyFeatures.forEach((feature) => {
+      const lower = feature.toLowerCase();
+
+      if (lower.includes("processor")) {
+        // Extract after "Processor: "
+        processor = feature.replace(/processor:\s*/i, "").trim();
+        // Optionally trim to main name like "Ryzen 7"
+        if (processor.toLowerCase().includes("ryzen")) {
+          const match = processor.match(/ryzen \d+/i);
+          if (match) processor = match[0];
+        } else if (processor.toLowerCase().includes("core i")) {
+          const match = processor.match(/core i\d+/i);
+          if (match) processor = match[0];
+        } else if (processor.toLowerCase().includes("snapdragon")) {
+          const match = processor.match(/snapdragon \w+ ?\w*/i);
+          if (match) processor = match[0];
+        }
+      }
+
+      if (lower.includes("ram")) {
+        // RAM usually like "RAM: 16GB DDR5 6400MHz; Storage: 1TB SSD"
+        // Split by semicolon or comma
+        const parts = feature.split(/[;,]/);
+        parts.forEach((part) => {
+          if (part.toLowerCase().includes("ram")) {
+            const ramMatch = part.match(/\d+GB/i);
+            if (ramMatch) ram = ramMatch[0];
+          }
+          if (
+            part.toLowerCase().includes("storage") ||
+            part.toLowerCase().includes("ssd")
+          ) {
+            const ssdMatch = part.match(/\d+TB|\d+GB/i);
+            if (ssdMatch) ssd = ssdMatch[0];
+          }
+        });
+      }
+
+      // In case Storage/SSD info is in a separate string and ssd not found yet
+      if ((lower.includes("storage") || lower.includes("ssd")) && !ssd) {
+        const ssdMatch = feature.match(/\d+TB|\d+GB/i);
+        if (ssdMatch) ssd = ssdMatch[0];
+      }
+    });
+
+    return { processor, ram, ssd };
+  };
+
+  // Filter only laptops
+  const desktopPCs = products.filter((product) => product.category === "Desktop");
+
+  // Handle checkbox filter change
   const handleChange = (type, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [type]: prev[type] === value ? "" : value
+      [type]: prev[type] === value ? "" : value,
     }));
   };
 
+  // Handle price inputs
   const handlePriceChange = (e, type) => {
     const value = Number(e.target.value);
-    setPriceRange(prev => ({
+    setPriceRange((prev) => ({
       ...prev,
-      [type]: value
+      [type]: value,
     }));
   };
 
-  const filteredData = desktopPCs.filter(pc => {
-    const priceNumber = Number(pc.price.replace(/,/g, ''));
+  // Filtered laptops according to filters
+  const filteredData = desktopPCs.filter((pc) => {
+    const priceNumber = Number(pc.price.toString().replace(/,/g, ""));
+
+    const { processor, ram, ssd } = extractSpecs(pc.key_features || []);
+
     return (
-      (!filters.processor || pc.processor === filters.processor) &&
-      (!filters.ram || pc.ram === filters.ram) &&
-      (!filters.ssd || pc.ssd === filters.ssd) &&
+      (!filters.processor || processor.toLowerCase().includes(filters.processor.toLowerCase())) &&
+      (!filters.ram || ram === filters.ram) &&
+      (!filters.ssd || ssd === filters.ssd) &&
       priceNumber >= priceRange.min &&
       priceNumber <= priceRange.max
     );
   });
 
+  if (isLoading) {
+    return (
+      <p className="text-center mt-10 text-blue-500">Loading products...</p>
+    );
+  }
+
+  if (isError) {
+    return (
+      <p className="text-center mt-10 text-red-500">Error loading products.</p>
+    );
+  }
+
   return (
-    <div className='mt-28 min-h-screen bg-gray-100 p-4'>
-      <h1 className="text-2xl font-bold mb-6 text-center">🖥️ Desktop PC Catalog</h1>
+    <div className="mt-28 min-h-screen bg-gray-100 p-4">
+      <h1 className="text-2xl font-bold mb-6 text-center">💻 Desktop Catalog</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Filter Sidebar */}
         <div className="space-y-6 bg-white p-4 rounded shadow-md">
           {/* Price Range */}
           <div>
-            <h4 className="font-bold mb-2">Price Range</h4>
+            <h4 className="font-bold mb-2">Price Range (৳)</h4>
             <div className="flex gap-2 items-center">
               <input
                 type="number"
@@ -254,13 +154,15 @@ function Desktop() {
                 value={priceRange.max}
                 onChange={(e) => handlePriceChange(e, "max")}
                 className="w-full border px-2 py-1 rounded"
+                min={0}
               />
             </div>
           </div>
 
+          {/* Processor */}
           <div>
             <h4 className="font-bold mb-2">Processor</h4>
-            {["Ryzen 5", "Ryzen 7", "Core i3"].map(item => (
+            {["Ryzen 5", "Ryzen 7", "Core i3", "Snapdragon X Plus"].map((item) => (
               <div key={item}>
                 <label>
                   <input
@@ -274,9 +176,10 @@ function Desktop() {
             ))}
           </div>
 
+          {/* RAM */}
           <div>
             <h4 className="font-bold mb-2">RAM</h4>
-            {["8GB", "16GB"].map(item => (
+            {["8GB", "16GB"].map((item) => (
               <div key={item}>
                 <label>
                   <input
@@ -290,9 +193,10 @@ function Desktop() {
             ))}
           </div>
 
+          {/* SSD */}
           <div>
             <h4 className="font-bold mb-2">SSD</h4>
-            {["256GB", "512GB"].map(item => (
+            {["256GB", "512GB", "1TB"].map((item) => (
               <div key={item}>
                 <label>
                   <input
@@ -307,27 +211,39 @@ function Desktop() {
           </div>
         </div>
 
-        {/* Card Grid */}
+        {/* Products */}
         <div className="md:col-span-3">
           {filteredData.length === 0 ? (
             <p className="text-center text-red-500 font-semibold">
-              No PCs found with selected filters.
+              No Laptops found with selected filters.
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {filteredData.map(pc => (
-                <div key={pc.id} className="border rounded-lg p-4 shadow-md bg-white">
-                  <img
-                    src={pc.image}
-                    alt={pc.name}
-                    className="w-full h-40 object-cover rounded"
-                  />
-                  <h2 className="font-semibold mt-2">{pc.name}</h2>
-                  <p className="text-sm text-gray-600">Processor: {pc.processor}</p>
-                  <p className="text-sm text-gray-600">RAM: {pc.ram} | SSD: {pc.ssd}</p>
-                  <p className="text-red-600 font-bold mt-2">{Number(pc.price).toLocaleString()} ৳</p>
-                </div>
-              ))}
+              {filteredData.map((pc) => {
+                const { processor, ram, ssd } = extractSpecs(pc.key_features || []);
+                return (
+                  <div
+                    key={pc._id}
+                    className="border rounded-lg p-4 shadow-md bg-white"
+                  >
+                    <img
+                      src={pc.image || "https://via.placeholder.com/150"}
+                      alt={pc.title}
+                      className="w-full h-40 object-cover rounded"
+                    />
+                    <h2 className="font-semibold mt-2">{pc.title}</h2>
+                    <p className="text-sm text-gray-600">
+                      Processor: {processor || "N/A"}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      RAM: {ram || "N/A"} | SSD: {ssd || "N/A"}
+                    </p>
+                    <p className="text-red-600 font-bold mt-2">
+                      {Number(pc.price).toLocaleString()} ৳
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
