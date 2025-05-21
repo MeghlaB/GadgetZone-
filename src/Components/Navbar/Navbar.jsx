@@ -88,8 +88,11 @@ const Navbar = () => {
                 />
                 
 
-                {/* Dashboard & Logout - Desktop only */}
-                <Link to={'/dashboard/adminhome'} className="hidden md:flex items-center gap-1">
+                {/* Dashboard & Logout - Desktop only */} 
+
+                {/* <Link to={'/dashboard/adminhome'} className="hidden md:flex items-center gap-1"></Link> */}
+
+                <Link to={'/dashboard/sellerhome'} className="hidden md:flex items-center gap-1">
                   <LuLayoutDashboard />
                   <span className="text-sm">Dashboard</span>
                 </Link>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import { Link } from "react-router-dom";
+
 
 function Accessories() {
   const axiosPublic = useAxiosPublic();
@@ -222,7 +224,7 @@ function Accessories() {
               {filteredData.map((pc) => {
                 const { processor, ram, ssd } = extractSpecs(pc.key_features || []);
                 return (
-                  <div
+                  <Link to={`/product/${pc._id}`}
                     key={pc._id}
                     className="border rounded-lg p-4 shadow-md bg-white"
                   >
@@ -241,7 +243,7 @@ function Accessories() {
                     <p className="text-red-600 font-bold mt-2">
                       {Number(pc.price).toLocaleString()} ৳
                     </p>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

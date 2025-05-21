@@ -27,6 +27,8 @@ import ErrorPage from "../Components/ErrorPage.jsx/ErrorPage";
 import EditProduct from "../Dashboard/AdminDashboard/AdminFeauter/EditProduct";
 import Accessories from "../Shared/Accessories/Accessories";
 import AllProduct from "../Dashboard/AdminDashboard/AdminFeauter/AllProduct";
+import SellerDashboard from "../Dashboard/SellerDashboard/SellerDashboard";
+import SellerHome from "../Dashboard/SellerDashboard/SellerFeature/SellerHome";
 
 
 export const router = createBrowserRouter([
@@ -147,7 +149,14 @@ export const router = createBrowserRouter([
         element: <EditProduct></EditProduct>
       },
 
+
+      // seleer dashboard
+      {
+        path: 'sellerhome', 
+        element: <SellerHome></SellerHome>
+      }
     ],
+
   }, 
   {
     path:'*', 

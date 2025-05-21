@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { ImCross, ImMenu } from 'react-icons/im';
 import UserDashboard from './UserDashboard/UserDashboard';
 import AdminDashboard from './AdminDashboard/AdminDashboard';
+import SellerDashboard from './SellerDashboard/SellerDashboard';
 
 
 export default function Dashboard() {
@@ -34,7 +35,8 @@ export default function Dashboard() {
         </button>
 
         {/* Sidebar Content */}
-        <AdminDashboard/>
+        {/* <AdminDashboard/> */}
+        <SellerDashboard></SellerDashboard>
         {/* {isAdmin ? <AdminDashboard /> : <UserDashboard/>} */}
       </div>
 

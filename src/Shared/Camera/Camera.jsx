@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import { Link } from "react-router-dom";
 
 function Camera() {
   const axiosPublic = useAxiosPublic();
@@ -222,7 +223,7 @@ function Camera() {
               {filteredData.map((pc) => {
                 const { processor, ram, ssd } = extractSpecs(pc.key_features || []);
                 return (
-                  <div
+                  <Link to={`/product/${pc._id}`}
                     key={pc._id}
                     className="border rounded-lg p-4 shadow-md bg-white"
                   >
@@ -241,7 +242,7 @@ function Camera() {
                     <p className="text-red-600 font-bold mt-2">
                       {Number(pc.price).toLocaleString()} ৳
                     </p>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
