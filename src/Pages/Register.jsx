@@ -6,9 +6,7 @@ import { AuthContext } from "../Provider/AuthProvider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// ImgBB API key
-const image_hosting_key = import.meta.env.VITE_IMAGEHOSTING;
-const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
 
 function Register() {
   const { createUser, updateUserprofile, GoogleLogin } = useContext(AuthContext);
@@ -22,53 +20,41 @@ function Register() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    setLoading(true);
-    try {
-      // Upload image to ImgBB
-      const formData = new FormData();
-      formData.append("image", data.photo[0]);
+ const onSubmit = async (data) => {
+  setLoading(true);
+  try {
+    // Create user with Firebase
+    const result = await createUser(data.email, data.password);
+    await updateUserprofile(data.name, data.photo);
 
-      const imgRes = await axios.post(image_hosting_api, formData);
-      if (!imgRes.data.success) throw new Error("Image upload failed");
+    // Save user in database
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      photo: data.photo, // ✅ FIXED HERE
+      role: "user",
+      status: "active",
+    };
 
-      const photoURL = imgRes.data.data.display_url;
+    const dbRes = await axios.post("http://localhost:5000/users", userInfo);
 
-      // Create user with Firebase
-      const result = await createUser(data.email, data.password);
-      await updateUserprofile(data.name, photoURL);
-
-      // Save user in database
-      const userInfo = {
-        name: data.name,
-        email: data.email,
-        photo: photoURL,
-        role: "user",
-        status: "active",
-      };
-
-      const dbRes = await axios.post("http://localhost:5000/users", userInfo, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (dbRes.data.insertedId || dbRes.data.acknowledged) {
-        toast.success("Account created successfully!");
-        reset();
-        navigate("/");
-      } else {
-        toast.error("User creation failed in database");
-      }
-
-    } catch (error) {
-      console.error("Registration Error:", error);
-      const msg = error.response?.data?.message || error.message || "Registration failed";
-      toast.error(msg);
-    } finally {
-      setLoading(false);
+    if (dbRes.data.insertedId || dbRes.data.acknowledged) {
+      toast.success("Account created successfully!");
+      reset();
+      navigate("/");
+    } else {
+      toast.error("User creation failed in database");
     }
-  };
+
+  } catch (error) {
+    console.error("Registration Error:", error);
+    const msg = error.response?.data?.message || error.message || "Registration failed";
+    toast.error(msg);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleGoogleSign = async () => {
     try {
@@ -118,8 +104,8 @@ function Register() {
           <label htmlFor="photo" className="block font-medium">Photo*</label>
           <input
             id="photo"
-            type="file"
-            accept="image/*"
+            type="url"
+         
             {...register("photo", { required: true })}
             className="w-full border px-3 py-2 rounded"
           />

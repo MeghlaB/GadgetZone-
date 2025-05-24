@@ -21,7 +21,7 @@ const ProductDetails = () => {
         },
         enabled: !!id,
     });
-    console.log(product)
+
 
     if (isLoading) return <div className="text-center mt-32 text-xl font-semibold">Loading...</div>;
     if (isError) return <div className="text-center mt-32 text-red-500">Error loading product</div>;

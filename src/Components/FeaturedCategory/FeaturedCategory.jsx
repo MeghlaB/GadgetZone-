@@ -8,7 +8,7 @@ const FeaturedCategory = () => {
         fetch('FeaturedCategory.json') 
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+        
                 setCategories(data);
             });
     }, []);

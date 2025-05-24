@@ -60,7 +60,7 @@ const AddProduct = () => {
         // navigate("/addproduct");
       }
     } catch (error) {
-      console.error("Product submission failed", error);
+
       Swal.fire({
         title: "Something went wrong!",
         icon: "error",

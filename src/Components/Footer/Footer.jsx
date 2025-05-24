@@ -52,8 +52,8 @@ function Footer() {
           <p className="text-sm text-gray-300 mb-2">
             Head Office: 28 Kazi Nazrul Islam Ave,<br />Navana Zohura Square, Dhaka 1000
           </p>
-          <p className="text-sm text-gray-300 mb-2">Developer: Joy Halder</p>
-          <p className="text-sm text-gray-300 mb-2">Email: joyhalder00113355@gmail.com</p>
+          <p className="text-sm text-gray-300 mb-2">Developer: Meghla Biswas, Joy Halder</p>
+          <p className="text-sm text-gray-300 mb-2">Email: </p>
           <p className="text-sm text-red-400 mb-4">webteam@startechbd.com</p>
 
           {/* Social Icons */}

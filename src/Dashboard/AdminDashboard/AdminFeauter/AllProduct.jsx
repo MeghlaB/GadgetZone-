@@ -17,7 +17,7 @@ import { AuthContext } from "../../../Provider/AuthProvider";
 function AllProduct() {
 
   const loadedProducts = useLoaderData()
-  console.log(loadedProducts)
+
   const [products, setProduct] = useState(loadedProducts)
   const {user} = useContext(AuthContext)
 
@@ -37,12 +37,12 @@ function AllProduct() {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data)
+
             if (data.deletedCount > 0) {
               Swal.fire("Deleted!", "Product has been deleted.", "success");
               const remaining = products.filter((p) => p._id !== _id);
               setProduct(remaining);
-              console.log(remaining)
+             
             }
           });
       }
