@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { FaSearch, FaUser, FaBolt } from 'react-icons/fa';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,12 +6,16 @@ import { AuthContext } from '../../Provider/AuthProvider';
 import { MdLogout } from "react-icons/md";
 import { useRef, useEffect } from 'react';
 import { LuLayoutDashboard } from "react-icons/lu";
+import userAdmin from '../../Hooks/userAdmin';
+import userSeller from '../../Hooks/userSeller';
 
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logOut } = useContext(AuthContext)
   const navigate = useNavigate()
+  const [isAdmin] = userAdmin();
+   const [isseller] = userSeller();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef();
@@ -27,6 +31,18 @@ const Navbar = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+
+    const getDashboardLink = useCallback(() => {
+    if (isAdmin) {
+      return '/dashboard/adminhome';
+    }
+    if (isseller) {
+      return '/dashboard/sellerhome';
+    }
+    return '/dashboard/home';
+  }, [isAdmin, isseller]);
+
 
 
   const categories = [
@@ -92,7 +108,7 @@ const Navbar = () => {
 
                 {/* <Link to={'/dashboard/adminhome'} className="hidden md:flex items-center gap-1"></Link> */}
 
-                <Link to={'/dashboard/sellerhome'} className="hidden md:flex items-center gap-1">
+                <Link to={getDashboardLink()} className="hidden md:flex items-center gap-1">
                   <LuLayoutDashboard />
                   <span className="text-sm">Dashboard</span>
                 </Link>
@@ -140,7 +156,7 @@ const Navbar = () => {
               {
                 showDropdown && (
                   <div className="absolute right-0 mt-2 w-32 text-black bg-white shadow-md rounded-md py-2 z-50">
-                    <Link to="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-200">
+                    <Link to={getDashboardLink()} className="block px-4 py-2 text-sm hover:bg-gray-200">
                       <div className='flex items-center gap-1'>
                         <LuLayoutDashboard />
                         <p>Dashboard</p>

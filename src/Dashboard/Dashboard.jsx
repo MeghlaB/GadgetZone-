@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ImCross, ImMenu } from 'react-icons/im';
 import UserDashboard from './UserDashboard/UserDashboard';
 import AdminDashboard from './AdminDashboard/AdminDashboard';
 import SellerDashboard from './SellerDashboard/SellerDashboard';
-
+import userAdmin from '../Hooks/userAdmin';
+import userSeller from '../Hooks/userSeller';
 
 export default function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const isAdmin = true; 
   const [loading, setLoading] = useState(false);
+  const [isAdmin] = userAdmin();
+  const [isseller] = userSeller();
 
   if (loading) {
     return <div>Loading...</div>;
@@ -20,28 +22,33 @@ export default function Dashboard() {
   };
 
   return (
-    <div className={`flex h-screen`}>
+    <div className="flex h-screen">
       {/* Sidebar */}
       <div
-        className={`fixed top-0 bg-gray-800 text-white left-0 z-40 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          } transition-transform duration-300 w-80 min-h-screen p-4`}
+        className={`fixed top-0 left-0 z-40 transform bg-gray-800 text-white transition-transform duration-300 w-80 min-h-screen p-4 ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
         {/* Close Button */}
         <button
           onClick={toggleSidebar}
-          className={`btn bg-red-600 text-white btn-sm absolute top-2 right-4`}
+          className="btn bg-red-600 text-white btn-sm absolute top-2 right-4"
         >
-          <ImCross  />
+          <ImCross />
         </button>
 
         {/* Sidebar Content */}
-        {/* <AdminDashboard/> */}
-        <SellerDashboard></SellerDashboard>
-        {/* {isAdmin ? <AdminDashboard /> : <UserDashboard/>} */}
+        {isAdmin ? (
+          <AdminDashboard />
+        ) : isseller ? (
+          <SellerDashboard />
+        ) : (
+          <UserDashboard />
+        )}
       </div>
 
       {/* Main Content */}
-      <div className={`flex-1`}>
+      <div className="flex-1">
         {/* Drawer Toggle Button */}
         <div className="p-4">
           <button
@@ -58,5 +65,5 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }
