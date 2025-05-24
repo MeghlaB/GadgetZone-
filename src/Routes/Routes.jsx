@@ -133,12 +133,12 @@ export const router = createBrowserRouter([
       {
         path: "adminhome",
         element: <AdminHome />,
-        loader: ()=> fetch('https://gadget-zone-server-ashy.vercel.app/products')
+        loader: ()=> fetch('http://localhost:5000/products')
       },
       {
         path: "allproduct",
         element: <AllProduct></AllProduct>,
-        loader: ()=> fetch('https://gadget-zone-server-ashy.vercel.app/products')
+        loader: ()=> fetch('http://localhost:5000/products')
       },
       {
         path: "addproduct",
