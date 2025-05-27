@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import useAxiosPublic from '../../Hooks/UseAxiosPublic';
 import { motion } from 'framer-motion';
 import { MdOutlineShoppingCart } from "react-icons/md";
@@ -80,12 +80,14 @@ const ProductDetails = () => {
                         </div>
                     </div>
 
-                    <motion.button
+                 <Link to={`/checkout/checkoders/${product._id}`}>
+                       <motion.button
                         whileTap={{ scale: 0.95 }}
                         className="btn btn-primary mt-6"
                     >
                         Buy Now
                     </motion.button>
+                 </Link>
                     <motion.button
                         whileTap={{ scale: 0.95 }}
                         className="btn btn-primary mt-6 ml-4"
