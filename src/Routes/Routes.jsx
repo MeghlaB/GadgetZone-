@@ -29,6 +29,8 @@ import Accessories from "../Shared/Accessories/Accessories";
 import AllProduct from "../Dashboard/AdminDashboard/AdminFeauter/AllProduct";
 import SellerDashboard from "../Dashboard/SellerDashboard/SellerDashboard";
 import SellerHome from "../Dashboard/SellerDashboard/SellerFeature/SellerHome";
+import Checkoutoders from "../Components/Checkout/Checkoutoders";
+import PaymentSucces from "../Components/PaymentSucces/PaymentSucces";
 
 
 export const router = createBrowserRouter([
@@ -118,6 +120,14 @@ export const router = createBrowserRouter([
       {
         path:'/product/:id',
         element:<ProductDetails/>
+      },
+      {
+        path:'/checkout/checkoders/:id',
+        element:<Checkoutoders/>
+      },
+      {
+        path:'/payment/success/:tranId',
+        element:<PaymentSucces/>
       }
     ],
   },
@@ -133,12 +143,12 @@ export const router = createBrowserRouter([
       {
         path: "adminhome",
         element: <AdminHome />,
-        loader: ()=> fetch('http://localhost:5000/products')
+        loader: ()=> fetch('https://gadget-zone-server-ashy.vercel.app/products')
       },
       {
         path: "allproduct",
         element: <AllProduct></AllProduct>,
-        loader: ()=> fetch('http://localhost:5000/products')
+        loader: ()=> fetch('https://gadget-zone-server-ashy.vercel.app/products')
       },
       {
         path: "addproduct",
