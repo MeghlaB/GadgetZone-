@@ -6,13 +6,9 @@ import { AuthContext } from "../Provider/AuthProvider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-<<<<<<< HEAD
 // imageBB API Key
 const image_hosting_key = import.meta.env.VITE_IMAGEHOSTING;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-=======
-
->>>>>>> d2a0298e88b3737c6b3d0584b47a18127f70eeea
 
 function Register() {
   const { createUser, updateUserprofile, GoogleLogin } = useContext(AuthContext);
@@ -26,7 +22,6 @@ function Register() {
     formState: { errors },
   } = useForm();
 
-<<<<<<< HEAD
   const onSubmit = async (data) => {
     setLoading(true);
     try {
@@ -38,32 +33,14 @@ function Register() {
       if (!imgRes.data.success) {
         throw new Error("Image upload failed");
       }
-=======
- const onSubmit = async (data) => {
-  setLoading(true);
-  try {
-    // Create user with Firebase
-    const result = await createUser(data.email, data.password);
-    await updateUserprofile(data.name, data.photo);
 
-    // Save user in database
-    const userInfo = {
-      name: data.name,
-      email: data.email,
-      photo: data.photo, // ✅ FIXED HERE
-      role: "user",
-      status: "active",
-    };
->>>>>>> d2a0298e88b3737c6b3d0584b47a18127f70eeea
+      const photoURL = imgRes.data.data.url;
 
-    const dbRes = await axios.post("http://localhost:5000/users", userInfo);
-
-<<<<<<< HEAD
-      // Create user with Firebase Auth
+      // Create user in Firebase
       const result = await createUser(data.email, data.password);
       await updateUserprofile(data.name, photoURL);
 
-      // Save user to DB
+      // Save user in database
       const userInfo = {
         name: data.name,
         email: data.email,
@@ -73,63 +50,45 @@ function Register() {
       };
 
       const dbRes = await axios.post("http://localhost:5000/users", userInfo);
-      console.log(dbRes.data)
 
-      if (dbRes.data.insertedId) {
+      if (dbRes.data.insertedId || dbRes.data.acknowledged) {
         toast.success("Account created successfully!");
         reset();
         navigate("/");
       } else {
-        toast.error("Failed to save user to database");
+        toast.error("User creation failed in database");
       }
 
     } catch (error) {
       console.error("Registration Error:", error);
-      toast.error(error.message || "Registration failed");
+      const msg = error.response?.data?.message || error.message || "Registration failed";
+      toast.error(msg);
     } finally {
       setLoading(false);
-=======
-    if (dbRes.data.insertedId || dbRes.data.acknowledged) {
-      toast.success("Account created successfully!");
-      reset();
-      navigate("/");
-    } else {
-      toast.error("User creation failed in database");
->>>>>>> d2a0298e88b3737c6b3d0584b47a18127f70eeea
     }
+  };
 
-  } catch (error) {
-    console.error("Registration Error:", error);
-    const msg = error.response?.data?.message || error.message || "Registration failed";
-    toast.error(msg);
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleGoogleSign = async () => {
+    try {
+      const result = await GoogleLogin();
+      const user = result.user;
 
+      const userInfo = {
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        role: "user",
+        status: "active",
+      };
 
- const handleGoogleSign = async () => {
-  try {
-    const result = await GoogleLogin();
-    const user = result.user;
+      await axios.post("http://localhost:5000/users", userInfo);
 
-    const userInfo = {
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-      role: "user",
-      status: "active",
-    };
-
-    await axios.post("https://gadget-zone-server-ashy.vercel.app/users", userInfo); 
-
-    toast.success("Logged in with Google");
-    navigate("/");
-  } catch (error) {
-    toast.error("Google login failed");
-  }
-};
-
+      toast.success("Logged in with Google");
+      navigate("/");
+    } catch (error) {
+      toast.error("Google login failed");
+    }
+  };
 
   return (
     <div className="mx-auto w-full max-w-md bg-white p-10 shadow-lg my-28">
@@ -148,13 +107,13 @@ function Register() {
           {errors.name && <span className="text-red-500">Name is required</span>}
         </div>
 
-        {/* Photo */}
+        {/* Photo (File Upload) */}
         <div className="space-y-1 text-sm">
           <label htmlFor="photo" className="block font-medium">Photo*</label>
           <input
             id="photo"
-            type="url"
-         
+            type="file"
+            accept="image/*"
             {...register("photo", { required: true })}
             className="w-full border px-3 py-2 rounded"
           />
@@ -192,11 +151,12 @@ function Register() {
           {errors.password?.type === "maxLength" && <span className="text-red-500">Maximum 20 characters</span>}
           {errors.password?.type === "pattern" && (
             <span className="text-red-500">
-              Password must contain 1 uppercase, 1 lowercase, 1 number, no spaces/special chars
+              Must include uppercase, lowercase, number, no special char or space
             </span>
           )}
         </div>
 
+        {/* Submit Button */}
         <input
           type="submit"
           value={loading ? "Signing Up..." : "Sign Up"}
@@ -207,6 +167,7 @@ function Register() {
         />
       </form>
 
+      {/* Already have account */}
       <p className="text-sm mt-4 text-center">
         Already have an account?{" "}
         <Link to="/account/login" className="text-blue-600 underline">Sign In</Link>
@@ -219,7 +180,7 @@ function Register() {
         <hr className="flex-1 border-gray-300" />
       </div>
 
-      {/* Google Login Button */}
+      {/* Google Sign-in */}
       <div className="flex justify-center">
         <button
           onClick={handleGoogleSign}
