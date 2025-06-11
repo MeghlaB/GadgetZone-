@@ -1,8 +1,4 @@
-import {
-  BookIcon,
-  Home,
-  CalendarCheck2,
-} from "lucide-react";
+import { BookIcon, Home, CalendarCheck2 } from "lucide-react";
 import React from "react";
 import { ImProfile } from "react-icons/im";
 import { Link } from "react-router-dom";
@@ -16,11 +12,11 @@ function UserDashboard() {
 
         <nav className="space-y-4">
           <Link
-            to="/dashboard/my-appoinments"
+            to="/dashboard/user-home"
             className="flex items-center gap-3 hover:text-gray-300"
           >
             <BookIcon size={20} />
-            My Appointments
+            user home
           </Link>
 
           <Link
@@ -43,10 +39,7 @@ function UserDashboard() {
 
       {/* Bottom Home link */}
       <div className="pt-10">
-        <Link
-          to="/"
-          className="flex items-center gap-3 hover:text-gray-300"
-        >
+        <Link to="/" className="flex items-center gap-3 hover:text-gray-300">
           <Home size={20} />
           Home
         </Link>

@@ -53,7 +53,7 @@ const Navbar = () => {
     if (isseller) {
       return "/dashboard/sellerhome";
     }
-    return "/dashboard/home";
+    return "/dashboard/user-home";
   }, [isAdmin, isseller]);
 
   const categories = [
