@@ -56,8 +56,7 @@ const AddProduct = () => {
           icon: "success",
           draggable: true,
         });
-        // Navigate if needed
-        // navigate("/addproduct");
+      
       }
     } catch (error) {
 
@@ -96,9 +95,7 @@ const AddProduct = () => {
             {...register("category", { required: true })}
             className="w-full px-4 py-2 border rounded-lg"
           >
-            {/* <option value="Desktop">Desktop</option>
-            <option value="Laptop">Laptop</option>
-            <option value="Accessories">Accessories</option> */}
+           
             {
               categoryOption.map(ctOption => <option value={ctOption}>{ctOption}</option> )
             }

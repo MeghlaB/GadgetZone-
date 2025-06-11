@@ -45,38 +45,36 @@ function Register() {
       toast.error("User creation failed in database");
     }
 
-  } catch (error) {
-    console.error("Registration Error:", error);
-    const msg = error.response?.data?.message || error.message || "Registration failed";
-    toast.error(msg);
-  } finally {
-    setLoading(false);
-  }
-};
+    } catch (error) {
+      console.error("Registration Error:", error);
+      const msg = error.response?.data?.message || error.message || "Registration failed";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const handleGoogleSign = async () => {
+    try {
+      const result = await GoogleLogin();
+      const user = result.user;
 
- const handleGoogleSign = async () => {
-  try {
-    const result = await GoogleLogin();
-    const user = result.user;
+      const userInfo = {
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        role: "user",
+        status: "active",
+      };
 
-    const userInfo = {
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-      role: "user",
-      status: "active",
-    };
+      await axios.post("http://localhost:5000/users", userInfo);
 
-    await axios.post("https://gadget-zone-server-ashy.vercel.app/users", userInfo); 
-
-    toast.success("Logged in with Google");
-    navigate("/");
-  } catch (error) {
-    toast.error("Google login failed");
-  }
-};
-
+      toast.success("Logged in with Google");
+      navigate("/");
+    } catch (error) {
+      toast.error("Google login failed");
+    }
+  };
 
   return (
     <div className="mx-auto w-full max-w-md bg-white p-10 shadow-lg my-28">
@@ -95,13 +93,13 @@ function Register() {
           {errors.name && <span className="text-red-500">Name is required</span>}
         </div>
 
-        {/* Photo */}
+        {/* Photo (File Upload) */}
         <div className="space-y-1 text-sm">
           <label htmlFor="photo" className="block font-medium">Photo*</label>
           <input
             id="photo"
-            type="url"
-         
+            type="file"
+            accept="image/*"
             {...register("photo", { required: true })}
             className="w-full border px-3 py-2 rounded"
           />
@@ -139,11 +137,12 @@ function Register() {
           {errors.password?.type === "maxLength" && <span className="text-red-500">Maximum 20 characters</span>}
           {errors.password?.type === "pattern" && (
             <span className="text-red-500">
-              Password must contain 1 uppercase, 1 lowercase, 1 number, no spaces/special chars
+              Must include uppercase, lowercase, number, no special char or space
             </span>
           )}
         </div>
 
+        {/* Submit Button */}
         <input
           type="submit"
           value={loading ? "Signing Up..." : "Sign Up"}
@@ -154,6 +153,7 @@ function Register() {
         />
       </form>
 
+      {/* Already have account */}
       <p className="text-sm mt-4 text-center">
         Already have an account?{" "}
         <Link to="/account/login" className="text-blue-600 underline">Sign In</Link>
@@ -166,7 +166,7 @@ function Register() {
         <hr className="flex-1 border-gray-300" />
       </div>
 
-      {/* Google Login Button */}
+      {/* Google Sign-in */}
       <div className="flex justify-center">
         <button
           onClick={handleGoogleSign}
