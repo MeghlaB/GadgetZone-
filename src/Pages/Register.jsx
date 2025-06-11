@@ -6,13 +6,6 @@ import { AuthContext } from "../Provider/AuthProvider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-<<<<<<< HEAD
-// imageBB API Key
-const image_hosting_key = import.meta.env.VITE_IMAGEHOSTING;
-const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-=======
-
->>>>>>> d2a0298e88b3737c6b3d0584b47a18127f70eeea
 
 function Register() {
   const { createUser, updateUserprofile, GoogleLogin } = useContext(AuthContext);
@@ -26,19 +19,6 @@ function Register() {
     formState: { errors },
   } = useForm();
 
-<<<<<<< HEAD
-  const onSubmit = async (data) => {
-    setLoading(true);
-    try {
-      // Upload photo to imgBB
-      const formData = new FormData();
-      formData.append("image", data.photo[0]);
-
-      const imgRes = await axios.post(image_hosting_api, formData);
-      if (!imgRes.data.success) {
-        throw new Error("Image upload failed");
-      }
-=======
  const onSubmit = async (data) => {
   setLoading(true);
   try {
@@ -54,48 +34,15 @@ function Register() {
       role: "user",
       status: "active",
     };
->>>>>>> d2a0298e88b3737c6b3d0584b47a18127f70eeea
 
     const dbRes = await axios.post("http://localhost:5000/users", userInfo);
 
-<<<<<<< HEAD
-      // Create user with Firebase Auth
-      const result = await createUser(data.email, data.password);
-      await updateUserprofile(data.name, photoURL);
-
-      // Save user to DB
-      const userInfo = {
-        name: data.name,
-        email: data.email,
-        photo: photoURL,
-        role: "user",
-        status: "active",
-      };
-
-      const dbRes = await axios.post("http://localhost:5000/users", userInfo);
-      console.log(dbRes.data)
-
-      if (dbRes.data.insertedId) {
-        toast.success("Account created successfully!");
-        reset();
-        navigate("/");
-      } else {
-        toast.error("Failed to save user to database");
-      }
-
-    } catch (error) {
-      console.error("Registration Error:", error);
-      toast.error(error.message || "Registration failed");
-    } finally {
-      setLoading(false);
-=======
     if (dbRes.data.insertedId || dbRes.data.acknowledged) {
       toast.success("Account created successfully!");
       reset();
       navigate("/");
     } else {
       toast.error("User creation failed in database");
->>>>>>> d2a0298e88b3737c6b3d0584b47a18127f70eeea
     }
 
   } catch (error) {
