@@ -125,8 +125,8 @@ const Navbar = () => {
                 <LuLayoutDashboard />
                 <span className="text-sm">Dashboard</span>
               </Link>
-              <Link to="/add-cart" className="relative inline-block">
-                <ShoppingCart className="w-6 h-6" />
+              <Link to="/dashboard/my-carts" className="relative inline-block">
+                <ShoppingCart  className="w-6 h-6" />
                 <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 rounded-full">
                   {cartItems?.length || 0}
                 </span>

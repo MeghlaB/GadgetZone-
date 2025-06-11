@@ -20,11 +20,11 @@ function UserDashboard() {
           </Link>
 
           <Link
-            to="/dashboard/quick-booking"
+            to="/dashboard/my-carts"
             className="flex items-center gap-3 hover:text-gray-300"
           >
             <CalendarCheck2 size={20} />
-            Quick Booking
+            My-Carts
           </Link>
 
           <Link
