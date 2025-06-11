@@ -31,6 +31,7 @@ import SellerDashboard from "../Dashboard/SellerDashboard/SellerDashboard";
 import SellerHome from "../Dashboard/SellerDashboard/SellerFeature/SellerHome";
 import Checkoutoders from "../Components/Checkout/Checkoutoders";
 import PaymentSucces from "../Components/PaymentSucces/PaymentSucces";
+import UserHome from "../Dashboard/UserDashboard/UserFeature/UserHome";
 
 
 export const router = createBrowserRouter([
@@ -164,6 +165,11 @@ export const router = createBrowserRouter([
       {
         path: 'sellerhome', 
         element: <SellerHome></SellerHome>
+      },
+      // user dashboard
+      {
+        path:'user-home',
+        element:<UserHome/>
       }
     ],
 
