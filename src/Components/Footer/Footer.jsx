@@ -1,11 +1,11 @@
 import { FaPhone, FaMapMarkerAlt, FaFacebookF, FaYoutube, FaInstagram, FaWhatsapp } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
+
 
 function Footer() {
   return (
     <footer className="bg-[#0C1B2A] text-white py-10 px-6">
       <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8 border-b border-gray-700 pb-8">
-        {/* Support */}
+     
         <div>
           <h3 className="text-sm font-semibold mb-4">SUPPORT</h3>
           <div className="space-y-4">
@@ -26,7 +26,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* About Us */}
         <div>
           <h3 className="text-sm font-semibold mb-4">ABOUT US</h3>
           <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-300">
