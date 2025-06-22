@@ -33,6 +33,7 @@ import Checkoutoders from "../Components/Checkout/Checkoutoders";
 import PaymentSucces from "../Components/PaymentSucces/PaymentSucces";
 import UserHome from "../Dashboard/UserDashboard/UserFeature/UserHome";
 import Mycarts from "../Dashboard/UserDashboard/UserFeature/Mycarts";
+import MyProfile from "../Dashboard/UserDashboard/UserFeature/Myprofile";
 
 
 export const router = createBrowserRouter([
@@ -175,6 +176,10 @@ export const router = createBrowserRouter([
       {
         path:'my-carts',
         element:<Mycarts/>
+      },
+      {
+        path:'user-profile',
+        element:<MyProfile/>
       }
     ],
 
