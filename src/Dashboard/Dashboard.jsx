@@ -34,7 +34,7 @@ export default function Dashboard() {
           onClick={toggleSidebar}
           className="btn bg-red-600 text-white btn-sm absolute top-2 right-4"
         >
-          <ImCross />
+          <ImCross /> 
         </button>
 
         {/* Sidebar Content */}

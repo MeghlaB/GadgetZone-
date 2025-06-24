@@ -124,7 +124,7 @@ const CheckoutOrders = () => {
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md shadow-sm transition"
           >
-            Pay Now
+           Buy Now
           </button>
         </form>
       </div>
