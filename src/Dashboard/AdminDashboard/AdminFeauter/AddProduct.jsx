@@ -42,10 +42,10 @@ const AddProduct = () => {
       brand: data?.brand,
       key_features: data?.key_features,
       image: data?.image,
-      time: showTime, 
+      time: showTime,
       product_code: data?.product_code,
     };
-  
+
     try {
       const productsRes = await axiosPublic.post("/add-products", productsData);
 
@@ -56,7 +56,7 @@ const AddProduct = () => {
           icon: "success",
           draggable: true,
         });
-      
+
       }
     } catch (error) {
 
@@ -67,11 +67,11 @@ const AddProduct = () => {
     }
   };
 
-  const categoryOption = ['Desktop', 'Laptop', 'Mobile', 'Camera', 'Monitor', 'UPS','Tablet','Component','Sever & Storage' ,'Accessories']
+  const categoryOption = ['Desktop', 'Laptop', 'Mobile', 'Camera', 'Monitor', 'UPS', 'Tablet', 'Component', 'Sever & Storage', 'Accessories']
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-xl rounded-2xl">
-      <h2 className="text-2xl font-bold mb-6 text-center">
+    <div className="max-w-3xl p-6 mx-auto bg-white shadow-xl rounded-2xl">
+      <h2 className="mb-6 text-2xl font-bold text-center">
         Add New  Product
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -84,7 +84,7 @@ const AddProduct = () => {
             className="w-full px-4 py-2 border rounded-lg"
           />
           {errors.title && (
-            <p className="text-red-500 text-sm">{errors.title.message}</p>
+            <p className="text-sm text-red-500">{errors.title.message}</p>
           )}
         </div>
 
@@ -95,9 +95,9 @@ const AddProduct = () => {
             {...register("category", { required: true })}
             className="w-full px-4 py-2 border rounded-lg"
           >
-           
+
             {
-              categoryOption.map(ctOption => <option value={ctOption}>{ctOption}</option> )
+              categoryOption.map(ctOption => <option value={ctOption}>{ctOption}</option>)
             }
           </select>
         </div>
@@ -203,7 +203,7 @@ const AddProduct = () => {
               <button
                 type="button"
                 onClick={() => remove(index)}
-                className="text-red-600 font-bold px-2"
+                className="px-2 font-bold text-red-600"
               >
                 ×
               </button>
@@ -212,7 +212,7 @@ const AddProduct = () => {
           <button
             type="button"
             onClick={() => append("")}
-            className="mt-2 text-blue-500 font-semibold"
+            className="mt-2 font-semibold text-blue-500"
           >
             + Add Feature
           </button>
@@ -234,7 +234,7 @@ const AddProduct = () => {
           <img
             src="https://www.startech.com.bd/image/cache/catalog/desktop-pc/ryzen-pc/ryzen-7-7700/ryzen-7-7700-01-200x200.webp"
             alt="Preview"
-            className="w-32 h-32 object-contain border p-1 rounded"
+            className="object-contain w-32 h-32 p-1 border rounded"
           />
         </div> */}
 
@@ -242,7 +242,7 @@ const AddProduct = () => {
         <div className="pt-4">
           <button
             type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700"
+            className="px-6 py-2 text-white bg-blue-600 rounded-xl hover:bg-blue-700"
           >
             Submit Product
           </button>

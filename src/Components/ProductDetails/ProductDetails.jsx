@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 import { motion } from "framer-motion";
 import { MdOutlineShoppingCart } from "react-icons/md";
@@ -12,7 +12,7 @@ const ProductDetails = () => {
   const axiosPublic = useAxiosPublic();
   const { id } = useParams();
   const { user } = useContext(AuthContext);
-  console.log(user)
+  const navigate = useNavigate()
 
   const {
     isError,
@@ -26,10 +26,12 @@ const ProductDetails = () => {
     },
     enabled: !!id,
   });
+  
+  console.log({product})
 
   const handleCart = async () => {
     if (!user) {
-      toast.error("Please login to Add to cart");
+      toast.warning("Please login to Add to cart");
 
       return;
     }
@@ -42,33 +44,43 @@ const ProductDetails = () => {
       status: "pending",
       quantity: 1,
     };
-      try {
-            const res = await axiosPublic.post('/cart', cartItems);
-            if (res.data.insertedId) {
-                toast.success("Product added to cart!");
-            } else {
-                toast.error("Failed to add to cart.");
-            }
-        } catch (error) {
-            toast.error("Something went wrong!");
-            console.error(error);
-        }
+    try {
+      const res = await axiosPublic.post('/cart', cartItems);
+      if (res.data.insertedId) {
+        toast.success("Product added to cart!");
+      } else {
+        toast.error("Failed to add to cart.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong!");
+      console.error(error);
+    }
   };
+
+  const handleBuy = async () => {
+    if (!user) {
+      toast.warning("Please login to Add to Buy");
+      return;
+    }
+    else{
+      navigate(`/checkout/checkoders/${product._id}`)
+    }
+  }
 
   if (isLoading)
     return (
-      <div className="text-center mt-32 text-xl font-semibold">Loading...</div>
+      <div className="mt-32 text-xl font-semibold text-center">Loading...</div>
     );
   if (isError)
     return (
-      <div className="text-center mt-32 text-red-500">
+      <div className="mt-32 text-center text-red-500">
         Error loading product
       </div>
     );
 
   return (
-    <div className="mt-28 max-w-6xl mx-auto px-4 py-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+    <div className="max-w-6xl px-4 py-5 mx-auto mt-28">
+      <div className="grid items-center grid-cols-1 gap-10 md:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
@@ -77,7 +89,7 @@ const ProductDetails = () => {
           <img
             src={product?.image}
             alt={product?.model}
-            className="rounded-xl shadow-lg"
+            className="shadow-lg rounded-xl"
           />
         </motion.div>
 
@@ -86,7 +98,7 @@ const ProductDetails = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className=" text-xl md:text-2xl lg:text-3xl font-bold text-primary">
+          <h1 className="text-xl font-bold md:text-2xl lg:text-3xl text-primary">
             {product?.title}
           </h1>
 
@@ -98,11 +110,11 @@ const ProductDetails = () => {
 
           <div className="mt-4 space-y-2">
             <div className="flex gap-2">
-              <p className="border btn text-gray-900 text-sm rounded-2xl">
+              <p className="text-sm text-gray-900 border btn rounded-2xl">
                 Brand : {product.brand}
               </p>
               {product?.product_code ? (
-                <p className="border btn text-gray-900 text-sm rounded-2xl">
+                <p className="text-sm text-gray-900 border btn rounded-2xl">
                   Product Code : {product?.product_code}
                 </p>
               ) : (
@@ -112,7 +124,7 @@ const ProductDetails = () => {
             <p className="text-xl font-bold text-green-600">
               Discount Price: ৳{product?.price}
             </p>
-            <p className="line-through text-gray-400">
+            <p className="text-gray-400 line-through">
               Old Price: ৳{product?.regular_price}
             </p>
             <p className="text-lg">
@@ -134,24 +146,25 @@ const ProductDetails = () => {
               <h1 className="text-xl">Key Feature</h1>
               <div>
                 {product.key_features.map((feat) => (
-                  <p className="text-gray-600 pb-1">{feat}</p>
+                  <p className="pb-1 text-gray-600">{feat}</p>
                 ))}
               </div>
             </div>
           </div>
 
-          <Link to={`/checkout/checkoders/${product._id}`}>
+          {/* <Link to={`/checkout/checkoders/${product._id}`}> */}
             <motion.button
+              onClick={handleBuy}
               whileTap={{ scale: 0.95 }}
-              className="btn btn-primary mt-6"
+              className="mt-6 btn btn-primary"
             >
               Buy Now
             </motion.button>
-          </Link>
+          {/* </Link> */}
           <motion.button
-          onClick={handleCart}
+            onClick={handleCart}
             whileTap={{ scale: 0.95 }}
-            className="btn btn-primary mt-6 ml-4"
+            className="mt-6 ml-4 btn btn-primary"
           >
             <MdOutlineShoppingCart size={20} />
             Add to cart
@@ -166,23 +179,23 @@ const ProductDetails = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
       >
-        <p className="text-lg font-semibold text-red-500 mb-2">
+        <p className="mb-2 text-lg font-semibold text-red-500">
           Discount Offer Ends In
         </p>
         <div className="flex justify-center gap-4 text-xl font-bold">
-          <div className="bg-neutral text-white rounded-xl px-4 py-2">
+          <div className="px-4 py-2 text-white bg-neutral rounded-xl">
             <span>00</span>
             <p className="text-sm">Days</p>
           </div>
-          <div className="bg-neutral text-white rounded-xl px-4 py-2">
+          <div className="px-4 py-2 text-white bg-neutral rounded-xl">
             <span>07</span>
             <p className="text-sm">Hours</p>
           </div>
-          <div className="bg-neutral text-white rounded-xl px-4 py-2">
+          <div className="px-4 py-2 text-white bg-neutral rounded-xl">
             <span>29</span>
             <p className="text-sm">Minutes</p>
           </div>
-          <div className="bg-neutral text-white rounded-xl px-4 py-2">
+          <div className="px-4 py-2 text-white bg-neutral rounded-xl">
             <span>12</span>
             <p className="text-sm">Seconds</p>
           </div>

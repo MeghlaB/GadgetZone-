@@ -30,18 +30,18 @@ const CheckoutOrders = () => {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data),
-      
-    }).then(res=> res.json())
-    .then(result=>{
-      window.location.replace(result.url)
-      console.log(result)
-    })
-    
+
+    }).then(res => res.json())
+      .then(result => {
+        window.location.replace(result.url)
+        console.log(result)
+      })
+
   };
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen text-gray-600 font-medium text-lg">
+      <div className="flex items-center justify-center h-screen text-lg font-medium text-gray-600">
         Loading...
       </div>
     );
@@ -49,28 +49,28 @@ const CheckoutOrders = () => {
 
   if (isError) {
     return (
-      <div className="flex justify-center items-center h-screen text-red-600 font-semibold text-lg">
+      <div className="flex items-center justify-center h-screen text-lg font-semibold text-red-600">
         Error loading product.
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
-      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg flex flex-col md:flex-row overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen px-4 py-12 mt-10 gray-50">
+      <div className="flex flex-col w-full max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg md:flex-row">
         {/* Product Info */}
-        <section className="md:w-1/2 p-10 bg-gray-100 flex flex-col items-center justify-center space-y-5 border-r border-gray-200">
+        <section className="flex flex-col items-center justify-center p-10 space-y-5 bg-gray-100 border-r border-gray-200 md:w-1/2">
           <img
             src={product?.image}
             alt={product?.name}
-            className="w-36 h-36 object-contain rounded-md border border-gray-300"
+            className="object-contain rounded-md "
           />
           <h2 className="text-2xl font-semibold text-gray-900">
             {product?.name}
           </h2>
           <p className="text-xl font-bold text-gray-800">${product?.price}</p>
           <p className="text-xl font-bold text-gray-800">{product?.title}</p>
-          <p className="text-gray-600 text-center text-sm leading-relaxed max-w-xs">
+          <p className="max-w-xs text-sm leading-relaxed text-center text-gray-600">
             {product?.description}
           </p>
         </section>
@@ -78,53 +78,44 @@ const CheckoutOrders = () => {
         {/* Payment Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="md:w-1/2 p-10 flex flex-col justify-center space-y-6"
+          className="flex flex-col justify-center p-10 space-y-6 md:w-1/2"
           noValidate
         >
-          <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+          <h3 className="mb-4 text-xl font-semibold text-center text-gray-800">
             Payment Details
           </h3>
 
           <input
             {...register("name", { required: true })}
             placeholder="Full Name"
-            className="border border-gray-300 rounded-md px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="px-4 py-3 text-gray-800 placeholder-gray-400 transition border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          <select
-            {...register("currency", { required: true })}
-            className="border border-gray-300 rounded-md px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            defaultValue=""
-          >
-            <option value="" disabled>
-              Select Currency
-            </option>
-            <option value="BDT">BDT</option>
-            <option value="USD">USD</option>
-          </select>
+
           <input
             {...register("price", { required: true })}
             placeholder="price"
-            className="border border-gray-300 rounded-md px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="px-4 py-3 text-gray-800 placeholder-gray-400 transition border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={product?.price}
           />
           <input
             {...register("address", { required: true })}
             placeholder="Address"
-            className="border border-gray-300 rounded-md px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="px-4 py-3 text-gray-800 placeholder-gray-400 transition border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
             {...register("phone", { required: true })}
             placeholder="Phone Number"
             type="tel"
-            className="border border-gray-300 rounded-md px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="px-4 py-3 text-gray-800 placeholder-gray-400 transition border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md shadow-sm transition"
+            className="w-full py-3 font-semibold text-white transition bg-blue-600 rounded-md shadow-sm hover:bg-blue-700"
           >
-           Buy Now
+            Buy Now
           </button>
         </form>
       </div>

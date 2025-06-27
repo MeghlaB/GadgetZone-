@@ -1,152 +1,157 @@
-import React, { useContext, useState } from "react";
+import React from 'react';
+import { Card, Progress, Table, Avatar } from 'antd';
 import {
-  FaBox,
-  FaUser,
-  FaShoppingCart,
-  FaCog,
-  FaSignOutAlt,
-  FaEye,
-  FaEdit,
-  FaTrash,
-  FaBars,
-} from "react-icons/fa";
-import { Link, useLoaderData } from "react-router-dom";
-import Swal from "sweetalert2";
-import { AuthContext } from "../../../Provider/AuthProvider";
+  UserOutlined,
+  ProjectOutlined,
+  CalendarOutlined,
+  FileTextOutlined,
+  TeamOutlined,
+  BellOutlined,
+} from '@ant-design/icons';
+import { Bar, Pie } from 'react-chartjs-2';
+import 'chart.js/auto';
 
-function AdminHome() {
+// Mock Data
+const userData = {
+  name: "John Doe",
+  role: "Project Manager",
+  email: "john.doe@example.com",
+  avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+};
 
-  const loadedProducts = useLoaderData()
+const tasks = [
+  { id: 1, title: "Design Homepage", status: "In Progress", deadline: "2023-12-15" },
+  { id: 2, title: "API Integration", status: "Completed", deadline: "2023-12-10" },
+  { id: 3, title: "User Testing", status: "Pending", deadline: "2023-12-20" },
+];
 
-  const [products, setProduct] = useState(loadedProducts)
-  const {user} = useContext(AuthContext)
+const projects = [
+  { name: "Website Redesign", progress: 65 },
+  { name: "Mobile App", progress: 40 },
+  { name: "Dashboard UI", progress: 90 },
+];
 
-  const handleDeleteProduct = (_id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(`http://localhost:5000/products/${_id}`, {
-          method: "DELETE",
-        })
-          .then((res) => res.json())
-          .then((data) => {
-       
-            if (data.deletedCount > 0) {
-              Swal.fire("Deleted!", "Product has been deleted.", "success");
-              const remaining = products.filter((p) => p._id !== _id);
-              setProduct(remaining);
-        
-            }
-          });
-      }
-    });
-  };
+const activityLog = [
+  { id: 1, action: "Logged in", time: "10:30 AM" },
+  { id: 2, action: "Updated Project X", time: "11:45 AM" },
+];
 
+// Charts Data
+const barChartData = {
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+  datasets: [{
+    label: 'Tasks Completed',
+    data: [12, 19, 3, 5, 2],
+    backgroundColor: '#1890ff',
+  }]
+};
+
+const pieChartData = {
+  labels: ['Completed', 'Pending', 'In Progress'],
+  datasets: [{
+    data: [45, 25, 30],
+    backgroundColor: ['#52c41a', '#faad14', '#1890ff'],
+  }]
+};
+
+export default function AdminHome() {
   return (
-    <div data-theme="dark" className="drawer lg:drawer-open min-h-screen">
-      {/* Drawer Toggle for Mobile */}
-      <input id="admin-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col">
-        {/* Navbar */}
-        <div className="w-full navbar bg-base-200 ">
-          <div className="flex-none">
-            {/* <label htmlFor="admin-drawer" className="btn btn-square btn-ghost">
-              <FaBars />
-            </label> */}
-          </div>
-          <div className="flex-1">
-            <h2 className="text-xl font-bold">ORYON Admin</h2>
-          </div>
-          <div className="flex-none">
-            <div className="avatar">
-              <div className="w-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={user.photoURL} />
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen p-6 bg-gray-50">
+      <h1 className="mb-6 text-2xl font-bold">Dashboard</h1>
 
-        {/* Main Content */}
-        <main className="p-4 space-y-6">
-          {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="card bg-base-200 p-4">
-              <h2 className="text-xl font-bold">Products</h2>
-              <p className="text-lg">{products.length}</p>
-            </div>
-            <div className="card bg-base-200 p-4">
-              <h2 className="text-xl font-bold">Orders</h2>
-              <p className="text-lg">12</p>
-            </div>
-            <div className="card bg-base-200 p-4">
-              <h2 className="text-xl font-bold">Revenue</h2>
-              <p className="text-lg">$3,240</p>
-            </div>
-            <div className="card bg-base-200 p-4">
-              <h2 className="text-xl font-bold">Users</h2>
-              <p className="text-lg">57</p>
+      {/* Top Row: Profile & Stats */}
+      <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-4">
+        {/* Profile Card */}
+        <Card className="shadow-sm">
+          <div className="flex items-center">
+            <Avatar size={64} src={userData.avatar} icon={<UserOutlined />} />
+            <div className="ml-4">
+              <h2 className="font-semibold">{userData.name}</h2>
+              <p className="text-gray-500">{userData.role}</p>
+              <p className="text-sm">{userData.email}</p>
             </div>
           </div>
+        </Card>
 
-          {/* Product Table */}
-          {/* <div className="overflow-x-auto bg-base-200 rounded-lg shadow">
-            <table className="table table-zebra w-full">
-              <thead>
-                <tr>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Stock</th>
-                  <th>Added</th>
-                  <th className="text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((p, idx) => (
-                  <tr key={p._id}>
-                    <td>
-                      <img src={p.image} alt={p.name} className="w-12 h-12 rounded" />
-                    </td>
-                    <td>{p.title}</td>
-                    <td>{p.price}</td>
-                    <td>{p.status == 'In Stock' ? "True" : "False"}</td>
-                    <td>{p?.time}</td>
-                    <td className="flex gap-2 justify-center flex-wrap">
-                      <Link to={`/product/${p._id}`} className="btn btn-sm btn-info"><FaEye /></Link>
-                      <Link to='/dashboard/editproduct' className="btn btn-sm btn-warning"><FaEdit /></Link>
-                      <button onClick={() => handleDeleteProduct(p._id)} className="btn btn-sm btn-error"><FaTrash /></button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div> */}
-        </main>
+        {/* Stats Cards */}
+        <Card className="shadow-sm">
+          <div className="flex items-center">
+            <ProjectOutlined className="mr-3 text-2xl text-blue-500" />
+            <div>
+              <p className="text-gray-500">Active Projects</p>
+              <h3 className="text-xl font-bold">5</h3>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="shadow-sm">
+          <div className="flex items-center">
+            <FileTextOutlined className="mr-3 text-2xl text-green-500" />
+            <div>
+              <p className="text-gray-500">Tasks Completed</p>
+              <h3 className="text-xl font-bold">24</h3>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="shadow-sm">
+          <div className="flex items-center">
+            <BellOutlined className="mr-3 text-2xl text-orange-500" />
+            <div>
+              <p className="text-gray-500">Notifications</p>
+              <h3 className="text-xl font-bold">3</h3>
+            </div>
+          </div>
+        </Card>
       </div>
 
-      {/* Sidebar */}
-      {/* <div className="drawer-side">
-        <label htmlFor="admin-drawer" className="drawer-overlay"></label>
-        <aside className="w-64 bg-base-200 p-4">
-          <h2 className="text-2xl font-bold mb-6 text-primary">ORYON</h2>
-          <ul className="menu">
-            <li><a><FaBox /> Products</a></li>
-            <li><a><FaShoppingCart /> Orders</a></li>
-            <li><a><FaUser /> Users</a></li>
-            <li><a><FaCog /> Settings</a></li>
-            <li className="text-red-500"><a><FaSignOutAlt /> Logout</a></li>
+      {/* Middle Row: Charts */}
+      <div className="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2">
+        <Card title="Monthly Progress" className="shadow-sm">
+          <Bar data={barChartData} />
+        </Card>
+        <Card title="Task Distribution" className="shadow-sm">
+          <Pie data={pieChartData} />
+        </Card>
+      </div>
+
+      {/* Bottom Row: Tasks & Activity */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <Card title="Recent Tasks" className="shadow-sm">
+          <ul>
+            {tasks.map((task) => (
+              <li key={task.id} className="p-2 mb-3 border-b">
+                <div className="flex justify-between">
+                  <span>{task.title}</span>
+                  <span className={`text-xs px-2 py-1 rounded ${
+                    task.status === "Completed" ? "bg-green-100 text-green-800" :
+                    task.status === "In Progress" ? "bg-blue-100 text-blue-800" :
+                    "bg-yellow-100 text-yellow-800"
+                  }`}>
+                    {task.status}
+                  </span>
+                </div>
+                <div className="mt-1 text-xs text-gray-500">
+                  Deadline: {task.deadline}
+                </div>
+              </li>
+            ))}
           </ul>
-        </aside>
-      </div> */}
+        </Card>
+
+        <Card title="Recent Activity" className="shadow-sm">
+          <ul>
+            {activityLog.map((log) => (
+              <li key={log.id} className="p-2 mb-3 border-b">
+                <div className="flex justify-between">
+                  <span>{log.action}</span>
+                  <span className="text-xs text-gray-500">{log.time}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      </div>
     </div>
   );
 }
-
-export default AdminHome;

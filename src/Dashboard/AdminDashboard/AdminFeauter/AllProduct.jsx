@@ -19,7 +19,7 @@ function AllProduct() {
   const loadedProducts = useLoaderData()
 
   const [products, setProduct] = useState(loadedProducts)
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
 
   const handleDeleteProduct = (_id) => {
     Swal.fire({
@@ -42,7 +42,7 @@ function AllProduct() {
               Swal.fire("Deleted!", "Product has been deleted.", "success");
               const remaining = products.filter((p) => p._id !== _id);
               setProduct(remaining);
-             
+
             }
           });
       }
@@ -50,13 +50,13 @@ function AllProduct() {
   };
 
   return (
-    <div data-theme="dark" className="drawer lg:drawer-open min-h-screen">
+    <div data-theme="dark" className="min-h-screen drawer lg:drawer-open">
       {/* Drawer Toggle for Mobile */}
       <input id="admin-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col">
+      <div className="flex flex-col drawer-content">
         {/* Navbar */}
         <div className="w-full navbar bg-base-200 ">
-          
+
           <div className="flex-1">
             <h2 className="text-xl font-bold">ORYON Admin</h2>
           </div>
@@ -72,10 +72,10 @@ function AllProduct() {
         {/* Main Content */}
         <main className="p-4 space-y-6">
           {/* Cards */}
-         
+
           {/* Product Table */}
-          <div className="overflow-x-auto bg-base-200 rounded-lg shadow">
-            <table className="table table-zebra w-full">
+          <div className="overflow-x-auto rounded-lg shadow bg-base-200">
+            <table className="table w-full table-zebra">
               <thead>
                 <tr>
                   <th>Image</th>
@@ -96,7 +96,7 @@ function AllProduct() {
                     <td>{p.price}</td>
                     <td>{p.status == 'In Stock' ? "True" : "False"}</td>
                     <td>{p?.time}</td>
-                    <td className="flex gap-2 justify-center flex-wrap">
+                    <td className="flex flex-wrap justify-center gap-2">
                       <Link to={`/product/${p._id}`} className="btn btn-sm btn-info"><FaEye /></Link>
                       <Link to='/dashboard/editproduct' className="btn btn-sm btn-warning"><FaEdit /></Link>
                       <button onClick={() => handleDeleteProduct(p._id)} className="btn btn-sm btn-error"><FaTrash /></button>
@@ -112,8 +112,8 @@ function AllProduct() {
       {/* Sidebar */}
       {/* <div className="drawer-side">
         <label htmlFor="admin-drawer" className="drawer-overlay"></label>
-        <aside className="w-64 bg-base-200 p-4">
-          <h2 className="text-2xl font-bold mb-6 text-primary">ORYON</h2>
+        <aside className="w-64 p-4 bg-base-200">
+          <h2 className="mb-6 text-2xl font-bold text-primary">ORYON</h2>
           <ul className="menu">
             <li><a><FaBox /> Products</a></li>
             <li><a><FaShoppingCart /> Orders</a></li>
