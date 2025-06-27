@@ -6,6 +6,8 @@ import { AuthContext } from "../Provider/AuthProvider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const image_hosting_key = import.meta.env.VITE_IMAGEHOSTING; // ✅ .env file এ রাখতে হবে
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 function Register() {
   const { createUser, updateUserprofile, GoogleLogin } = useContext(AuthContext);
@@ -19,31 +21,42 @@ function Register() {
     formState: { errors },
   } = useForm();
 
- const onSubmit = async (data) => {
-  setLoading(true);
-  try {
-    // Create user with Firebase
-    const result = await createUser(data.email, data.password);
-    await updateUserprofile(data.name, data.photo);
+  const onSubmit = async (data) => {
+    setLoading(true);
 
-    // Save user in database
-    const userInfo = {
-      name: data.name,
-      email: data.email,
-      photo: data.photo, // ✅ FIXED HERE
-      role: "user",
-      status: "active",
-    };
+    try {
+      // 1. Upload image to imgBB
+      const imageFile = data.photo[0];
+      const formData = new FormData();
+      formData.append("image", imageFile);
 
-    const dbRes = await axios.post("http://localhost:5000/users", userInfo);
+      const imgRes = await axios.post(image_hosting_api, formData);
+      const photoURL = imgRes.data.data.display_url;
 
-    if (dbRes.data.insertedId || dbRes.data.acknowledged) {
-      toast.success("Account created successfully!");
-      reset();
-      navigate("/");
-    } else {
-      toast.error("User creation failed in database");
-    }
+      // 2. Create Firebase user
+      const result = await createUser(data.email, data.password);
+
+      // 3. Update Firebase user profile
+      await updateUserprofile(data.name, photoURL);
+
+      // 4. Save user info to database
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        photo: photoURL,
+        role: "user",
+        status: "active",
+      };
+
+      const dbRes = await axios.post("http://localhost:5000/users", userInfo);
+
+      if (dbRes.data.insertedId || dbRes.data.acknowledged) {
+        toast.success("Account created successfully!");
+        reset();
+        navigate("/");
+      } else {
+        toast.error("User creation failed in database");
+      }
 
     } catch (error) {
       console.error("Registration Error:", error);
@@ -80,7 +93,6 @@ function Register() {
     <div className="mx-auto w-full max-w-md bg-white p-10 shadow-lg my-28">
       <h1 className="text-xl font-bold text-center mb-6">Register Account</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
         {/* Name */}
         <div className="space-y-1 text-sm">
           <label htmlFor="name" className="block font-medium">Name*</label>
@@ -147,9 +159,7 @@ function Register() {
           type="submit"
           value={loading ? "Signing Up..." : "Sign Up"}
           disabled={loading}
-          className={`w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded transition ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded transition ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
         />
       </form>
 
@@ -173,7 +183,7 @@ function Register() {
           className="border rounded-full p-3 hover:bg-gray-100"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="h-5 w-5">
-            <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"/>
+            <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z" />
           </svg>
         </button>
       </div>

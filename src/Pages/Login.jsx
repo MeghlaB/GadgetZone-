@@ -7,7 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
-  const { signInUser, GoogleLogin } = useContext(AuthContext);
+  const { signIn, GoogleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -17,18 +17,27 @@ function Login() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    setLoading(true);
-    try {
-      await signInUser(data.email, data.password);
-      toast.success("Logged in successfully!");
-      navigate("/");
-    } catch (error) {
-      toast.error("Invalid email or password");
-    } finally {
-      setLoading(false);
+const onSubmit = async (data) => {
+  setLoading(true);
+  try {
+    await signIn(data.email, data.password);
+    toast.success("Logged in successfully!");
+    setTimeout(() => navigate("/"), 1000);
+  } catch (error) {
+    console.error("Login Error:", error);
+    const errorCode = error.code;
+
+    if (errorCode === "auth/user-not-found") {
+      toast.error("No user found with this email");
+    } else if (errorCode === "auth/wrong-password") {
+      toast.error("Incorrect password");
+    } else {
+      toast.error("Login failed");
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleGoogleSign = async () => {
     try {
