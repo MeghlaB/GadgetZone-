@@ -33,6 +33,7 @@ function AuthProvider({ children }) {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
+
   // user-logout
   const logOut = () => {
     setLoading(true);
@@ -40,70 +41,70 @@ function AuthProvider({ children }) {
   };
 
   // updatephoto
-  const updateUserprofile =(name,photo)=>{
-    return updateProfile(auth.currentUser,{
-      displayName:name ,photoURL:photo
+  const updateUserprofile = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name, photoURL: photo
     })
 
   }
   // Google_login
-  const GoogleLogin =()=>{
+  const GoogleLogin = () => {
     setLoading(true)
-    return signInWithPopup(auth,provider)
+    return signInWithPopup(auth, provider)
   }
 
   // onAuthStateChanged
-useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-     setUser(currentUser);
-     //console.log('Current-user =>',currentUser)
-     
-    // if (currentUser) {
-    //   setUser(currentUser);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      //console.log('Current-user =>',currentUser)
 
-    //   const userInfo = { email: currentUser.email };
-    //   axiosPublic.post("/jwt", userInfo)
-    //     .then((res) => {
-    //       if (res.data.token) {
-    //         localStorage.setItem("access-token", res.data.token);
-    //       }
-    //       setIsLoading(false); // ✅ এখানে রাখো
-    //     })
-    //     .catch(() => {
-    //       setIsLoading(false); // 🛑 error হলেও loading বন্ধ হওয়া দরকার
-    //     });
-    // } else {
-    //   setUser(null);
-    //   localStorage.removeItem("access-token");
-    //   setIsLoading(false);
-    // }
-  });
+      // if (currentUser) {
+      //   setUser(currentUser);
 
-  return () => unsubscribe();
-}, []);
+      //   const userInfo = { email: currentUser.email };
+      //   axiosPublic.post("/jwt", userInfo)
+      //     .then((res) => {
+      //       if (res.data.token) {
+      //         localStorage.setItem("access-token", res.data.token);
+      //       }
+      //       setIsLoading(false); // ✅ এখানে রাখো
+      //     })
+      //     .catch(() => {
+      //       setIsLoading(false); // 🛑 error হলেও loading বন্ধ হওয়া দরকার
+      //     });
+      // } else {
+      //   setUser(null);
+      //   localStorage.removeItem("access-token");
+      //   setIsLoading(false);
+      // }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
 
- 
+
   const authInfo = {
     user,
     loading,
     createUser,
     signIn,
     logOut,
-    updateUserprofile ,
+    updateUserprofile,
     GoogleLogin
   };
   return (
     <AuthContext.Provider value={authInfo}>
-    {children}
-    {/* {loading ? (
-      <div className="fixed inset-0 flex justify-center items-center bg-accent bg-opacity-50">
+      {children}
+      {/* {loading ? (
+      <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 bg-accent">
         <span className="loading loading-dots loading-lg"></span>
       </div>
     ) : (
       children
     )} */}
-  </AuthContext.Provider>
+    </AuthContext.Provider>
   );
 }
 

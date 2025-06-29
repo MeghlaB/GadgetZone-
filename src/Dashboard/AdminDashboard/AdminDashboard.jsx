@@ -23,11 +23,15 @@ function AdminDashboard() {
         </Link>
         <Link to="/dashboard/addproduct" className="flex items-center gap-3 hover:text-gray-300">
           <FaCartPlus size={20} />
-          Add Product
+          Add Products
         </Link>
         <Link to="/dashboard/allproduct" className="flex items-center gap-3 hover:text-gray-300">
           <MdInventory size={20} />
           All Products
+        </Link>
+        <Link to="/dashboard/allproduct" className="flex items-center gap-3 hover:text-gray-300">
+          <MdInventory size={20} />
+          All Orders 
         </Link>
       </div>
 
