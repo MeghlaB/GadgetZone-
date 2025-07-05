@@ -26,7 +26,7 @@ const CheckoutOrders = () => {
   const onSubmit = (data) => {
     console.log("✅ Payment Data:", data);
     data.productID = id;
-    fetch("http://localhost:5000/oders", {
+    fetch("https://gadget-zone-server-kappa.vercel.app/oders", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data),

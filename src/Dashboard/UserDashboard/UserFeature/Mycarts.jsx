@@ -18,7 +18,7 @@ const Mycarts = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axios.get(
-        `http://localhost:5000/carts?email=${user?.email}`
+        `https://gadget-zone-server-kappa.vercel.app/carts?email=${user?.email}`
       );
       return res.data;
     },
