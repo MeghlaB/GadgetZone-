@@ -17,7 +17,7 @@ import { AuthContext } from "../../../Provider/AuthProvider";
 function AllProduct() {
 
   const loadedProducts = useLoaderData()
-
+  
   const [products, setProduct] = useState(loadedProducts)
   const { user } = useContext(AuthContext)
 
