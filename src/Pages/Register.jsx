@@ -48,7 +48,7 @@ function Register() {
         status: "active",
       };
 
-      const dbRes = await axios.post("http://localhost:5000/users", userInfo);
+      const dbRes = await axios.post("https://gadget-zone-server-kappa.vercel.app/users", userInfo);
 
       if (dbRes.data.insertedId || dbRes.data.acknowledged) {
         toast.success("Account created successfully!");
@@ -80,7 +80,7 @@ function Register() {
         status: "active",
       };
 
-      await axios.post("http://localhost:5000/users", userInfo);
+      await axios.post("https://gadget-zone-server-kappa.vercel.app/users", userInfo);
 
       toast.success("Logged in with Google");
       navigate("/");

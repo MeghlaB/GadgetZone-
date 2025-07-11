@@ -11,7 +11,7 @@ export default function userSeller() {
 const {data: isseller,isPending: issellerLoading} = useQuery({
   queryKey:[user?.email ,'isseller'],
   queryFn:async ()=>{
-    const result = await axios.get(`http://localhost:5000/users/seller/${user?.email}`)
+    const result = await axios.get(`https://gadget-zone-server-kappa.vercel.app/users/seller/${user?.email}`)
 
     return result.data?.seller
   }
