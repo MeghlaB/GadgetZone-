@@ -17,14 +17,12 @@ export const AuthContext = createContext(null);
 
 
 const provider = new GoogleAuthProvider();
-
+const hello  = 'Nothings here'
 function AuthProvider({ children }) {
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const hello = 0 // demo 
-  const hello2 = 4 
   // CreateUser
   const createUser = (email, password) => {
     setLoading(true);
