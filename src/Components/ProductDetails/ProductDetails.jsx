@@ -14,6 +14,7 @@ const ProductDetails = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate()
   const hello = 1; 
+  const hello2 = 3; 
 
   const {
     isError,
