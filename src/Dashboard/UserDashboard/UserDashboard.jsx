@@ -4,11 +4,12 @@ import { ImProfile } from "react-icons/im";
 import { Link } from "react-router-dom";
 
 function UserDashboard() {
+  let hello = 2; 
   return (
-    <aside className="h-screen w-full bg-gray-800 text-white px-4 py-6 flex flex-col justify-between">
+    <aside className="flex flex-col justify-between w-full h-screen px-4 py-6 text-white bg-gray-800">
       {/* Top section */}
       <div>
-        <div className="text-2xl font-bold mb-10">User Dashboard</div>
+        <div className="mb-10 text-2xl font-bold">User Dashboard</div>
 
         <nav className="space-y-4">
           <Link
