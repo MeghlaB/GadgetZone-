@@ -17,7 +17,8 @@ export default function Dashboard() {
     return <div>Loading...</div>;
   }
   
-  const hello = 4 ; 
+  
+  
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };

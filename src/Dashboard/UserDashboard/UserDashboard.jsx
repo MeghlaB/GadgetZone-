@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 function UserDashboard() {
   let hello = 2; 
+  const helloworld = 5; 
   return (
     <aside className="flex flex-col justify-between w-full h-screen px-4 py-6 text-white bg-gray-800">
       {/* Top section */}
