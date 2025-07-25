@@ -13,8 +13,7 @@ const ProductDetails = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate()
-  const hello = 1; 
-  const hello2 = 3; 
+
 
   const {
     isError,
@@ -28,8 +27,8 @@ const ProductDetails = () => {
     },
     enabled: !!id,
   });
-  
-  console.log({product})
+
+  console.log({ product })
 
   const handleCart = async () => {
     if (!user) {
@@ -64,7 +63,7 @@ const ProductDetails = () => {
       toast.warning("Please login to Add to Buy");
       return;
     }
-    else{
+    else {
       navigate(`/checkout/checkoders/${product._id}`)
     }
   }
@@ -155,13 +154,13 @@ const ProductDetails = () => {
           </div>
 
           {/* <Link to={`/checkout/checkoders/${product._id}`}> */}
-            <motion.button
-              onClick={handleBuy}
-              whileTap={{ scale: 0.95 }}
-              className="mt-6 btn btn-primary"
-            >
-              Buy Now
-            </motion.button>
+          <motion.button
+            onClick={handleBuy}
+            whileTap={{ scale: 0.95 }}
+            className="mt-6 btn btn-primary"
+          >
+            Buy Now
+          </motion.button>
           {/* </Link> */}
           <motion.button
             onClick={handleCart}
