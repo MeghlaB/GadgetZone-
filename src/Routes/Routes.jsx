@@ -44,15 +44,6 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
-
-      },
-      {
-        path: "account/login",
-        element: <Login></Login>,
-      },
-      {
-        path: "account/register",
-        element: <Register></Register>,
       },
       // submenu category
       {
@@ -116,23 +107,31 @@ export const router = createBrowserRouter([
         element: <Gadget />,
       },
       {
-        path:'/accessories',
-        element:<Accessories/>
+        path: '/accessories',
+        element: <Accessories />
       }
       ,
       {
-        path:'/product/:id',
-        element:<ProductDetails/>
+        path: '/product/:id',
+        element: <ProductDetails />
       },
       {
-        path:'/checkout/checkoders/:id',
-        element:<Checkoutoders/>
+        path: '/checkout/checkoders/:id',
+        element: <Checkoutoders />
       },
       {
-        path:'/payment/success/:tranId',
-        element:<PaymentSucces/>
+        path: '/payment/success/:tranId',
+        element: <PaymentSucces />
       }
     ],
+  },
+  {
+    path: "account/login",
+    element: <Login></Login>,
+  },
+  {
+    path: "account/register",
+    element: <Register></Register>,
   },
   {
     path: "/dashboard",
@@ -146,12 +145,12 @@ export const router = createBrowserRouter([
       {
         path: "adminhome",
         element: <AdminHome />,
-        loader: ()=> fetch('https://gadget-zone-server-kappa.vercel.app/products')
+        loader: () => fetch('https://gadget-zone-server-kappa.vercel.app/products')
       },
       {
         path: "allproduct",
         element: <AllProduct></AllProduct>,
-        loader: ()=> fetch('https://gadget-zone-server-kappa.vercel.app/products')
+        loader: () => fetch('https://gadget-zone-server-kappa.vercel.app/products')
       },
       {
         path: "addproduct",
@@ -165,27 +164,27 @@ export const router = createBrowserRouter([
 
       // seleer dashboard
       {
-        path: 'sellerhome', 
+        path: 'sellerhome',
         element: <SellerHome></SellerHome>
       },
       // user dashboard
       {
-        path:'user-home',
-        element:<UserHome/>
+        path: 'user-home',
+        element: <UserHome />
       },
       {
-        path:'my-carts',
-        element:<Mycarts/>
+        path: 'my-carts',
+        element: <Mycarts />
       },
       {
-        path:'user-profile',
-        element:<MyProfile/>
+        path: 'user-profile',
+        element: <MyProfile />
       }
     ],
 
-  }, 
+  },
   {
-    path:'*', 
+    path: '*',
     element: <ErrorPage></ErrorPage>
   }
 ]);
