@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 import { motion } from "framer-motion";
@@ -14,6 +14,9 @@ const ProductDetails = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate()
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const {
     isError,

@@ -79,31 +79,30 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="w-full fixed z-50 top-0">
+    <div className="fixed top-0 z-50 w-full">
       {/* Top Bar */}
       <div className="bg-[#071c2b] text-white px-4 py-2 flex flex-wrap items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img
-            className="h-8 md:h-10 rounded-lg "
+            className="h-8 rounded-lg md:h-10 "
             src="https://i.ibb.co/7Jp64HMt/Whats-App-Image-2025-05-19-at-01-03-05-a47959b3.jpg"
           />
         </Link>
 
         {/* Search Bar - Desktop */}
-        <div className="flex-1 mx-4 hidden md:flex">
+        <div className="flex-1 hidden mx-4 md:flex">
           <input
             type="text"
             placeholder="Search"
-            className="w-full px-4 py-2 rounded-l-md outline-none text-black"
+            className="w-full px-4 py-2 text-black outline-none rounded-l-md"
           />
-          <button className="bg-white text-black px-4 rounded-r-md">
+          <button className="px-4 text-black bg-white rounded-r-md">
             <FaSearch />
           </button>
         </div>
 
-        {/* Icons */}
-
+      {/* Icons */}
         <div className="flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-4">
@@ -111,16 +110,16 @@ const Navbar = () => {
               <img
                 src={user.photoURL}
                 alt="profile"
-                className="w-8 h-8 rounded-full hidden md:block"
+                className="hidden w-8 h-8 rounded-full md:block"
               />
 
               {/* Dashboard & Logout - Desktop only */}
 
-              {/* <Link to={'/dashboard/adminhome'} className="hidden md:flex items-center gap-1"></Link> */}
+              {/* <Link to={'/dashboard/adminhome'} className="items-center hidden gap-1 md:flex"></Link> */}
 
               <Link
                 to={getDashboardLink()}
-                className="hidden md:flex items-center gap-1"
+                className="items-center hidden gap-1 md:flex"
               >
                 <LuLayoutDashboard />
                 <span className="text-sm">Dashboard</span>
@@ -132,14 +131,14 @@ const Navbar = () => {
                 </span>
               </Link>
 
-              <div className="hidden md:flex items-center gap-1">
+              <div className="items-center hidden gap-1 md:flex">
                 <FaBolt />
                 <span className="text-sm">Happy Hour</span>
               </div>
 
               <Link
                 onClick={logOut}
-                className="hidden md:flex items-center gap-1"
+                className="items-center hidden gap-1 md:flex"
               >
                 <MdLogout />
                 <span className="text-sm">LogOut</span>
@@ -147,7 +146,7 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-4">
-              <div className="hidden md:flex items-center gap-1">
+              <div className="items-center hidden gap-1 md:flex">
                 <FaBolt />
                 <span className="text-sm">Happy Hour</span>
               </div>
@@ -155,7 +154,7 @@ const Navbar = () => {
               {/* Login Button Between PC Builder and Menu */}
               <Link
                 to={"/account/login"}
-                className=" md:block bg-gradient-to-r from-green-500 to-blue-500 px-4 py-1 rounded-md text-sm font-semibold text-white"
+                className="px-4 py-1 text-sm font-semibold text-white rounded-md md:block bg-gradient-to-r from-green-500 to-blue-500"
               >
                 Login
               </Link>
@@ -163,7 +162,7 @@ const Navbar = () => {
           )}
 
           {/* PC Builder Button */}
-          <button className="bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-1 rounded-md text-sm font-semibold">
+          <button className="px-4 py-1 text-sm font-semibold rounded-md bg-gradient-to-r from-blue-500 to-purple-500">
             PC Builder
           </button>
 
@@ -177,7 +176,7 @@ const Navbar = () => {
                 className="w-8 h-8 rounded-full cursor-pointer"
               />
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-32 text-black bg-white shadow-md rounded-md py-2 z-50">
+                <div className="absolute right-0 z-50 w-32 py-2 mt-2 text-black bg-white rounded-md shadow-md">
                   <Link
                     to={getDashboardLink()}
                     className="block px-4 py-2 text-sm hover:bg-gray-200"
@@ -189,7 +188,7 @@ const Navbar = () => {
                   </Link>
                   <button
                     onClick={logOut}
-                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-200"
+                    className="block w-full px-4 py-2 text-sm text-left hover:bg-gray-200"
                   >
                     <div className="flex items-center gap-1">
                       <MdLogout />
@@ -204,7 +203,7 @@ const Navbar = () => {
           {/* Mobile Menu Icon */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden text-xl"
+            className="text-xl md:hidden"
           >
             {menuOpen ? <HiX /> : <HiMenu />}
           </button>
@@ -212,13 +211,13 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Search */}
-      <div className="md:hidden flex px-4 py-2 items-center gap-2 bg-gray-100">
+      <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 md:hidden">
         <input
           type="text"
           placeholder="Search"
-          className="w-full px-3 py-2 rounded-md border"
+          className="w-full px-3 py-2 border rounded-md"
         />
-        <button className="bg-blue-500 text-white px-3 py-2 rounded-md">
+        <button className="px-3 py-2 text-white bg-blue-500 rounded-md">
           <FaSearch />
         </button>
       </div>
