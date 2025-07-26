@@ -13,7 +13,8 @@ const ProductDetails = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate()
-
+  const demo  = 'product details'
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -32,7 +33,6 @@ const ProductDetails = () => {
   });
 
   console.log({ product })
-
   const handleCart = async () => {
     if (!user) {
       toast.warning("Please login to Add to cart");
