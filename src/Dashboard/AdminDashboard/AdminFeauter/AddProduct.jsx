@@ -27,7 +27,7 @@ const AddProduct = () => {
   const showTime = date.getHours()
     + ':' + date.getMinutes()
     + ":" + date.getSeconds();
-
+  const currentDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 
   const onSubmit = async (data) => {
     const productsData = {
@@ -43,7 +43,9 @@ const AddProduct = () => {
       key_features: data?.key_features,
       image: data?.image,
       time: showTime,
+      date: currentDate,
       product_code: data?.product_code,
+      quantity: data?.quantity
     };
 
     try {
@@ -188,6 +190,14 @@ const AddProduct = () => {
               className="w-full px-4 py-2 border rounded-lg"
             />
           </div>
+          <div>
+            <label className="block mb-1 font-semibold">Quantity</label>
+            <input
+              type="text"
+              {...register("quantity")}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+          </div>
         </div>
 
         {/* Key Features (dynamic) */}
@@ -242,7 +252,7 @@ const AddProduct = () => {
         <div className="pt-4">
           <button
             type="submit"
-            className="px-6 py-2 text-white bg-blue-600 rounded-xl hover:bg-blue-700"
+            className="px-6 py-3 font-semibold text-white bg-blue-600 p text rounded-xl hover:bg-blue-700"
           >
             Submit Product
           </button>

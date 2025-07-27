@@ -38,7 +38,8 @@ function AllProduct() {
       }
     });
   };
-
+  
+  console.log(products)
   return (
     <div data-theme="dark" className="min-h-screen bg-base-100">
       {/* Navbar */}
@@ -80,12 +81,12 @@ function AllProduct() {
                   <h3 className="font-semibold text-blue-400">{p.title}</h3>
                   <p className="text-sm text-gray-400">${p.price}</p>
                   <p className="text-sm">
-                    Quantity: <span className="font-semibold">{p.quantity}</span>
+                    Quantity: <span className="text-sm">{p.quantity}</span>
                   </p>
                   <span
                     className={`inline-block px-2 py-1 mt-1 rounded text-xs font-medium ${
                       p.status === "In Stock"
-                        ? "bg-green-300 text-green-900"
+                        ? "bg-green-500 text-green-900"
                         : "bg-red-300 text-red-900"
                     }`}
                   >
@@ -146,20 +147,21 @@ function AllProduct() {
                     />
                   </td>
                   <td className="font-semibold text-blue-400">{p.title}</td>
-                  <td>${p.price}</td>
+                  <td>৳{p.price}</td>
                   <td>
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${
                         p.status === "In Stock"
-                          ? "bg-green-200 text-green-800"
+                          ? "bg-green-600 text-white"
                           : "bg-red-200 text-red-800"
                       }`}
                     >
                       {p.status}
                     </span>
                   </td>
-                  <td>{p.quantity}</td>
-                  <td>{p.time}</td>
+                  <td className="text-sm">{p.quantity}</td>
+                  <td className="text-sm ">{p?.date}</td>
+                  <td className="text-sm">{p.time}</td>
                   <td>
                     <div className="flex flex-wrap justify-center gap-2">
                       <Link
