@@ -70,8 +70,7 @@ const AddProduct = () => {
     }
   };
 
-  const categoryOption = ['Desktop', 'Laptop', 'Mobile', 'Camera', 'Monitor', 'UPS', 'Tablet', 'Component', 'Sever & Storage', 'Accessories']
-
+  const categoryOption = ['Desktop', 'Laptop', 'Mobile','Gaming','Appliance', 'TV','Gadget', 'Camera', 'Monitor', 'UPS', 'Tablet', 'Component', 'Sever & Storage', 'Accessories', 'Networking','Phone', 'Office Equipment', 'Software', "Drone", 'Gimbal', 'Charger Fan', 'Weight Scale', 'Mobile Accessories', 'Portable SSD', 'Portable Wifi Camera', 'Trimmer', 'Smart Watch', 'Action Camera', 'Earphone', 'Earbuds', 'Bluetooth Speakers', 'Gaming Console']
   return (
     <div className="max-w-3xl p-6 mx-auto bg-white shadow-xl rounded-2xl">
       <h2 className="mb-6 text-2xl font-bold text-center">
