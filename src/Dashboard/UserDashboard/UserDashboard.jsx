@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 
 function UserDashboard() {
   let hello = 2; 
-  const helloworld = 5; 
-  const helloworld2 = 6; 
+  
   return (
     <aside className="flex flex-col justify-between w-full h-screen px-4 py-6 text-white bg-gray-800">
       {/* Top section */}
@@ -18,24 +17,24 @@ function UserDashboard() {
             to="/dashboard/user-home"
             className="flex items-center gap-3 hover:text-gray-300"
           >
-            <BookIcon size={20} />
-            user home
+            <BookIcon size={25} />
+            <p className="text-[15px]">User Home</p>
           </Link>
 
           <Link
             to="/dashboard/my-carts"
             className="flex items-center gap-3 hover:text-gray-300"
           >
-            <CalendarCheck2 size={20} />
-            My-Carts
+            <CalendarCheck2 size={25} />
+            <p className="text-[15px]">My Carts</p>
           </Link>
 
           <Link
             to="/dashboard/user-profile"
             className="flex items-center gap-3 hover:text-gray-300"
           >
-            <ImProfile size={20} />
-            User Profile
+            <ImProfile size={25} />
+            <p className="text-[15px]">My profile</p>
           </Link>
         </nav>
       </div>
