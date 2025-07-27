@@ -92,7 +92,8 @@ function AllProduct() {
                   >
                     {p.status}
                   </span>
-                  <p className="mt-1 text-xs text-gray-400">{p.time}</p>
+                  <p className="mt-1 text-xs text-gray-400">{p?.time}</p>
+                  <p className="mt-1 text-xs text-gray-400">{p?.date}</p>
                 </div>
               </div>
               <div className="flex justify-end gap-2 mt-2">

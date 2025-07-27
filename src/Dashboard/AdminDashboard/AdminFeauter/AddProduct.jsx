@@ -23,6 +23,7 @@ const AddProduct = () => {
     name: "key_features",
   });
 
+  // current date and time 
   const date = new Date();
   const showTime = date.getHours()
     + ':' + date.getMinutes()
@@ -260,6 +261,7 @@ const AddProduct = () => {
       </form>
     </div>
   );
+  
 };
 
 export default AddProduct;
