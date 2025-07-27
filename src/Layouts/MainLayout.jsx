@@ -10,9 +10,9 @@ const MainLayout = () => {
 
   return (
     <div>
-    <Navbar></Navbar>
+      <Navbar></Navbar>
       {/* {noHeaderFooter || <Navbar></Navbar>} */}
-       <div className="min-h-[calc(100vh-288px)] mb-20">
+      <div className="min-h-[calc(100vh-288px)] mb-20">
         <Outlet />
       </div>
       <Footer></Footer>

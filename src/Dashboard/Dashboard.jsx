@@ -18,7 +18,6 @@ export default function Dashboard() {
   }
   
   
-  
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -40,13 +39,16 @@ export default function Dashboard() {
         </button>
 
         {/* Sidebar Content */}
-        {isAdmin ? (
+        {/* {isAdmin ? (
           <AdminDashboard />
         ) : isseller ? (
           <SellerDashboard />
         ) : (
           <UserDashboard />
-        )}
+        )} */}
+
+        {/* This if for testing */}
+        <AdminDashboard/>
       </div>
 
       {/* Main Content */}

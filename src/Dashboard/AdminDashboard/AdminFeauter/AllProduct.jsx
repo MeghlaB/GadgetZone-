@@ -1,25 +1,17 @@
 import React, { useContext, useState } from "react";
 import {
-  FaBox,
-  FaUser,
-  FaShoppingCart,
-  FaCog,
-  FaSignOutAlt,
   FaEye,
   FaEdit,
   FaTrash,
-  FaBars,
 } from "react-icons/fa";
 import { Link, useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../Provider/AuthProvider";
 
 function AllProduct() {
-
-  const loadedProducts = useLoaderData()
-  
-  const [products, setProduct] = useState(loadedProducts)
-  const { user } = useContext(AuthContext)
+  const loadedProducts = useLoaderData();
+  const [products, setProduct] = useState(loadedProducts);
+  const { user } = useContext(AuthContext);
 
   const handleDeleteProduct = (_id) => {
     Swal.fire({
@@ -37,12 +29,10 @@ function AllProduct() {
         })
           .then((res) => res.json())
           .then((data) => {
-
             if (data.deletedCount > 0) {
               Swal.fire("Deleted!", "Product has been deleted.", "success");
               const remaining = products.filter((p) => p._id !== _id);
               setProduct(remaining);
-
             }
           });
       }
@@ -50,79 +40,161 @@ function AllProduct() {
   };
 
   return (
-    <div data-theme="dark" className="min-h-screen drawer lg:drawer-open">
-      {/* Drawer Toggle for Mobile */}
-      <input id="admin-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="flex flex-col drawer-content">
-        {/* Navbar */}
-        <div className="w-full navbar bg-base-200 ">
-
-          <div className="flex-1">
-            <h2 className="text-xl font-bold">ORYON Admin</h2>
-          </div>
-          <div className="flex-none">
-            <div className="avatar">
-              <div className="w-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={user.photoURL} />
-              </div>
+    <div data-theme="dark" className="min-h-screen bg-base-100">
+      {/* Navbar */}
+      <div className="px-4 shadow navbar bg-base-200 md:px-8">
+        <div className="flex-1">
+          <h2 className="text-lg font-bold text-blue-500 md:text-2xl">ORYON Admin Panel</h2>
+        </div>
+        <div className="flex-none">
+          <div className="avatar">
+            <div className="rounded-full w-9 md:w-10 ring ring-primary ring-offset-base-100 ring-offset-2">
+              <img src={user?.photoURL} alt="admin" />
             </div>
           </div>
         </div>
-
-        {/* Main Content */}
-        <main className="p-4 space-y-6">
-          {/* Cards */}
-
-          {/* Product Table */}
-          <div className="overflow-x-auto rounded-lg shadow bg-base-200">
-            <table className="table w-full table-zebra">
-              <thead>
-                <tr>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Stock</th>
-                  <th>Added</th>
-                  <th className="text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((p, idx) => (
-                  <tr key={p._id}>
-                    <td>
-                      <img src={p.image} alt={p.name} className="w-12 h-12 rounded" />
-                    </td>
-                    <td>{p.title}</td>
-                    <td>{p.price}</td>
-                    <td>{p.status == 'In Stock' ? "True" : "False"}</td>
-                    <td>{p?.time}</td>
-                    <td className="flex flex-wrap justify-center gap-2">
-                      <Link to={`/product/${p._id}`} className="btn btn-sm btn-info"><FaEye /></Link>
-                      <Link to='/dashboard/editproduct' className="btn btn-sm btn-warning"><FaEdit /></Link>
-                      <button onClick={() => handleDeleteProduct(p._id)} className="btn btn-sm btn-error"><FaTrash /></button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </main>
       </div>
 
-      {/* Sidebar */}
-      {/* <div className="drawer-side">
-        <label htmlFor="admin-drawer" className="drawer-overlay"></label>
-        <aside className="w-64 p-4 bg-base-200">
-          <h2 className="mb-6 text-2xl font-bold text-primary">ORYON</h2>
-          <ul className="menu">
-            <li><a><FaBox /> Products</a></li>
-            <li><a><FaShoppingCart /> Orders</a></li>
-            <li><a><FaUser /> Users</a></li>
-            <li><a><FaCog /> Settings</a></li>
-            <li className="text-red-500"><a><FaSignOutAlt /> Logout</a></li>
-          </ul>
-        </aside>
-      </div> */}
+      {/* Main Content */}
+      <main className="p-4 md:p-8">
+
+      {/* Total products  */}
+        <div>
+          <h1 className="my-4 text-xl">Total Products = {products.length} </h1>
+        </div>
+        
+        {/* Responsive Card Grid for Small Devices */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:hidden">
+          {products.map((p) => (
+            <div
+              key={p._id}
+              className="flex flex-col gap-2 p-4 rounded-lg shadow bg-base-200"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="object-cover w-16 h-16 rounded"
+                />
+                <div>
+                  <h3 className="font-semibold text-blue-400">{p.title}</h3>
+                  <p className="text-sm text-gray-400">${p.price}</p>
+                  <p className="text-sm">
+                    Quantity: <span className="font-semibold">{p.quantity}</span>
+                  </p>
+                  <span
+                    className={`inline-block px-2 py-1 mt-1 rounded text-xs font-medium ${
+                      p.status === "In Stock"
+                        ? "bg-green-300 text-green-900"
+                        : "bg-red-300 text-red-900"
+                    }`}
+                  >
+                    {p.status}
+                  </span>
+                  <p className="mt-1 text-xs text-gray-400">{p.time}</p>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 mt-2">
+                <Link
+                  to={`/product/${p._id}`}
+                  className="btn btn-sm btn-info"
+                  title="View"
+                >
+                  <FaEye />
+                </Link>
+                <Link
+                  to="/dashboard/editproduct"
+                  className="btn btn-sm btn-warning"
+                  title="Edit"
+                >
+                  <FaEdit />
+                </Link>
+                <button
+                  onClick={() => handleDeleteProduct(p._id)}
+                  className="btn btn-sm btn-error"
+                  title="Delete"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Table View for Large Devices */}
+        <div className="hidden mt-8 overflow-x-auto lg:block">
+          <table className="table w-full text-sm shadow md:text-base bg-base-200 rounded-xl">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Quantity</th>
+                <th>Date & Time</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((p) => (
+                <tr key={p._id}>
+                  <td>
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      className="object-cover w-12 h-12 rounded"
+                    />
+                  </td>
+                  <td className="font-semibold text-blue-400">{p.title}</td>
+                  <td>${p.price}</td>
+                  <td>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        p.status === "In Stock"
+                          ? "bg-green-200 text-green-800"
+                          : "bg-red-200 text-red-800"
+                      }`}
+                    >
+                      {p.status}
+                    </span>
+                  </td>
+                  <td>{p.quantity}</td>
+                  <td>{p.time}</td>
+                  <td>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      <Link
+                        to={`/product/${p._id}`}
+                        className="btn btn-sm btn-info"
+                        title="View"
+                      >
+                        <FaEye />
+                      </Link>
+                      <Link
+                        to="/dashboard/editproduct"
+                        className="btn btn-sm btn-warning"
+                        title="Edit"
+                      >
+                        <FaEdit />
+                      </Link>
+                      <button
+                        onClick={() => handleDeleteProduct(p._id)}
+                        className="btn btn-sm btn-error"
+                        title="Delete"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {products.length === 0 && (
+            <div className="py-6 text-center text-gray-400">No products found.</div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }

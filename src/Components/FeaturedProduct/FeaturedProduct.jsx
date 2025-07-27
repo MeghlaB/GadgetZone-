@@ -19,7 +19,7 @@ function FeaturedProduct() {
       return res.data;
     },
   });
-  console.log(Products)
+
 
   return (
     <div className="relative w-11/12 mx-auto my-10 top-16">
