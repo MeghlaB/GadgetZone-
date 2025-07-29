@@ -34,6 +34,7 @@ import PaymentSucces from "../Components/PaymentSucces/PaymentSucces";
 import UserHome from "../Dashboard/UserDashboard/UserFeature/UserHome";
 import Mycarts from "../Dashboard/UserDashboard/UserFeature/Mycarts";
 import MyProfile from "../Dashboard/UserDashboard/UserFeature/Myprofile";
+import AllUsers from "../Dashboard/AdminDashboard/AdminFeauter/AllUsers";
 
 
 export const router = createBrowserRouter([
@@ -159,6 +160,12 @@ export const router = createBrowserRouter([
       {
         path: "editproduct",
         element: <EditProduct></EditProduct>
+      },
+      {
+        path: "users",
+        loader: async()=> fetch('https://gadget-zone-server-kappa.vercel.app/products'),
+        element: <AllUsers></AllUsers>, 
+
       },
 
 

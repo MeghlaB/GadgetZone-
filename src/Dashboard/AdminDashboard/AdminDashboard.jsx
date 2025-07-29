@@ -10,6 +10,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCartPlus } from "react-icons/fa";
 import { MdInventory } from 'react-icons/md';
+import { FaUsers } from "react-icons/fa";
+
 
 function AdminDashboard() {
   return (
@@ -21,20 +23,21 @@ function AdminDashboard() {
           <Home size={20} />
           Admin Home
         </Link>
-        <Link to="/dashboard/addproduct" className="flex items-center gap-3 hover:text-gray-300">
-          <FaCartPlus size={20} />
-          Add Products
-        </Link>
+
         <Link to="/dashboard/allproduct" className="flex items-center gap-3 hover:text-gray-300">
           <MdInventory size={20} />
           All Products
         </Link>
         <Link to="/dashboard/allproduct" className="flex items-center gap-3 hover:text-gray-300">
           <MdInventory size={20} />
-          All Orders
+          Orders
+        </Link>
+        <Link to="/dashboard/addproduct" className="flex items-center gap-3 hover:text-gray-300">
+          <FaCartPlus size={20} />
+          Add Products
         </Link>
         <Link to="/dashboard/users" className="flex items-center gap-3 hover:text-gray-300">
-          <MdInventory size={20} />
+          <FaUsers size={20} />
           Manage users
         </Link>
         <Link to="/" className="relative flex items-center gap-3 hover:text-gray-301 ">
