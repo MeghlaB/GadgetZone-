@@ -12,7 +12,8 @@ function AllProduct() {
   const loadedProducts = useLoaderData();
   const [products, setProduct] = useState(loadedProducts);
   const { user } = useContext(AuthContext);
-
+  const demo = 'hello '
+  
   const handleDeleteProduct = (_id) => {
     Swal.fire({
       title: "Are you sure?",
