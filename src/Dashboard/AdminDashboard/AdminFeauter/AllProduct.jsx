@@ -13,6 +13,7 @@ function AllProduct() {
   const [products, setProduct] = useState(loadedProducts);
   const { user } = useContext(AuthContext);
   const demo = 'hello '
+  const hello = 'demo'
   
   const handleDeleteProduct = (_id) => {
     Swal.fire({
