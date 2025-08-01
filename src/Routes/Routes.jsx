@@ -163,7 +163,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "users",
-        loader: async()=> fetch('https://gadget-zone-server-kappa.vercel.app/products'),
+        loader: async()=> fetch('https://gadget-zone-server-kappa.vercel.app/users'),
         element: <AllUsers></AllUsers>, 
 
       },

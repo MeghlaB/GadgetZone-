@@ -15,7 +15,7 @@ function AllProduct() {
   const demo = 'hello '
   const hello = 'demo'
   const demo2 = 'hello world'
-  
+
   const handleDeleteProduct = (_id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -41,7 +41,7 @@ function AllProduct() {
       }
     });
   };
-  
+
   console.log(products)
   return (
     <div data-theme="dark" className="min-h-screen bg-base-100">
@@ -62,11 +62,11 @@ function AllProduct() {
       {/* Main Content */}
       <main className="p-4 md:p-8">
 
-      {/* Total products  */}
+        {/* Total products  */}
         <div>
           <h1 className="my-4 text-xl">Total Products = {products.length} </h1>
         </div>
-        
+
         {/* Responsive Card Grid for Small Devices */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:hidden">
           {products.map((p) => (
@@ -87,11 +87,10 @@ function AllProduct() {
                     Quantity: <span className="text-sm">{p.quantity}</span>
                   </p>
                   <span
-                    className={`inline-block px-2 py-1 mt-1 rounded text-xs font-medium ${
-                      p.status === "In Stock"
+                    className={`inline-block px-2 py-1 mt-1 rounded text-xs font-medium ${p.status === "In Stock"
                         ? "bg-green-500 text-green-900"
                         : "bg-red-300 text-red-900"
-                    }`}
+                      }`}
                   >
                     {p.status}
                   </span>
@@ -154,11 +153,10 @@ function AllProduct() {
                   <td>৳{p.price}</td>
                   <td>
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        p.status === "In Stock"
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${p.status === "In Stock"
                           ? "bg-green-600 text-white"
                           : "bg-red-200 text-red-800"
-                      }`}
+                        }`}
                     >
                       {p.status}
                     </span>
