@@ -26,7 +26,7 @@ function Login() {
       toast.success("Logged in successfully!");
       setTimeout(() => navigate("/"), 1000);
     } catch (error) {
-      console.error("Login Error:", error);
+     
       const errorCode = error.code;
 
       if (errorCode === "auth/user-not-found") {

@@ -18,7 +18,7 @@ function AllUsers() {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`https://gadget-zone-server-kappa.vercel.app/users/${_id}`, {
+                fetch(`https://gadget-zone-server-ashy.vercel.app/users/${_id}`, {
                     method: "DELETE",
                 })
                     .then((res) => res.json())

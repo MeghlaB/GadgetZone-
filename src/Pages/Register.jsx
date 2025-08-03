@@ -62,7 +62,6 @@ function Register() {
       }
 
     } catch (error) {
-      console.error("Registration Error:", error);
       const msg = error.response?.data?.message || error.message || "Registration failed";
       toast.error(msg);
     } finally {

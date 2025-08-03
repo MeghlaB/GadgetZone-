@@ -13,8 +13,8 @@ const ProductDetails = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate()
-  const demo  = 'product details'
-  
+  const demo = 'product details'
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -32,13 +32,14 @@ const ProductDetails = () => {
     enabled: !!id,
   });
 
-  console.log({ product })
+
+  
   const handleCart = async () => {
     if (!user) {
-      toast.warning("Please login to Add to cart");
-
+      toast.warning("Please login to add to cart");
       return;
     }
+
     const cartItems = {
       productId: product._id,
       title: product.title,
@@ -48,18 +49,25 @@ const ProductDetails = () => {
       status: "pending",
       quantity: 1,
     };
+
     try {
-      const res = await axiosPublic.post('/cart', cartItems);
+      const res = await axiosPublic.post("/cart", cartItems);
+
       if (res.data.insertedId) {
         toast.success("Product added to cart!");
+      } else if (res.data.message === "Product already in cart") {
+        toast.warning("This product is already in your cart.");
       } else {
         toast.error("Failed to add to cart.");
       }
     } catch (error) {
+     
       toast.error("Something went wrong!");
-      console.error(error);
     }
   };
+
+
+
 
   const handleBuy = async () => {
     if (!user) {

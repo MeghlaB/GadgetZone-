@@ -40,7 +40,7 @@ const Navbar = () => {
     queryKey: ["cart", user?.email],
     queryFn: async () => {
       const res = await axiosPublic.get(`/carts?email=${user.email}`);
-      console.log(res.data);
+     
       return res.data;
     },
     enabled: !!user?.email,

@@ -22,7 +22,7 @@ const Mycarts = () => {
     },
   });
 
-  console.log(carts)
+
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {

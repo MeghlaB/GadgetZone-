@@ -41,7 +41,7 @@ export default function MyProfile() {
           });
         })
         .catch((error) => {
-          console.error("Error fetching profile data:", error);
+
         });
     }
   }, [user?.email, reset, axiosPublic]);
@@ -82,8 +82,7 @@ export default function MyProfile() {
         photo: imageUrl,
       };
 
-      console.log("Updating profile id:", profileData?._id);
-      console.log("Updated data:", updatedData);
+      
 
       // Send update request to backend
       const updateResponse = await axiosPublic.put(
@@ -113,7 +112,7 @@ export default function MyProfile() {
         throw new Error(updateResponse.data.message || "Update failed");
       }
     } catch (error) {
-      console.error("Update error:", error);
+     
 
       const errorMessage =
         error.response?.data?.message ||
@@ -145,7 +144,7 @@ export default function MyProfile() {
             alt="Profile"
           />
         </div>
-        <div className="space-y-1 pt-8 text-center">
+        <div className="pt-8 space-y-1 text-center">
           <h1 className="text-xl md:text-2xl">{profileData?.name}</h1>
           <p className="text-sm text-gray-400">{profileData?.role}</p>
           <p className="text-sm text-gray-800">{profileData?.email}</p>
@@ -173,14 +172,14 @@ export default function MyProfile() {
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="rounded-xl bg-white p-5 shadow-lg sm:p-6">
+          <div className="p-5 bg-white shadow-lg rounded-xl sm:p-6">
             <div className="flex justify-end">
               <button
                 onClick={() => setOpenModal(false)}
                 className="rounded-full p-1.5 hover:bg-gray-100"
               >
                 <svg
-                  className="h-5 w-5 text-gray-600"
+                  className="w-5 h-5 text-gray-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -195,35 +194,35 @@ export default function MyProfile() {
               </button>
             </div>
 
-            <h2 className="mb-6 text-center text-2xl font-semibold text-gray-900">
+            <h2 className="mb-6 text-2xl font-semibold text-center text-gray-900">
               Edit Profile
             </h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
               <div>
-                <label className="block text-sm font-medium mb-1">Full Name</label>
+                <label className="block mb-1 text-sm font-medium">Full Name</label>
                 <input
                   type="text"
                   {...register("name", { required: "Full name is required" })}
-                  className="w-full rounded-md border px-3 py-2"
+                  className="w-full px-3 py-2 border rounded-md"
                 />
                 {errors.name && (
-                  <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
+                <label className="block mb-1 text-sm font-medium">Email</label>
                 <input
                   type="email"
                   value={profileData?.email || ""}
                   readOnly
-                  className="w-full rounded-md border bg-gray-100 px-3 py-2 cursor-not-allowed"
+                  className="w-full px-3 py-2 bg-gray-100 border rounded-md cursor-not-allowed"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Profile Photo</label>
+                <label className="block mb-1 text-sm font-medium">Profile Photo</label>
                 <input
                   type="file"
                   {...register("photo")}
@@ -234,7 +233,7 @@ export default function MyProfile() {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+                  className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700"
                 >
                   Update Profile
                 </button>
