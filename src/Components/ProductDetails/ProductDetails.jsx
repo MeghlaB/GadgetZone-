@@ -13,7 +13,6 @@ const ProductDetails = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate()
-  const demo = 'product details'
 
   useEffect(() => {
     window.scrollTo(0, 0);
