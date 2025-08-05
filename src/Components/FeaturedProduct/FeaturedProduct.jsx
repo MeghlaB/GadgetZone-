@@ -20,7 +20,7 @@ function FeaturedProduct() {
     },
   });
 
-
+  const hello = 'demo section'
   return (
     <div className="relative w-11/12 mx-auto my-10 top-16">
       <h1 className="text-lg font-bold text-center md:text-2xl">
