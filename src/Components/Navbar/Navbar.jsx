@@ -23,6 +23,8 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef();
 
+  const [searchItem, setSearchItem] = useState('')
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -40,7 +42,7 @@ const Navbar = () => {
     queryKey: ["cart", user?.email],
     queryFn: async () => {
       const res = await axiosPublic.get(`/carts?email=${user.email}`);
-     
+
       return res.data;
     },
     enabled: !!user?.email,
@@ -95,6 +97,8 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search"
+            value={searchItem}
+            onChange={(e) => setSearchItem(e.target.value)}
             className="w-full px-4 py-2 text-black outline-none rounded-l-md"
           />
           <button className="px-4 text-black bg-white rounded-r-md">
@@ -102,7 +106,7 @@ const Navbar = () => {
           </button>
         </div>
 
-      {/* Icons */}
+        {/* Icons */}
         <div className="flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-4">
@@ -125,7 +129,7 @@ const Navbar = () => {
                 <span className="text-sm">Dashboard</span>
               </Link>
               <Link to="/dashboard/my-carts" className="relative inline-block">
-                <ShoppingCart  className="w-6 h-6" />
+                <ShoppingCart className="w-6 h-6" />
                 <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 rounded-full">
                   {cartItems?.length || 0}
                 </span>
@@ -224,9 +228,8 @@ const Navbar = () => {
 
       {/* Sticky Categories */}
       <div
-        className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${
-          menuOpen ? "block" : "hidden"
-        } md:flex`}
+        className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${menuOpen ? "block" : "hidden"
+          } md:flex`}
       >
         {categories.map((cat, index) => (
           <Link
