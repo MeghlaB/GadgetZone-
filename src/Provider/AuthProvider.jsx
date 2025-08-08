@@ -17,7 +17,7 @@ export const AuthContext = createContext(null);
 
 
 const provider = new GoogleAuthProvider();
-
+const hello  = 'Nothings here'
 function AuthProvider({ children }) {
 
   const [user, setUser] = useState(null);
@@ -40,7 +40,7 @@ function AuthProvider({ children }) {
     return signOut(auth);
   };
 
-  // updatephoto
+  // update photo
   const updateUserprofile = (name, photo) => {
     return updateProfile(auth.currentUser, {
       displayName: name, photoURL: photo
@@ -57,27 +57,7 @@ function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      //console.log('Current-user =>',currentUser)
-
-      // if (currentUser) {
-      //   setUser(currentUser);
-
-      //   const userInfo = { email: currentUser.email };
-      //   axiosPublic.post("/jwt", userInfo)
-      //     .then((res) => {
-      //       if (res.data.token) {
-      //         localStorage.setItem("access-token", res.data.token);
-      //       }
-      //       setIsLoading(false); // ✅ এখানে রাখো
-      //     })
-      //     .catch(() => {
-      //       setIsLoading(false); // 🛑 error হলেও loading বন্ধ হওয়া দরকার
-      //     });
-      // } else {
-      //   setUser(null);
-      //   localStorage.removeItem("access-token");
-      //   setIsLoading(false);
-      // }
+      
     });
 
     return () => unsubscribe();

@@ -34,7 +34,11 @@ import PaymentSucces from "../Components/PaymentSucces/PaymentSucces";
 import UserHome from "../Dashboard/UserDashboard/UserFeature/UserHome";
 import Mycarts from "../Dashboard/UserDashboard/UserFeature/Mycarts";
 import MyProfile from "../Dashboard/UserDashboard/UserFeature/Myprofile";
+
 import SearchResults from "../Pages/SearchResults";
+
+import AllUsers from "../Dashboard/AdminDashboard/AdminFeauter/AllUsers";
+
 
 
 export const router = createBrowserRouter([
@@ -45,15 +49,6 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
-
-      },
-      {
-        path: "account/login",
-        element: <Login></Login>,
-      },
-      {
-        path: "account/register",
-        element: <Register></Register>,
       },
       // submenu category
       {
@@ -117,19 +112,20 @@ export const router = createBrowserRouter([
         element: <Gadget />,
       },
       {
-        path:'/accessories',
-        element:<Accessories/>
+        path: '/accessories',
+        element: <Accessories />
       }
       ,
       {
-        path:'/product/:id',
-        element:<ProductDetails/>
+        path: '/product/:id',
+        element: <ProductDetails />
       },
       {
-        path:'/checkout/checkoders/:id',
-        element:<Checkoutoders/>
+        path: '/checkout/checkoders/:id',
+        element: <Checkoutoders />
       },
       {
+
         path:'/payment/success/:tranId',
         element:<PaymentSucces/>
       },
@@ -139,7 +135,20 @@ export const router = createBrowserRouter([
       },
       // <Route path="/search" element={<SearchResults />} />
 
+{
+        path: '/payment/success/:tranId',
+        element: <PaymentSucces />
+      }
+
     ],
+  },
+  {
+    path: "account/login",
+    element: <Login></Login>,
+  },
+  {
+    path: "account/register",
+    element: <Register></Register>,
   },
   {
     path: "/dashboard",
@@ -153,12 +162,12 @@ export const router = createBrowserRouter([
       {
         path: "adminhome",
         element: <AdminHome />,
-        loader: ()=> fetch('https://gadget-zone-server-kappa.vercel.app/products')
+        loader: () => fetch('https://gadget-zone-server-kappa.vercel.app/products')
       },
       {
         path: "allproduct",
         element: <AllProduct></AllProduct>,
-        loader: ()=> fetch('https://gadget-zone-server-kappa.vercel.app/products')
+        loader: () => fetch('https://gadget-zone-server-kappa.vercel.app/products')
       },
       {
         path: "addproduct",
@@ -168,31 +177,37 @@ export const router = createBrowserRouter([
         path: "editproduct",
         element: <EditProduct></EditProduct>
       },
+      {
+        path: "users",
+        loader: async()=> fetch('https://gadget-zone-server-kappa.vercel.app/users'),
+        element: <AllUsers></AllUsers>, 
+
+      },
 
 
       // seleer dashboard
       {
-        path: 'sellerhome', 
+        path: 'sellerhome',
         element: <SellerHome></SellerHome>
       },
       // user dashboard
       {
-        path:'user-home',
-        element:<UserHome/>
+        path: 'user-home',
+        element: <UserHome />
       },
       {
-        path:'my-carts',
-        element:<Mycarts/>
+        path: 'my-carts',
+        element: <Mycarts />
       },
       {
-        path:'user-profile',
-        element:<MyProfile/>
+        path: 'user-profile',
+        element: <MyProfile />
       }
     ],
 
-  }, 
+  },
   {
-    path:'*', 
+    path: '*',
     element: <ErrorPage></ErrorPage>
   }
 ]);

@@ -16,7 +16,8 @@ export default function Dashboard() {
   if (loading) {
     return <div>Loading...</div>;
   }
-
+  
+  
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -32,19 +33,22 @@ export default function Dashboard() {
         {/* Close Button */}
         <button
           onClick={toggleSidebar}
-          className="btn bg-red-600 text-white btn-sm absolute top-2 right-4"
+          className="absolute text-white bg-red-600 btn btn-sm top-2 right-4"
         >
           <ImCross /> 
         </button>
 
         {/* Sidebar Content */}
-        {isAdmin ? (
+        {/* {isAdmin ? (
           <AdminDashboard />
         ) : isseller ? (
           <SellerDashboard />
         ) : (
           <UserDashboard />
-        )}
+        )} */}
+
+        {/* This if for testing */}
+        <AdminDashboard/>
       </div>
 
       {/* Main Content */}
@@ -53,7 +57,7 @@ export default function Dashboard() {
         <div className="p-4">
           <button
             onClick={toggleSidebar}
-            className="btn bg-green-600 text-white drawer-button"
+            className="text-white bg-green-600 btn drawer-button"
           >
             <ImMenu />
           </button>

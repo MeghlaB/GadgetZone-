@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 import { motion } from "framer-motion";
@@ -14,6 +14,10 @@ const ProductDetails = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate()
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const {
     isError,
     isLoading,
@@ -26,15 +30,18 @@ const ProductDetails = () => {
     },
     enabled: !!id,
   });
+
   
   // console.log({product})
 
+
+  
   const handleCart = async () => {
     if (!user) {
-      toast.warning("Please login to Add to cart");
-
+      toast.warning("Please login to add to cart");
       return;
     }
+
     const cartItems = {
       productId: product._id,
       title: product.title,
@@ -44,25 +51,32 @@ const ProductDetails = () => {
       status: "pending",
       quantity: 1,
     };
+
     try {
-      const res = await axiosPublic.post('/cart', cartItems);
+      const res = await axiosPublic.post("/cart", cartItems);
+
       if (res.data.insertedId) {
         toast.success("Product added to cart!");
+      } else if (res.data.message === "Product already in cart") {
+        toast.warning("This product is already in your cart.");
       } else {
         toast.error("Failed to add to cart.");
       }
     } catch (error) {
+     
       toast.error("Something went wrong!");
-      console.error(error);
     }
   };
+
+
+
 
   const handleBuy = async () => {
     if (!user) {
       toast.warning("Please login to Add to Buy");
       return;
     }
-    else{
+    else {
       navigate(`/checkout/checkoders/${product._id}`)
     }
   }
@@ -153,13 +167,13 @@ const ProductDetails = () => {
           </div>
 
           {/* <Link to={`/checkout/checkoders/${product._id}`}> */}
-            <motion.button
-              onClick={handleBuy}
-              whileTap={{ scale: 0.95 }}
-              className="mt-6 btn btn-primary"
-            >
-              Buy Now
-            </motion.button>
+          <motion.button
+            onClick={handleBuy}
+            whileTap={{ scale: 0.95 }}
+            className="mt-6 btn btn-primary"
+          >
+            Buy Now
+          </motion.button>
           {/* </Link> */}
           <motion.button
             onClick={handleCart}

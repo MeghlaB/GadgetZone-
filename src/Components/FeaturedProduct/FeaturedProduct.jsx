@@ -1,77 +1,97 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-function FeaturedProduct() {
-  const axiosPublic = useAxiosPublic()
- 
 
-   const {
+function FeaturedProduct() {
+  const {
     isLoading,
     error,
     isError,
-    data: Products = [],
+    data: products = [],
   } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
-      const res = await axios.get("https://gadget-zone-server-kappa.vercel.app/products");
+      const res = await axios.get(
+        "https://gadget-zone-server-kappa.vercel.app/products"
+      );
       return res.data;
     },
   });
 
+  if (isLoading) {
+    return (
+      <div className="text-center my-10">
+        <span className="loading loading-spinner text-primary mx-auto"></span>
+        <p className="mt-2 text-gray-500">Loading products…</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center my-10 text-red-600">
+        Error loading products: {error.message}
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="text-center my-10 text-gray-500">
+        No featured products found.
+      </div>
+    );
+  }
+
   return (
-    <div className="my-10 w-11/12 mx-auto relative top-16">
-      <h1 className="text-lg text-center md:text-2xl font-bold">
+    <div className="relative w-11/12 mx-auto my-10 top-16">
+      <h1 className="text-lg font-bold text-center md:text-2xl">
         Featured Products
       </h1>
-      <p className="text-center text-gray-600 mb-6">
+      <p className="mb-6 text-center text-gray-600">
         Get Your Desired Product from Featured Products!
       </p>
 
-      { Products.length === 0 ? (
-      <div className="text-center"><span className="loading loading-spinner text-primary "></span></div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          { Products.map((product, idx) => (
-            <div
-              key={idx}
-              className="relative bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
-            >
-              {/* Save Badge */}
-              <div className="absolute top-3 left-2 bg-purple-600 text-white text-xs px-2 py-1 rounded-md z-10">
-                Save: {product.save_amount}৳ ({product.discount})
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        {products.map((product, idx) => (
+          <div
+            key={product._id || idx}
+            className="relative overflow-hidden transition-all duration-300 bg-white shadow-lg rounded-xl hover:shadow-2xl"
+          >
+            {/* Save Badge */}
+            <div className="absolute z-10 px-2 py-1 text-xs text-white bg-purple-600 rounded-md top-3 left-2">
+              Save: {product.save_amount}৳ ({product.discount})
+            </div>
+
+            {/* Product Image */}
+            <Link to={`/product/${product._id}`}>
+              <div className="flex items-center justify-center h-40 p-4">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="object-contain max-h-full"
+                />
               </div>
 
-              {/* Product Image */}
-              <Link to={`/product/${product._id}`}>
-                <div className="p-4 flex justify-center items-center h-40">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="object-contain max-h-full"
-                  />
-                </div>
+              {/* Product Title */}
+              <div className="px-4 pb-4 text-center">
+                <h2 className="mb-2 text-sm font-semibold text-gray-800">
+                  {product.title}
+                </h2>
 
-                {/* Product Title */}
-                <div className="px-4 pb-4 text-center">
-                  <h2 className="text-sm font-semibold text-gray-800 mb-2">
-                    {product.title}
-                  </h2>
-
-                  {/* Price Section */}
-                  <div className="text-red-600 font-bold text-lg">
-                    {product.price}৳{" "}
-                    <span className="line-through text-sm text-gray-500 ml-2">
-                      {product.previous_price}৳
-                    </span>
-                  </div>
+                {/* Price Section */}
+                <div className="text-lg font-bold text-red-600">
+                  {product.price}৳{" "}
+                  <span className="ml-2 text-sm text-gray-500 line-through">
+                    {product.previous_price}৳
+                  </span>
                 </div>
-              </Link>
-            </div>
-          ))}
-        </div>
-      )}
+              </div>
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
