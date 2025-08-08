@@ -1,8 +1,8 @@
 [
-  { "name": "Drone", "icon": "https://cdn-icons-png.flaticon.com/512/974/974510.png" },
-  { "name": "Gimbal", "icon": "https://static.thenounproject.com/png/4223505-200.png" },
-  { "name": "Charger Fan", "icon": "https://static.vecteezy.com/system/resources/previews/000/356/722/non_2x/charging-fan-vector-icon.jpg" },
-  { "name": "Weight Scale", "icon": "https://cdn-icons-png.flaticon.com/512/6824/6824573.png" },
+  { "name": "Drone", "icon": "https://cdn-icons-png.flaticon.com/512/974/974510.png","path":"/gadget" },
+  { "name": "Gimbal", "icon": "https://static.thenounproject.com/png/4223505-200.png", "path":"/camera"  },
+  { "name": "Charger Fan", "icon": "https://static.vecteezy.com/system/resources/previews/000/356/722/non_2x/charging-fan-vector-icon.jpg", "path":"/accessories"  },
+  { "name": "Weight Scale", "icon": "https://cdn-icons-png.flaticon.com/512/6824/6824573.png" ,"path":"/accessories"  },
   { "name": "TV", "icon": "https://cdn-icons-png.flaticon.com/512/2502/2502208.png" },
   { "name": "Mobile Phone", "icon": "https://cdn-icons-png.flaticon.com/512/0/191.png" },
   { "name": "Mobile Accessories", "icon": "https://cdn.vectorstock.com/i/1000v/44/89/mobile-phone-accessories-icon-set-vector-1834489.jpg" },

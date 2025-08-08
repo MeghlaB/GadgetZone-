@@ -39,16 +39,16 @@ export default function Dashboard() {
         </button>
 
         {/* Sidebar Content */}
-        {/* {isAdmin ? (
+        {isAdmin ? (
           <AdminDashboard />
         ) : isseller ? (
           <SellerDashboard />
         ) : (
           <UserDashboard />
-        )} */}
+        )}
 
         {/* This if for testing */}
-        <AdminDashboard/>
+        {/* <AdminDashboard/> */}
       </div>
 
       {/* Main Content */}
