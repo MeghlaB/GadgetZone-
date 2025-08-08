@@ -27,7 +27,7 @@ const ProductDetails = () => {
     enabled: !!id,
   });
   
-  console.log({product})
+  // console.log({product})
 
   const handleCart = async () => {
     if (!user) {

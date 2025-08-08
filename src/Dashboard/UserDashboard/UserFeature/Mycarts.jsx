@@ -23,7 +23,7 @@ const Mycarts = () => {
       return res.data;
     },
   });
-  console.log(carts)
+  // console.log(carts)
 
   if (isLoading)
     return <span className="loading loading-spinner text-neutral"></span>;

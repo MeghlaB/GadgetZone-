@@ -1,14 +1,13 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useState, useRef, useEffect } from "react";
 import { FaSearch, FaUser, FaBolt } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { MdLogout } from "react-icons/md";
-import { useRef, useEffect } from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
 import userAdmin from "../../Hooks/userAdmin";
 import userSeller from "../../Hooks/userSeller";
-import { CarFront, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 
@@ -23,6 +22,10 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef();
 
+  // Search state
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -35,17 +38,17 @@ const Navbar = () => {
     };
   }, []);
 
-  // user-add-to-cart.......
+  // Get cart data
   const { data: cartItems } = useQuery({
     queryKey: ["cart", user?.email],
     queryFn: async () => {
       const res = await axiosPublic.get(`/carts?email=${user.email}`);
-      console.log(res.data);
       return res.data;
     },
     enabled: !!user?.email,
   });
 
+  // Get dashboard link based on role
   const getDashboardLink = useCallback(() => {
     if (isAdmin) {
       return "/dashboard/adminhome";
@@ -55,6 +58,14 @@ const Navbar = () => {
     }
     return "/dashboard/user-home";
   }, [isAdmin, isseller]);
+
+  // Search handler
+  const handleSearch = () => {
+    const q = searchTerm.trim();
+    if (!q) return;
+    navigate(`/search?q=${encodeURIComponent(q)}`);
+    setMenuOpen(false); // close mobile menu if open
+  };
 
   const categories = [
     { name: "Home", path: "/" },
@@ -85,7 +96,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img
-            className="h-8 md:h-10 rounded-lg "
+            className="h-8 md:h-10 rounded-lg"
             src="https://i.ibb.co/7Jp64HMt/Whats-App-Image-2025-05-19-at-01-03-05-a47959b3.jpg"
           />
         </Link>
@@ -96,14 +107,19 @@ const Navbar = () => {
             type="text"
             placeholder="Search"
             className="w-full px-4 py-2 rounded-l-md outline-none text-black"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
-          <button className="bg-white text-black px-4 rounded-r-md">
+          <button
+            className="bg-white text-black px-4 rounded-r-md"
+            onClick={handleSearch}
+          >
             <FaSearch />
           </button>
         </div>
 
         {/* Icons */}
-
         <div className="flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-4">
@@ -114,10 +130,7 @@ const Navbar = () => {
                 className="w-8 h-8 rounded-full hidden md:block"
               />
 
-              {/* Dashboard & Logout - Desktop only */}
-
-              {/* <Link to={'/dashboard/adminhome'} className="hidden md:flex items-center gap-1"></Link> */}
-
+              {/* Dashboard */}
               <Link
                 to={getDashboardLink()}
                 className="hidden md:flex items-center gap-1"
@@ -125,18 +138,22 @@ const Navbar = () => {
                 <LuLayoutDashboard />
                 <span className="text-sm">Dashboard</span>
               </Link>
+
+              {/* Cart */}
               <Link to="/dashboard/my-carts" className="relative inline-block">
-                <ShoppingCart  className="w-6 h-6" />
+                <ShoppingCart className="w-6 h-6" />
                 <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 rounded-full">
                   {cartItems?.length || 0}
                 </span>
               </Link>
 
+              {/* Happy Hour */}
               <div className="hidden md:flex items-center gap-1">
                 <FaBolt />
                 <span className="text-sm">Happy Hour</span>
               </div>
 
+              {/* Logout */}
               <Link
                 onClick={logOut}
                 className="hidden md:flex items-center gap-1"
@@ -151,11 +168,9 @@ const Navbar = () => {
                 <FaBolt />
                 <span className="text-sm">Happy Hour</span>
               </div>
-
-              {/* Login Button Between PC Builder and Menu */}
               <Link
                 to={"/account/login"}
-                className=" md:block bg-gradient-to-r from-green-500 to-blue-500 px-4 py-1 rounded-md text-sm font-semibold text-white"
+                className="md:block bg-gradient-to-r from-green-500 to-blue-500 px-4 py-1 rounded-md text-sm font-semibold text-white"
               >
                 Login
               </Link>
@@ -217,8 +232,14 @@ const Navbar = () => {
           type="text"
           placeholder="Search"
           className="w-full px-3 py-2 rounded-md border"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-        <button className="bg-blue-500 text-white px-3 py-2 rounded-md">
+        <button
+          className="bg-blue-500 text-white px-3 py-2 rounded-md"
+          onClick={handleSearch}
+        >
           <FaSearch />
         </button>
       </div>

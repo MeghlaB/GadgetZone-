@@ -82,8 +82,8 @@ export default function MyProfile() {
         photo: imageUrl,
       };
 
-      console.log("Updating profile id:", profileData?._id);
-      console.log("Updated data:", updatedData);
+      // console.log("Updating profile id:", profileData?._id);
+      // console.log("Updated data:", updatedData);
 
       // Send update request to backend
       const updateResponse = await axiosPublic.put(

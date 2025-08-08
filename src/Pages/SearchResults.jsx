@@ -1,39 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import useAxiosPublic from "../../Hooks/UseAxiosPublic";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-function FeaturedProduct() {
-  const axiosPublic = useAxiosPublic()
- 
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-   const {
-    isLoading,
-    error,
-    isError,
-    data: Products = [],
-  } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const res = await axios.get("https://gadget-zone-server-kappa.vercel.app/products");
-      return res.data;
-    },
-  });
+const SearchResults = () => {
+  const location = useLocation();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // URL থেকে search query বের করা
+  const query = new URLSearchParams(location.search).get("q");
+
+  useEffect(() => {
+    if (!query) return;
+    setLoading(true);
+    fetch(`http://localhost:5000/products?search=${query}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching search results:", err);
+        setLoading(false);
+      });
+  }, [query]);
+
+  if (loading) {
+    return (
+       <div className="text-center"><span className="loading loading-spinner text-primary "></span></div>
+    );
+  }
 
   return (
-    <div className="my-10 w-11/12 mx-auto relative top-16">
-      <h1 className="text-lg text-center md:text-2xl font-bold">
-        Featured Products
-      </h1>
-      <p className="text-center text-gray-600 mb-6">
-        Get Your Desired Product from Featured Products!
-      </p>
+    <div className="w-11/12  mx-auto px-4 py-8 mt-9">
+      <h2 className="text-2xl font-bold mb-6">
+        Search results for: <span className="text-blue-600">{query}</span>
+      </h2>
 
-      { Products.length === 0 ? (
-      <div className="text-center"><span className="loading loading-spinner text-primary "></span></div>
+      {products.length === 0 ? (
+        <p className="text-gray-500">No products found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          { Products.map((product, idx) => (
+          { products.map((product, idx) => (
             <div
               key={idx}
               className="relative bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
@@ -74,6 +81,6 @@ function FeaturedProduct() {
       )}
     </div>
   );
-}
+};
 
-export default FeaturedProduct;
+export default SearchResults;

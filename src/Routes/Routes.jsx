@@ -34,6 +34,7 @@ import PaymentSucces from "../Components/PaymentSucces/PaymentSucces";
 import UserHome from "../Dashboard/UserDashboard/UserFeature/UserHome";
 import Mycarts from "../Dashboard/UserDashboard/UserFeature/Mycarts";
 import MyProfile from "../Dashboard/UserDashboard/UserFeature/Myprofile";
+import SearchResults from "../Pages/SearchResults";
 
 
 export const router = createBrowserRouter([
@@ -131,7 +132,13 @@ export const router = createBrowserRouter([
       {
         path:'/payment/success/:tranId',
         element:<PaymentSucces/>
-      }
+      },
+      {
+        path:'/search',
+        element:<SearchResults/>
+      },
+      // <Route path="/search" element={<SearchResults />} />
+
     ],
   },
   {
