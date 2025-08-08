@@ -49,6 +49,17 @@ const Navbar = () => {
   });
 
   // Get dashboard link based on role
+
+  // search handler 
+  const handleSearch = () => {
+    if (searchItem.trim() !== "") {
+      navigate(`/search?query=${encodeURIComponent(searchItem)}`);
+      setSearchItem(""); 
+    }
+  };
+
+
+
   const getDashboardLink = useCallback(() => {
     if (isAdmin) {
       return "/dashboard/adminhome";
@@ -112,8 +123,13 @@ const Navbar = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
           <button
+
             className="bg-white text-black px-4 rounded-r-md"
             onClick={handleSearch}
+
+            onClick={handleSearch}
+            className="px-4 text-black bg-white rounded-r-md"
+
           >
             <FaSearch />
           </button>
@@ -231,6 +247,7 @@ const Navbar = () => {
         <input
           type="text"
           placeholder="Search"
+
           className="w-full px-3 py-2 rounded-md border"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -239,6 +256,15 @@ const Navbar = () => {
         <button
           className="bg-blue-500 text-white px-3 py-2 rounded-md"
           onClick={handleSearch}
+
+          value={searchItem}
+          onChange={(e) => setSearchItem(e.target.value)}
+          className="w-full px-3 py-2 border rounded-md"
+        />
+        <button
+          onClick={handleSearch}
+          className="px-3 py-2 text-white bg-blue-500 rounded-md"
+
         >
           <FaSearch />
         </button>
