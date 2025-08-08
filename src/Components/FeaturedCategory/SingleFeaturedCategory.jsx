@@ -3,7 +3,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const SingleFeaturedCategory = ({ category }) => {
+
+    // console.log(category)
+
     
+
     return (
         <div className="flex flex-col items-center justify-center w-24 h-24 text-center shadow-2xl md:w-32 md:h-32 bg-base-100 md:p-4 rounded-2xl">
             <Link className='flex flex-col items-center' to={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`}>

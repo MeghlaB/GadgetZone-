@@ -1,14 +1,13 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useState, useRef, useEffect } from "react";
 import { FaSearch, FaUser, FaBolt } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { MdLogout } from "react-icons/md";
-import { useRef, useEffect } from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
 import userAdmin from "../../Hooks/userAdmin";
 import userSeller from "../../Hooks/userSeller";
-import { CarFront, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 
@@ -23,8 +22,10 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef();
 
-  const [searchItem, setSearchItem] = useState('')
+  // Search state
+  const [searchTerm, setSearchTerm] = useState("");
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -37,16 +38,17 @@ const Navbar = () => {
     };
   }, []);
 
-  // user-add-to-cart.......
+  // Get cart data
   const { data: cartItems } = useQuery({
     queryKey: ["cart", user?.email],
     queryFn: async () => {
       const res = await axiosPublic.get(`/carts?email=${user.email}`);
-
       return res.data;
     },
     enabled: !!user?.email,
   });
+
+  // Get dashboard link based on role
 
   // search handler 
   const handleSearch = () => {
@@ -55,6 +57,7 @@ const Navbar = () => {
       setSearchItem(""); 
     }
   };
+
 
 
   const getDashboardLink = useCallback(() => {
@@ -66,6 +69,14 @@ const Navbar = () => {
     }
     return "/dashboard/user-home";
   }, [isAdmin, isseller]);
+
+  // Search handler
+  const handleSearch = () => {
+    const q = searchTerm.trim();
+    if (!q) return;
+    navigate(`/search?q=${encodeURIComponent(q)}`);
+    setMenuOpen(false); // close mobile menu if open
+  };
 
   const categories = [
     { name: "Home", path: "/" },
@@ -90,29 +101,35 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="fixed top-0 z-50 w-full">
+    <div className="w-full fixed z-50 top-0">
       {/* Top Bar */}
       <div className="bg-[#071c2b] text-white px-4 py-2 flex flex-wrap items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img
-            className="h-8 rounded-lg md:h-10 "
+            className="h-8 md:h-10 rounded-lg"
             src="https://i.ibb.co/7Jp64HMt/Whats-App-Image-2025-05-19-at-01-03-05-a47959b3.jpg"
           />
         </Link>
 
         {/* Search Bar - Desktop */}
-        <div className="flex-1 hidden mx-4 md:flex">
+        <div className="flex-1 mx-4 hidden md:flex">
           <input
             type="text"
             placeholder="Search"
-            value={searchItem}
-            onChange={(e) => setSearchItem(e.target.value)}
-            className="w-full px-4 py-2 text-black outline-none rounded-l-md"
+            className="w-full px-4 py-2 rounded-l-md outline-none text-black"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
           <button
+
+            className="bg-white text-black px-4 rounded-r-md"
+            onClick={handleSearch}
+
             onClick={handleSearch}
             className="px-4 text-black bg-white rounded-r-md"
+
           >
             <FaSearch />
           </button>
@@ -126,20 +143,19 @@ const Navbar = () => {
               <img
                 src={user.photoURL}
                 alt="profile"
-                className="hidden w-8 h-8 rounded-full md:block"
+                className="w-8 h-8 rounded-full hidden md:block"
               />
 
-              {/* Dashboard & Logout - Desktop only */}
-
-              {/* <Link to={'/dashboard/adminhome'} className="items-center hidden gap-1 md:flex"></Link> */}
-
+              {/* Dashboard */}
               <Link
                 to={getDashboardLink()}
-                className="items-center hidden gap-1 md:flex"
+                className="hidden md:flex items-center gap-1"
               >
                 <LuLayoutDashboard />
                 <span className="text-sm">Dashboard</span>
               </Link>
+
+              {/* Cart */}
               <Link to="/dashboard/my-carts" className="relative inline-block">
                 <ShoppingCart className="w-6 h-6" />
                 <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 rounded-full">
@@ -147,14 +163,16 @@ const Navbar = () => {
                 </span>
               </Link>
 
-              <div className="items-center hidden gap-1 md:flex">
+              {/* Happy Hour */}
+              <div className="hidden md:flex items-center gap-1">
                 <FaBolt />
                 <span className="text-sm">Happy Hour</span>
               </div>
 
+              {/* Logout */}
               <Link
                 onClick={logOut}
-                className="items-center hidden gap-1 md:flex"
+                className="hidden md:flex items-center gap-1"
               >
                 <MdLogout />
                 <span className="text-sm">LogOut</span>
@@ -162,15 +180,13 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-4">
-              <div className="items-center hidden gap-1 md:flex">
+              <div className="hidden md:flex items-center gap-1">
                 <FaBolt />
                 <span className="text-sm">Happy Hour</span>
               </div>
-
-              {/* Login Button Between PC Builder and Menu */}
               <Link
                 to={"/account/login"}
-                className="px-4 py-1 text-sm font-semibold text-white rounded-md md:block bg-gradient-to-r from-green-500 to-blue-500"
+                className="md:block bg-gradient-to-r from-green-500 to-blue-500 px-4 py-1 rounded-md text-sm font-semibold text-white"
               >
                 Login
               </Link>
@@ -178,7 +194,7 @@ const Navbar = () => {
           )}
 
           {/* PC Builder Button */}
-          <button className="px-4 py-1 text-sm font-semibold rounded-md bg-gradient-to-r from-blue-500 to-purple-500">
+          <button className="bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-1 rounded-md text-sm font-semibold">
             PC Builder
           </button>
 
@@ -192,7 +208,7 @@ const Navbar = () => {
                 className="w-8 h-8 rounded-full cursor-pointer"
               />
               {showDropdown && (
-                <div className="absolute right-0 z-50 w-32 py-2 mt-2 text-black bg-white rounded-md shadow-md">
+                <div className="absolute right-0 mt-2 w-32 text-black bg-white shadow-md rounded-md py-2 z-50">
                   <Link
                     to={getDashboardLink()}
                     className="block px-4 py-2 text-sm hover:bg-gray-200"
@@ -204,7 +220,7 @@ const Navbar = () => {
                   </Link>
                   <button
                     onClick={logOut}
-                    className="block w-full px-4 py-2 text-sm text-left hover:bg-gray-200"
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-200"
                   >
                     <div className="flex items-center gap-1">
                       <MdLogout />
@@ -219,7 +235,7 @@ const Navbar = () => {
           {/* Mobile Menu Icon */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-xl md:hidden"
+            className="md:hidden text-xl"
           >
             {menuOpen ? <HiX /> : <HiMenu />}
           </button>
@@ -227,10 +243,20 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Search */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 md:hidden">
+      <div className="md:hidden flex px-4 py-2 items-center gap-2 bg-gray-100">
         <input
           type="text"
           placeholder="Search"
+
+          className="w-full px-3 py-2 rounded-md border"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+        />
+        <button
+          className="bg-blue-500 text-white px-3 py-2 rounded-md"
+          onClick={handleSearch}
+
           value={searchItem}
           onChange={(e) => setSearchItem(e.target.value)}
           className="w-full px-3 py-2 border rounded-md"
@@ -238,6 +264,7 @@ const Navbar = () => {
         <button
           onClick={handleSearch}
           className="px-3 py-2 text-white bg-blue-500 rounded-md"
+
         >
           <FaSearch />
         </button>
@@ -245,8 +272,9 @@ const Navbar = () => {
 
       {/* Sticky Categories */}
       <div
-        className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${menuOpen ? "block" : "hidden"
-          } md:flex`}
+        className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${
+          menuOpen ? "block" : "hidden"
+        } md:flex`}
       >
         {categories.map((cat, index) => (
           <Link
