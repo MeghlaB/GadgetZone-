@@ -48,6 +48,15 @@ const Navbar = () => {
     enabled: !!user?.email,
   });
 
+  // search handler 
+  const handleSearch = () => {
+    if (searchItem.trim() !== "") {
+      navigate(`/search?query=${encodeURIComponent(searchItem)}`);
+      setSearchItem(""); 
+    }
+  };
+
+
   const getDashboardLink = useCallback(() => {
     if (isAdmin) {
       return "/dashboard/adminhome";
@@ -101,7 +110,10 @@ const Navbar = () => {
             onChange={(e) => setSearchItem(e.target.value)}
             className="w-full px-4 py-2 text-black outline-none rounded-l-md"
           />
-          <button className="px-4 text-black bg-white rounded-r-md">
+          <button
+            onClick={handleSearch}
+            className="px-4 text-black bg-white rounded-r-md"
+          >
             <FaSearch />
           </button>
         </div>
@@ -219,9 +231,14 @@ const Navbar = () => {
         <input
           type="text"
           placeholder="Search"
+          value={searchItem}
+          onChange={(e) => setSearchItem(e.target.value)}
           className="w-full px-3 py-2 border rounded-md"
         />
-        <button className="px-3 py-2 text-white bg-blue-500 rounded-md">
+        <button
+          onClick={handleSearch}
+          className="px-3 py-2 text-white bg-blue-500 rounded-md"
+        >
           <FaSearch />
         </button>
       </div>
