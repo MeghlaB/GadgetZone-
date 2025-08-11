@@ -17,14 +17,13 @@ const CheckoutOrders = () => {
     queryKey: ["product", id],
     queryFn: async () => {
       const res = await axiosPublic.get(`/products/${id}`);
-      
       return res.data[0];
     },
     enabled: !!id,
   });
 
   const onSubmit = (data) => {
-  
+
     data.productID = id;
     fetch("https://gadget-zone-server-kappa.vercel.app/oders", {
       method: "POST",
@@ -34,7 +33,7 @@ const CheckoutOrders = () => {
     }).then(res => res.json())
       .then(result => {
         window.location.replace(result.url)
-        
+
       })
 
   };

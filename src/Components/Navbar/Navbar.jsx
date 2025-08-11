@@ -1,14 +1,13 @@
-import { useCallback, useContext, useState } from "react";
-import { FaSearch, FaUser, FaBolt } from "react-icons/fa";
+import { useCallback, useContext, useState, useRef, useEffect } from "react";
+import { FaSearch, FaBolt } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { MdLogout } from "react-icons/md";
-import { useRef, useEffect } from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
 import userAdmin from "../../Hooks/userAdmin";
 import userSeller from "../../Hooks/userSeller";
-import { CarFront, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 
@@ -23,8 +22,10 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef();
 
-  const [searchItem, setSearchItem] = useState('')
+  // Search state
+  const [searchTerm, setSearchTerm] = useState("");
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -37,26 +38,17 @@ const Navbar = () => {
     };
   }, []);
 
-  // user-add-to-cart.......
+  // Get cart data
   const { data: cartItems } = useQuery({
     queryKey: ["cart", user?.email],
     queryFn: async () => {
       const res = await axiosPublic.get(`/carts?email=${user.email}`);
-
       return res.data;
     },
     enabled: !!user?.email,
   });
 
-  // search handler 
-  const handleSearch = () => {
-    if (searchItem.trim() !== "") {
-      navigate(`/search?query=${encodeURIComponent(searchItem)}`);
-      setSearchItem(""); 
-    }
-  };
-
-
+  // Get dashboard link based on role
   const getDashboardLink = useCallback(() => {
     if (isAdmin) {
       return "/dashboard/adminhome";
@@ -66,6 +58,19 @@ const Navbar = () => {
     }
     return "/dashboard/user-home";
   }, [isAdmin, isseller]);
+
+  // Search handler
+  const handleSearch = () => {
+    const q = searchTerm.trim();
+    if (!q) return;
+
+    // Navigate to search page
+    navigate(`/search?q=${encodeURIComponent(q)}`);
+
+    // Reset search term & close menu
+    setSearchTerm("");
+    setMenuOpen(false);
+  };
 
   const categories = [
     { name: "Home", path: "/" },
@@ -96,8 +101,9 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img
-            className="h-8 rounded-lg md:h-10 "
+            className="h-8 rounded-lg md:h-10"
             src="https://i.ibb.co/7Jp64HMt/Whats-App-Image-2025-05-19-at-01-03-05-a47959b3.jpg"
+            alt="Logo"
           />
         </Link>
 
@@ -106,13 +112,15 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search"
-            value={searchItem}
-            onChange={(e) => setSearchItem(e.target.value)}
             className="w-full px-4 py-2 text-black outline-none rounded-l-md"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
           <button
-            onClick={handleSearch}
             className="px-4 text-black bg-white rounded-r-md"
+            onClick={handleSearch}
+            aria-label="Search"
           >
             <FaSearch />
           </button>
@@ -129,10 +137,7 @@ const Navbar = () => {
                 className="hidden w-8 h-8 rounded-full md:block"
               />
 
-              {/* Dashboard & Logout - Desktop only */}
-
-              {/* <Link to={'/dashboard/adminhome'} className="items-center hidden gap-1 md:flex"></Link> */}
-
+              {/* Dashboard */}
               <Link
                 to={getDashboardLink()}
                 className="items-center hidden gap-1 md:flex"
@@ -140,6 +145,8 @@ const Navbar = () => {
                 <LuLayoutDashboard />
                 <span className="text-sm">Dashboard</span>
               </Link>
+
+              {/* Cart */}
               <Link to="/dashboard/my-carts" className="relative inline-block">
                 <ShoppingCart className="w-6 h-6" />
                 <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 rounded-full">
@@ -147,18 +154,20 @@ const Navbar = () => {
                 </span>
               </Link>
 
+              {/* Happy Hour */}
               <div className="items-center hidden gap-1 md:flex">
                 <FaBolt />
                 <span className="text-sm">Happy Hour</span>
               </div>
 
-              <Link
+              {/* Logout */}
+              <button
                 onClick={logOut}
                 className="items-center hidden gap-1 md:flex"
               >
                 <MdLogout />
                 <span className="text-sm">LogOut</span>
-              </Link>
+              </button>
             </div>
           ) : (
             <div className="flex items-center gap-4">
@@ -166,8 +175,6 @@ const Navbar = () => {
                 <FaBolt />
                 <span className="text-sm">Happy Hour</span>
               </div>
-
-              {/* Login Button Between PC Builder and Menu */}
               <Link
                 to={"/account/login"}
                 className="px-4 py-1 text-sm font-semibold text-white rounded-md md:block bg-gradient-to-r from-green-500 to-blue-500"
@@ -220,6 +227,7 @@ const Navbar = () => {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="text-xl md:hidden"
+            aria-label="Toggle menu"
           >
             {menuOpen ? <HiX /> : <HiMenu />}
           </button>
@@ -231,13 +239,15 @@ const Navbar = () => {
         <input
           type="text"
           placeholder="Search"
-          value={searchItem}
-          onChange={(e) => setSearchItem(e.target.value)}
           className="w-full px-3 py-2 border rounded-md"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
         <button
-          onClick={handleSearch}
           className="px-3 py-2 text-white bg-blue-500 rounded-md"
+          onClick={handleSearch}
+          aria-label="Search"
         >
           <FaSearch />
         </button>
@@ -245,8 +255,9 @@ const Navbar = () => {
 
       {/* Sticky Categories */}
       <div
-        className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${menuOpen ? "block" : "hidden"
-          } md:flex`}
+        className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${
+          menuOpen ? "block" : "hidden"
+        } md:flex`}
       >
         {categories.map((cat, index) => (
           <Link

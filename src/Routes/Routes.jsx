@@ -34,7 +34,11 @@ import PaymentSucces from "../Components/PaymentSucces/PaymentSucces";
 import UserHome from "../Dashboard/UserDashboard/UserFeature/UserHome";
 import Mycarts from "../Dashboard/UserDashboard/UserFeature/Mycarts";
 import MyProfile from "../Dashboard/UserDashboard/UserFeature/Myprofile";
+
+import SearchResults from "../Pages/SearchResults";
+
 import AllUsers from "../Dashboard/AdminDashboard/AdminFeauter/AllUsers";
+
 
 
 export const router = createBrowserRouter([
@@ -121,9 +125,21 @@ export const router = createBrowserRouter([
         element: <Checkoutoders />
       },
       {
+
+        path: '/payment/success/:tranId',
+        element: <PaymentSucces />
+      },
+      {
+        path: '/search',
+        element: <SearchResults />
+      },
+      // <Route path="/search" element={<SearchResults />} />
+
+      {
         path: '/payment/success/:tranId',
         element: <PaymentSucces />
       }
+
     ],
   },
   {
@@ -163,8 +179,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "users",
-        loader: async()=> fetch('https://gadget-zone-server-kappa.vercel.app/users'),
-        element: <AllUsers></AllUsers>, 
+        loader: async () => fetch('https://gadget-zone-server-kappa.vercel.app/users'),
+        element: <AllUsers></AllUsers>,
 
       },
 
