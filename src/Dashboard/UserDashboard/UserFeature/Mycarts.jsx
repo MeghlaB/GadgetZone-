@@ -6,6 +6,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const Mycarts = () => {
   const { user } = useContext(AuthContext);
@@ -38,10 +39,36 @@ const Mycarts = () => {
   );
 
   const handleDelete = (id) => {
-    if (confirm("Are you sure you want to remove this item from your cart?")) {
-      deleteMutation.mutate(id);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5000/deleteCart/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.acknowledged) {
+              Swal.fire("Deleted!", "Item has been deleted.", "success");
+              // Update UI after deletion, e.g., remove from cart state
+              setCartItems((prevItems) => prevItems.filter((item) => item._id !== id));
+            } else {
+              Swal.fire("Failed!", data.message || "Failed to delete item.", "error");
+            }
+          })
+          .catch(() => {
+            Swal.fire("Error!", "Something went wrong.", "error");
+          });
+      }
+    });
   };
+
 
   const handleQuantityChange = async (item, delta) => {
     const newQuantity = item.quantity + delta;
@@ -193,7 +220,7 @@ const Mycarts = () => {
                     className="text-red-500 hover:text-red-700"
                     title="Remove from cart"
                   >
-                    <MdDelete size={22} />
+                    <MdDelete size={25} />
                   </button>
                 </div>
               </div>

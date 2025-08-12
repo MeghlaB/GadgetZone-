@@ -36,6 +36,38 @@ const ProductDetails = () => {
 
 
 
+  // const handleCart = async () => {
+  //   if (!user) {
+  //     toast.warning("Please login to add to cart");
+  //     return;
+  //   }
+
+  //   const cartItems = {
+  //     productId: product._id,
+  //     title: product.title,
+  //     image: product.image,
+  //     price: product.price,
+  //     userEmail: user.email,
+  //     status: "pending",
+  //     quantity: 1,
+  //   };
+
+  //   try {
+  //     const res = await axiosPublic.post("/cart", cartItems);
+
+  //     if (res.data.insertedId) {
+  //       toast.success("Product added to cart!");
+  //     } else if (res.data.message === "Product already in cart") {
+  //       toast.warning("This product is already in your cart.");
+  //     } else {
+  //       toast.error("Failed to add to cart.");
+  //     }
+  //   } catch (error) {
+
+  //     toast.error("Something went wrong!");
+  //   }
+  // };
+
   const handleCart = async () => {
     if (!user) {
       toast.warning("Please login to add to cart");
@@ -54,16 +86,16 @@ const ProductDetails = () => {
 
     try {
       const res = await axiosPublic.post("/cart", cartItems);
+      const data = res.data;
 
-      if (res.data.insertedId) {
+      if (data.acknowledged) {
         toast.success("Product added to cart!");
-      } else if (res.data.message === "Product already in cart") {
+      } else if (data.message === "Product already in cart") {
         toast.warning("This product is already in your cart.");
       } else {
-        toast.error("Failed to add to cart.");
+        toast.error(data.message || "Failed to add to cart.");
       }
     } catch (error) {
-
       toast.error("Something went wrong!");
     }
   };
@@ -183,11 +215,6 @@ const ProductDetails = () => {
             {product?.title}
           </h1>
 
-          {/* <div className="my-4">
-                        <p><span className="font-semibold">Display:</span> {product?.display}</p>
-                        <p><span className="font-semibold">Ports:</span> {product?.ports}</p>
-                        <p><span className="font-semibold">Features:</span> {product?.features}</p>
-                    </div> */}
 
           <div className="mt-4 space-y-2">
             <div className="flex gap-2">
