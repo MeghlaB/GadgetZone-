@@ -71,14 +71,14 @@ const Navbar = () => {
   //   setSearchTerm("");
   //   setMenuOpen(false);
   // };
-const handleSearch = () => {
-  const q = searchTerm.trim();
-  console.log("Searching for:", q);
-  if (!q) return;
-  navigate(`/search?q=${encodeURIComponent(q)}`);
-  setSearchTerm("");
-  setMenuOpen(false);
-};
+  const handleSearch = () => {
+    const q = searchTerm.trim();
+    console.log("Searching for:", q);
+    if (!q) return;
+    navigate(`/search?q=${encodeURIComponent(q)}`);
+    setSearchTerm("");
+    setMenuOpen(false);
+  };
 
   const categories = [
     { name: "Home", path: "/" },
@@ -263,9 +263,8 @@ const handleSearch = () => {
 
       {/* Sticky Categories */}
       <div
-        className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${
-          menuOpen ? "block" : "hidden"
-        } md:flex`}
+        className={`bg-white py-2 w-full mx-auto px-6 overflow-x-auto whitespace-nowrap flex flex-col md:flex-row gap-2 md:gap-4 ${menuOpen ? "block" : "hidden"
+          } md:flex`}
       >
         {categories.map((cat, index) => (
           <Link

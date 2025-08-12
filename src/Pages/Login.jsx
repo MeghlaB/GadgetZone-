@@ -26,7 +26,7 @@ function Login() {
       toast.success("Logged in successfully!");
       setTimeout(() => navigate("/"), 1000);
     } catch (error) {
-     
+
       const errorCode = error.code;
 
       if (errorCode === "auth/user-not-found") {
@@ -131,7 +131,7 @@ function Login() {
         Don&apos;t have an account?{" "}
         <Link to="/account/register" className="text-blue-600 underline">Register</Link>
       </p>
-      
+
       {/* Forget password */}
       <div className="mt-3 text-xs text-center ">
         <NavLink to={'/'} className="text-gray-600 underline cursor-pointer ">Forgot password</NavLink>
