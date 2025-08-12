@@ -60,17 +60,25 @@ const Navbar = () => {
   }, [isAdmin, isseller]);
 
   // Search handler
-  const handleSearch = () => {
-    const q = searchTerm.trim();
-    if (!q) return;
+  // const handleSearch = () => {
+  //   const q = searchTerm.trim();
+  //   if (!q) return;
 
-    // Navigate to search page
-    navigate(`/search?q=${encodeURIComponent(q)}`);
+  //   // Navigate to search page
+  //   navigate(`/search?q=${encodeURIComponent(q)}`);
 
-    // Reset search term & close menu
-    setSearchTerm("");
-    setMenuOpen(false);
-  };
+  //   // Reset search term & close menu
+  //   setSearchTerm("");
+  //   setMenuOpen(false);
+  // };
+const handleSearch = () => {
+  const q = searchTerm.trim();
+  console.log("Searching for:", q);
+  if (!q) return;
+  navigate(`/search?q=${encodeURIComponent(q)}`);
+  setSearchTerm("");
+  setMenuOpen(false);
+};
 
   const categories = [
     { name: "Home", path: "/" },

@@ -6,23 +6,29 @@ const SearchResults = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // URL থেকে search query বের করা
+ 
   const query = new URLSearchParams(location.search).get("q");
 
-  useEffect(() => {
-    if (!query) return;
-    setLoading(true);
-    fetch(`http://localhost:5000/products?search=${query}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching search results:", err);
-        setLoading(false);
-      });
-  }, [query]);
+useEffect(() => {
+  if (!query) return;
+
+  setLoading(true);
+  fetch("http://localhost:5000/products") 
+    .then((res) => res.json())
+    .then((data) => {
+     
+      const filtered = data.filter((product) =>
+        product.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setProducts(filtered);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error(err);
+      setLoading(false);
+    });
+}, [query]);
+
 
   if (loading) {
     return (
@@ -37,7 +43,7 @@ const SearchResults = () => {
       </h2>
 
       {products.length === 0 ? (
-        <p className="text-gray-500">No products found.</p>
+        <p className="text-red-500">No products found..</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           { products.map((product, idx) => (
