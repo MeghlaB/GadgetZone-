@@ -40,6 +40,14 @@ function AdminDashboard() {
           <FaUsers size={20} />
           Manage users
         </Link>
+        <Link to="/dashboard/addbannerimg" className="flex items-center gap-3 hover:text-gray-300">
+          <FaUsers size={20} />
+          Add Banner Image
+        </Link>
+        <Link to="/dashboard/allbannerimg" className="flex items-center gap-3 hover:text-gray-300">
+          <FaUsers size={20} />
+          All Banner Image
+        </Link>
         <Link to="/" className="relative flex items-center gap-3 hover:text-gray-301 ">
           <Home size={20} />
           Go Home
