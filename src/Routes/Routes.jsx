@@ -119,6 +119,11 @@ export const router = createBrowserRouter([
       }
       ,
       {
+        path: '/appliance',
+        element: <Accessories />
+      }
+      ,
+      {
         path: '/product/:id',
         element: <ProductDetails />
       },

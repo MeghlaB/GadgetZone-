@@ -11,7 +11,8 @@ import { Link } from 'react-router-dom';
 import { FaCartPlus } from "react-icons/fa";
 import { MdInventory } from 'react-icons/md';
 import { FaUsers } from "react-icons/fa";
-
+import { RiImageEditFill } from "react-icons/ri";
+import { IoImages } from "react-icons/io5";
 
 function AdminDashboard() {
   return (
@@ -41,11 +42,11 @@ function AdminDashboard() {
           Manage users
         </Link>
         <Link to="/dashboard/addbannerimg" className="flex items-center gap-3 hover:text-gray-300">
-          <FaUsers size={20} />
+          <RiImageEditFill size={20} />
           Add Banner Image
         </Link>
         <Link to="/dashboard/allbannerimg" className="flex items-center gap-3 hover:text-gray-300">
-          <FaUsers size={20} />
+          <IoImages size={20} />
           All Banner Image
         </Link>
         <Link to="/" className="relative flex items-center gap-3 hover:text-gray-301 ">

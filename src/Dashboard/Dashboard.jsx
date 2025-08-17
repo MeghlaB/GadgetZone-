@@ -6,6 +6,7 @@ import AdminDashboard from './AdminDashboard/AdminDashboard';
 import SellerDashboard from './SellerDashboard/SellerDashboard';
 import userAdmin from '../Hooks/userAdmin';
 import userSeller from '../Hooks/userSeller';
+import { FaImage } from "react-icons/fa6";
 
 export default function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
