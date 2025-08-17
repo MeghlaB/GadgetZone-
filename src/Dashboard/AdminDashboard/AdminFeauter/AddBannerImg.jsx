@@ -9,27 +9,29 @@ const AddBannerImg = () => {
     const handleBannerImg = async (e) => {
         e.preventDefault();
 
-        if (!link.trim()) {
-            setMessage({ type: "error", text: "Please enter an image link." });
-            return;
-        }
+        // if (!link.trim()) {
+        //     setMessage({ type: "error", text: "Please enter an image link." });
+        //     return;
+        // }
 
-        setLoading(true);
-        setMessage(null);
+        // setLoading(true);
+        // setMessage(null);
 
-        try {
-            const res = await axios.post("/bannerImg", { url: link.trim() }); // adjust endpoint if needed
-            if (res.data.acknowledged) {
-                setMessage({ type: "success", text: "Banner image added successfully!" });
-                setLink("");
-            } else {
-                setMessage({ type: "error", text: res.data.message || "Failed to add banner image." });
-            }
-        } catch (error) {
-            setMessage({ type: "error", text: "Something went wrong. Please try again." });
-        } finally {
-            setLoading(false);
-        }
+        // try {
+        //     const res = await axios.post("/bannerImg", { url: link.trim() }); // adjust endpoint if needed
+        //     if (res.data.acknowledged) {
+        //         setMessage({ type: "success", text: "Banner image added successfully!" });
+        //         setLink("");
+        //     } else {
+        //         setMessage({ type: "error", text: res.data.message || "Failed to add banner image." });
+        //     }
+        // } catch (error) {
+        //     setMessage({ type: "error", text: "Something went wrong. Please try again." });
+        // } finally {
+        //     setLoading(false);
+        // }
+        
+        
     };
 
     return (

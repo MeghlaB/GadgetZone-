@@ -13,7 +13,7 @@ const SearchResults = () => {
     if (!query) return;
 
     setLoading(true);
-    fetch("http://localhost:5000/products")
+    fetch("https://gadget-zone-server-ashy.vercel.app/products")
       .then((res) => res.json())
       .then((data) => {
 
@@ -24,7 +24,7 @@ const SearchResults = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
+        
         setLoading(false);
       });
   }, [query]);
