@@ -73,7 +73,7 @@ const Navbar = () => {
   // };
   const handleSearch = () => {
     const q = searchTerm.trim();
-    console.log("Searching for:", q);
+
     if (!q) return;
     navigate(`/search?q=${encodeURIComponent(q)}`);
     setSearchTerm("");

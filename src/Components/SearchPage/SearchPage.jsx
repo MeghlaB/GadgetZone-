@@ -13,12 +13,12 @@ const SearchPage = () => {
         if (searchQuery) {
             setLoading(true);
             axios
-                .get(`http://localhost:5000/search?q=${encodeURIComponent(searchQuery)}`)
+                .get(`https://gadget-zone-server-ashy.vercel.app/search?q=${encodeURIComponent(searchQuery)}`)
                 .then((res) => {
                     setResults(res.data);
                 })
                 .catch((err) => {
-                    console.error("Search error:", err);
+
                 })
                 .finally(() => {
                     setLoading(false);

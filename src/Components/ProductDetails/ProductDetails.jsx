@@ -32,7 +32,7 @@ const ProductDetails = () => {
   });
 
 
-  // console.log({product})
+
 
 
 
