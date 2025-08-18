@@ -27,7 +27,7 @@ function AllProduct() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://gadget-zone-server-kappa.vercel.app/products/${_id}`, {
+        fetch(`https://gadgetzone-server.onrender.com/products/${_id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

@@ -3,8 +3,8 @@ import axios from 'axios'
 
 const axiosPublic= axios.create({
 
-    // baseURL:"https://gadget-zone-server-kappa.vercel.app",
-    baseURL:"https://gadget-zone-server-kappa.vercel.app", 
+    // baseURL:"https://gadgetzone-server.onrender.com",
+    baseURL:"https://gadgetzone-server.onrender.com", 
     withCredentials:true,
   
 })

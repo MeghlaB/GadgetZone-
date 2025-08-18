@@ -169,12 +169,12 @@ export const router = createBrowserRouter([
       {
         path: "adminhome",
         element: <AdminHome />,
-        loader: () => fetch('https://gadget-zone-server-kappa.vercel.app/products')
+        loader: () => fetch('https://gadgetzone-server.onrender.com/products')
       },
       {
         path: "allproduct",
         element: <AllProduct></AllProduct>,
-        loader: () => fetch('https://gadget-zone-server-kappa.vercel.app/products')
+        loader: () => fetch('https://gadgetzone-server.onrender.com/products')
       },
       {
         path: "addproduct",
@@ -194,7 +194,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "users",
-        loader: async () => fetch('https://gadget-zone-server-kappa.vercel.app/users'),
+        loader: async () => fetch('https://gadgetzone-server.onrender.com/users'),
         element: <AllUsers></AllUsers>,
 
       },

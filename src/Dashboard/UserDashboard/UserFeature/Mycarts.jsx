@@ -17,7 +17,7 @@ const Mycarts = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axios.get(
-        `https://gadget-zone-server-kappa.vercel.app/carts?email=${user?.email}`
+        `https://gadgetzone-server.onrender.com/carts?email=${user?.email}`
       );
       return res.data;
     },
@@ -26,7 +26,7 @@ const Mycarts = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      await axios.delete(`https://gadget-zone-server-kappa.vercel.app/carts/${id}`);
+      await axios.delete(`https://gadgetzone-server.onrender.com/carts/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["carts"]);
@@ -74,7 +74,7 @@ const Mycarts = () => {
     const newQuantity = item.quantity + delta;
     if (newQuantity < 1) return;
 
-    await axios.patch(`https://gadget-zone-server-kappa.vercel.app/carts/${item._id}`, {
+    await axios.patch(`https://gadgetzone-server.onrender.com/carts/${item._id}`, {
       quantity: newQuantity,
     });
     queryClient.invalidateQueries(["carts"]);
