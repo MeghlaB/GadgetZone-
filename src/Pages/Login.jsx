@@ -55,7 +55,7 @@ function Login() {
       };
 
       // Check if user already exists before posting
-      await axios.post("https://gadget-zone-server-kappa.vercel.app/users", userInfo);
+      await axios.post("https://gadgetzone-server.onrender.com/users", userInfo);
 
       toast.success("Logged in with Google");
       navigate("/");

@@ -51,7 +51,7 @@ function Register() {
         status: "active",
       };
 
-      const dbRes = await axios.post("https://gadget-zone-server-kappa.vercel.app/users", userInfo);
+      const dbRes = await axios.post("https://gadgetzone-server.onrender.com/users", userInfo);
 
       if (dbRes.data.insertedId || dbRes.data.acknowledged) {
         toast.success("Account created successfully!");
@@ -82,7 +82,7 @@ function Register() {
         status: "active",
       };
 
-      await axios.post("https://gadget-zone-server-kappa.vercel.app/users", userInfo);
+      await axios.post("https://gadgetzone-server.onrender.com/users", userInfo);
 
       toast.success("Logged in with Google");
       navigate("/");

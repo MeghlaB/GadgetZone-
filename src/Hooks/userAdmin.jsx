@@ -11,7 +11,7 @@ export default function userAdmin() {
 const {data: isAdmin ,isLoading: isAdminLoading } = useQuery({
   queryKey:[user?.email ,'isAdmin'],
   queryFn:async ()=>{
-    const result = await axios.get(`https://gadget-zone-server-kappa.vercel.app/users/admin/${user.email}`)
+    const result = await axios.get(`https://gadgetzone-server.onrender.com/users/admin/${user.email}`)
     
     return result.data?.admin
   }

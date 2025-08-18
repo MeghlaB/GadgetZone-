@@ -13,7 +13,7 @@ function FeaturedProduct() {
     queryKey: ["products"],
     queryFn: async () => {
       const res = await axios.get(
-        "https://gadget-zone-server-kappa.vercel.app/products"
+        "https://gadgetzone-server.onrender.com/products"
       );
       
       return res.data;
