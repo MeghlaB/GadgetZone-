@@ -1,155 +1,173 @@
-import React from 'react';
-import { Card, Progress, Table, Avatar } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Statistic, Table, Avatar, Tag, Switch } from 'antd';
 import {
   UserOutlined,
-  ProjectOutlined,
-  CalendarOutlined,
-  FileTextOutlined,
-  TeamOutlined,
-  BellOutlined,
+  RiseOutlined,
+  FallOutlined,
+  BarChartOutlined,
+  MoonOutlined,
+  SunOutlined,
 } from '@ant-design/icons';
-import { Bar, Pie } from 'react-chartjs-2';
+import { Bar, Pie, Line, Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 // Mock Data
 const userData = {
-  name: "John Doe",
-  role: "Project Manager",
-  email: "john.doe@example.com",
-  avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+  name: "Sarah Johnson",
+  role: "Administrator",
+  avatar: "https://randomuser.me/api/portraits/women/12.jpg",
 };
 
 const tasks = [
-  { id: 1, title: "Design Homepage", status: "In Progress", deadline: "2023-12-15" },
-  { id: 2, title: "API Integration", status: "Completed", deadline: "2023-12-10" },
-  { id: 3, title: "User Testing", status: "Pending", deadline: "2023-12-20" },
-];
-
-const projects = [
-  { name: "Website Redesign", progress: 65 },
-  { name: "Mobile App", progress: 40 },
-  { name: "Dashboard UI", progress: 90 },
+  { id: 1, title: "Q4 Financial Report", status: "In Progress", deadline: "2023-12-15" },
+  { id: 2, title: "Inventory Audit", status: "Completed", deadline: "2023-12-10" },
+  { id: 3, title: "Marketing Strategy", status: "Pending", deadline: "2023-12-20" },
 ];
 
 const activityLog = [
-  { id: 1, action: "Logged in", time: "10:30 AM" },
-  { id: 2, action: "Updated Project X", time: "11:45 AM" },
+  { id: 1, action: "Updated sales report", time: "10:30 AM", user: "Sarah J." },
+  { id: 2, action: "Added new product", time: "11:45 AM", user: "Michael T." },
 ];
 
-// Charts Data
-const barChartData = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+const businessMetrics = {
+  revenue: 124532,
+  revenueChange: 12.5,
+  orders: 342,
+  ordersChange: 8.2,
+  customers: 1245,
+  customersChange: 5.7,
+  conversion: 4.3,
+  conversionChange: 2.1,
+};
+
+const revenueChartData = {
+  labels: ['Jan', 'Feb', 'Mar', 'Apr'],
   datasets: [{
-    label: 'Tasks Completed',
-    data: [12, 19, 3, 5, 2],
-    backgroundColor: '#1890ff',
+    label: 'Revenue ($)',
+    data: [12500, 19000, 22000, 31000],
+    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    borderColor: 'rgba(54, 162, 235, 1)',
+    borderWidth: 2,
+    fill: true,
+    tension: 0.3,
   }]
 };
 
-const pieChartData = {
-  labels: ['Completed', 'Pending', 'In Progress'],
+const salesDistributionData = {
+  labels: ['Electronics', 'Clothing', 'Home Goods', 'Books'],
   datasets: [{
-    data: [45, 25, 30],
-    backgroundColor: ['#52c41a', '#faad14', '#1890ff'],
+    data: [45, 25, 15, 15],
+    backgroundColor: [
+      'rgba(54, 162, 235, 0.7)',
+      'rgba(255, 99, 132, 0.7)',
+      'rgba(255, 206, 86, 0.7)',
+      'rgba(75, 192, 192, 0.7)',
+    ],
   }]
 };
+
+const topProductsColumns = [
+  { title: 'Product', dataIndex: 'product', key: 'product' },
+  { title: 'Category', dataIndex: 'category', key: 'category' },
+  { title: 'Price', dataIndex: 'price', key: 'price', render: (p) => `$${p}` },
+  { title: 'Units Sold', dataIndex: 'sold', key: 'sold' },
+];
+
+const topProductsData = [
+  { key: '1', product: 'Wireless Headphones', category: 'Electronics', price: 199, sold: 142 },
+  { key: '2', product: 'Fitness Tracker', category: 'Electronics', price: 89, sold: 231 },
+];
 
 export default function AdminHome() {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const chartOptions = {
+    responsive: true,
+    plugins: { legend: { position: 'top', labels: { color: darkMode ? "#fff" : "#000" } } },
+    scales: {
+      y: { ticks: { color: darkMode ? "#fff" : "#000" } },
+      x: { ticks: { color: darkMode ? "#fff" : "#000" } }
+    }
+  };
+
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
-      <h1 className="mb-6 text-2xl font-bold">Dashboard</h1>
-
-      {/* Top Row: Profile & Stats */}
-      <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-4">
-        {/* Profile Card */}
-        <Card className="shadow-sm">
-          <div className="flex items-center">
-            <Avatar size={64} src={userData.avatar} icon={<UserOutlined />} />
-            <div className="ml-4">
-              <h2 className="font-semibold">{userData.name}</h2>
-              <p className="text-gray-500">{userData.role}</p>
-              <p className="text-sm">{userData.email}</p>
-            </div>
+    <div className={`${darkMode ? "dark bg-gray-900 text-white" : "bg-gray-50 text-gray-900"} min-h-screen p-4`}>
+      {/* Header */}
+      <div className="flex flex-col justify-between mb-6 md:flex-row md:items-center">
+        <div>
+          <h1 className="text-2xl font-bold">Business Dashboard</h1>
+          <p className="text-sm opacity-70">
+            {currentTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+        </div>
+        <div className="flex items-center mt-4 space-x-4 md:mt-0">
+          <Switch
+            checkedChildren={<MoonOutlined />}
+            unCheckedChildren={<SunOutlined />}
+            checked={darkMode}
+            onChange={() => setDarkMode(!darkMode)}
+          />
+          <Avatar size="large" src={userData.avatar} icon={<UserOutlined />} />
+          <div>
+            <div className="font-medium">{userData.name}</div>
+            <div className="text-xs opacity-70">{userData.role}</div>
           </div>
+        </div>
+      </div>
+
+      {/* Metrics */}
+      <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="shadow-sm">
+          <Statistic title="Revenue" value={businessMetrics.revenue} prefix="$" valueStyle={{ color: "#3f8600" }}
+            suffix={<span className="text-green-500"><RiseOutlined /> {businessMetrics.revenueChange}%</span>} />
         </Card>
-
-        {/* Stats Cards */}
         <Card className="shadow-sm">
-          <div className="flex items-center">
-            <ProjectOutlined className="mr-3 text-2xl text-blue-500" />
-            <div>
-              <p className="text-gray-500">Active Projects</p>
-              <h3 className="text-xl font-bold">5</h3>
-            </div>
-          </div>
+          <Statistic title="Orders" value={businessMetrics.orders} valueStyle={{ color: "#1890ff" }}
+            suffix={<span className="text-green-500"><RiseOutlined /> {businessMetrics.ordersChange}%</span>} />
         </Card>
-
         <Card className="shadow-sm">
-          <div className="flex items-center">
-            <FileTextOutlined className="mr-3 text-2xl text-green-500" />
-            <div>
-              <p className="text-gray-500">Tasks Completed</p>
-              <h3 className="text-xl font-bold">24</h3>
-            </div>
-          </div>
+          <Statistic title="Customers" value={businessMetrics.customers} valueStyle={{ color: "#722ed1" }}
+            suffix={<span className="text-green-500"><RiseOutlined /> {businessMetrics.customersChange}%</span>} />
         </Card>
-
         <Card className="shadow-sm">
-          <div className="flex items-center">
-            <BellOutlined className="mr-3 text-2xl text-orange-500" />
-            <div>
-              <p className="text-gray-500">Notifications</p>
-              <h3 className="text-xl font-bold">3</h3>
-            </div>
-          </div>
+          <Statistic title="Conversion" value={businessMetrics.conversion} precision={2} suffix="%"
+            valueStyle={{ color: "#cf1322" }}
+            suffix={<span className="text-red-500"><FallOutlined /> {businessMetrics.conversionChange}%</span>} />
         </Card>
       </div>
 
-      {/* Middle Row: Charts */}
-      <div className="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2">
-        <Card title="Monthly Progress" className="shadow-sm">
-          <Bar data={barChartData} />
+      {/* Charts */}
+      <div className="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+        <Card title={<><BarChartOutlined /> Revenue Overview</>}>
+          <Line data={revenueChartData} options={chartOptions} height={80} />
         </Card>
-        <Card title="Task Distribution" className="shadow-sm">
-          <Pie data={pieChartData} />
+        <Card title="Sales Distribution">
+          <Doughnut data={salesDistributionData} options={chartOptions} />
         </Card>
       </div>
 
-      {/* Bottom Row: Tasks & Activity */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Card title="Recent Tasks" className="shadow-sm">
+      {/* Bottom Section */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Card title="Recent Tasks">
           <ul>
-            {tasks.map((task) => (
-              <li key={task.id} className="p-2 mb-3 border-b">
-                <div className="flex justify-between">
-                  <span>{task.title}</span>
-                  <span className={`text-xs px-2 py-1 rounded ${
-                    task.status === "Completed" ? "bg-green-100 text-green-800" :
-                    task.status === "In Progress" ? "bg-blue-100 text-blue-800" :
-                    "bg-yellow-100 text-yellow-800"
-                  }`}>
-                    {task.status}
-                  </span>
-                </div>
-                <div className="mt-1 text-xs text-gray-500">
-                  Deadline: {task.deadline}
-                </div>
+            {tasks.map(t => (
+              <li key={t.id} className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                <span>{t.title}</span>
+                <Tag color={t.status === "Completed" ? "green" : t.status === "In Progress" ? "blue" : "orange"}>
+                  {t.status}
+                </Tag>
               </li>
             ))}
           </ul>
         </Card>
-
-        <Card title="Recent Activity" className="shadow-sm">
-          <ul>
-            {activityLog.map((log) => (
-              <li key={log.id} className="p-2 mb-3 border-b">
-                <div className="flex justify-between">
-                  <span>{log.action}</span>
-                  <span className="text-xs text-gray-500">{log.time}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
+        <Card title="Top Products">
+          <Table columns={topProductsColumns} dataSource={topProductsData} pagination={false} size="small" />
         </Card>
       </div>
     </div>
