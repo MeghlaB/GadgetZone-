@@ -1,165 +1,4 @@
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import Swal from "sweetalert2";
-// import { FaTrash } from "react-icons/fa";
 
-// const AddBannerImg = () => {
-//     const [title, setTitle] = useState("");
-//     const [link, setLink] = useState("");
-//     const [loading, setLoading] = useState(false);
-//     const [bannerImgs, setBannerImgs] = useState([]);
-
-//     // Fetch banner images
-//     useEffect(() => {
-//         fetchBanners();
-//     }, []);
-
-//     console.log(bannerImgs)    
-//     const fetchBanners = async () => {
-//         setLoading(true);
-//         try {
-//             const res = await axios.get("http://localhost:5000/bannerImgs");
-//             setBannerImgs(res.data);
-//         } catch (err) {
-//             console.error("Error fetching banner images:", err);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     // Add Banner
-//     const handleBannerImg = async (e) => {
-//         e.preventDefault();
-//         if (!title || !link) return;
-
-//         setLoading(true);
-//         try {
-//             const res = await axios.post("http://localhost:5000/bannerImg", {
-//                 title,
-//                 url: link,
-//             });
-
-//             setBannerImgs([...bannerImgs, res.data]);
-//             setTitle("");
-//             setLink("");
-
-//             Swal.fire({
-//                 icon: "success",
-//                 title: "Banner Added",
-//                 text: "Your banner has been added successfully!",
-//                 timer: 2000,
-//                 showConfirmButton: false,
-//             });
-//         } catch (err) {
-//             Swal.fire({
-//                 icon: "error",
-//                 title: "Error",
-//                 text: "Failed to add banner. Try again!",
-//             });
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     // Delete Banner
-//     const handleDelete = async (id) => {
-//         Swal.fire({
-//             title: "Are you sure?",
-//             text: "This banner will be deleted permanently!",
-//             icon: "warning",
-//             showCancelButton: true,
-//             confirmButtonColor: "#3085d6",
-//             cancelButtonColor: "#d33",
-//             confirmButtonText: "Yes, delete it!",
-//         }).then(async (result) => {
-//             if (result.isConfirmed) {
-//                 try {
-//                     await axios.delete(`http://localhost:5000/bannerImg/${id}`);
-//                     setBannerImgs(bannerImgs.filter((banner) => banner._id !== id));
-
-//                     Swal.fire("Deleted!", "The banner has been removed.", "success");
-//                 } catch (err) {
-//                     Swal.fire("Error!", "Failed to delete banner.", "error");
-//                 }
-//             }
-//         });
-//     };
-
-//     return (
-//         <div className="grid max-w-6xl grid-cols-1 gap-8 p-6 mx-auto md:grid-cols-2">
-//             {/* Left Side - Banner List */}
-//             <div>
-//                 <h1 className="mb-4 text-2xl font-bold text-indigo-700">All Banners</h1>
-//                 {loading && bannerImgs.length === 0 ? (
-//                     <p>Loading banners...</p>
-//                 ) : (
-//                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-//                         {bannerImgs.map((img) => (
-//                             <div
-//                                 key={img._id}
-//                                 className="relative overflow-hidden rounded-lg shadow-lg group"
-//                             >
-//                                 <img
-//                                     src={img.url}
-//                                     alt={img.title}
-//                                     className="object-cover w-full h-40"
-//                                 />
-//                                 <div className="absolute inset-0 flex flex-col justify-between transition-opacity duration-300 bg-black opacity-0 bg-opacity-40 group-hover:opacity-100">
-//                                     <p className="mt-2 font-semibold text-center text-white">
-//                                         {img.title}
-//                                     </p>
-//                                     <button
-//                                         onClick={() => handleDelete(img._id)}
-//                                         className="flex items-center justify-center py-2 text-white bg-red-600 hover:bg-red-700"
-//                                     >
-//                                         <FaTrash className="mr-2" /> Delete
-//                                     </button>
-//                                 </div>
-//                             </div>
-//                         ))}
-//                     </div>
-//                 )}
-//             </div>
-
-//             {/* Right Side - Add Banner Form */}
-//             <div className="p-6 bg-white rounded-lg shadow-lg">
-//                 <h1 className="mb-6 text-2xl font-bold text-center text-indigo-700">
-//                     Add New Banner
-//                 </h1>
-//                 <form onSubmit={handleBannerImg} className="space-y-4">
-//                     <input
-//                         type="text"
-//                         placeholder="Banner Title"
-//                         className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
-//                         value={title}
-//                         onChange={(e) => setTitle(e.target.value)}
-//                         required
-//                     />
-//                     <input
-//                         type="url"
-//                         placeholder="Banner Image URL"
-//                         className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
-//                         value={link}
-//                         onChange={(e) => setLink(e.target.value)}
-//                         required
-//                     />
-//                     <button
-//                         type="submit"
-//                         disabled={loading}
-//                         className={`w-full py-2 rounded-md text-white font-semibold ${loading
-//                                 ? "bg-indigo-300 cursor-not-allowed"
-//                                 : "bg-indigo-600 hover:bg-indigo-700"
-//                             }`}
-//                     >
-//                         {loading ? "Processing..." : "Add Banner"}
-//                     </button>
-//                 </form>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default AddBannerImg;
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -181,7 +20,7 @@ const AddBannerImg = () => {
     const fetchBanners = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:5000/bannerImgs");
+            const res = await axios.get("https://gadgetzone-server.onrender.com/bannerImg");
             setBannerImgs(res.data);
         } catch (err) {
             console.error("Error fetching banner images:", err);
@@ -204,7 +43,7 @@ const AddBannerImg = () => {
         try {
             if (editingId) {
                 // Update existing banner
-                const res = await axios.put(`http://localhost:5000/bannerImg/${editingId}`, {
+                const res = await axios.put(`https://gadgetzone-server.onrender.com/bannerImg/${editingId}`, {
                     title,
                     url: link,
                 });
@@ -223,7 +62,7 @@ const AddBannerImg = () => {
                 setEditingId(null);
             } else {
                 // Add new banner
-                const res = await axios.post("http://localhost:5000/bannerImg", {
+                const res = await axios.post("https://gadgetzone-server.onrender.com/bannerImg", {
                     title,
                     url: link,
                 });
@@ -266,7 +105,7 @@ const AddBannerImg = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`http://localhost:5000/bannerImg/${id}`);
+                    await axios.delete(`https://gadgetzone-server.onrender.com/bannerImg/${id}`);
                     setBannerImgs(bannerImgs.filter((banner) => banner._id !== id));
 
                     Swal.fire("Deleted!", "The banner has been removed.", "success");

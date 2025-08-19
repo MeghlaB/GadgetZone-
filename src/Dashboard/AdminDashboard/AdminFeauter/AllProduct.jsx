@@ -69,21 +69,21 @@ function AllProduct() {
             <div className="text-3xl font-bold text-blue-600">{products.length}</div>
             <div className="text-sm font-medium text-gray-500">Total Products</div>
           </div>
-          
+
           <div className="p-5 bg-white rounded-lg shadow-sm">
             <div className="text-3xl font-bold text-green-600">
               {products.filter(p => p.status === "In Stock").length}
             </div>
             <div className="text-sm font-medium text-gray-500">In Stock</div>
           </div>
-          
+
           <div className="p-5 bg-white rounded-lg shadow-sm">
             <div className="text-3xl font-bold text-red-600">
               {products.filter(p => p.status !== "In Stock").length}
             </div>
             <div className="text-sm font-medium text-gray-500">Out of Stock</div>
           </div>
-          
+
           <div className="p-5 bg-white rounded-lg shadow-sm">
             <Link
               to="/dashboard/addproduct"
@@ -110,7 +110,7 @@ function AllProduct() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            
+
             <div className="flex gap-2">
               <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 <option>All Categories</option>
@@ -118,7 +118,7 @@ function AllProduct() {
                 <option>Fashion</option>
                 <option>Home & Kitchen</option>
               </select>
-              
+
               <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 <option>All Status</option>
                 <option>In Stock</option>
@@ -156,11 +156,10 @@ function AllProduct() {
                     <p className="font-medium text-blue-600">৳{p.price}</p>
                     <div className="flex items-center mt-2">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          p.status === "In Stock"
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${p.status === "In Stock"
                             ? "bg-green-100 text-green-800"
                             : "bg-red-100 text-red-800"
-                        }`}
+                          }`}
                       >
                         {p.status}
                       </span>
@@ -180,7 +179,7 @@ function AllProduct() {
                     <FaEye />
                   </Link>
                   <Link
-                    to="/dashboard/editproduct"
+                    to={`/dashboard/editproduct/${p._id}`}
                     className="p-2 text-yellow-600 bg-yellow-100 rounded-lg hover:bg-yellow-200"
                     title="Edit"
                   >
@@ -250,11 +249,10 @@ function AllProduct() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`inline-flex px-2 py-1 text-xs font-semibold leading-5 rounded-full ${
-                            p.status === "In Stock"
+                          className={`inline-flex px-2 py-1 text-xs font-semibold leading-5 rounded-full ${p.status === "In Stock"
                               ? "bg-green-100 text-green-800"
                               : "bg-red-100 text-red-800"
-                          }`}
+                            }`}
                         >
                           {p.status}
                         </span>
@@ -276,7 +274,7 @@ function AllProduct() {
                             <FaEye />
                           </Link>
                           <Link
-                            to="/dashboard/editproduct"
+                            to={`/dashboard/editproduct/${p._id}`}
                             className="p-2 text-yellow-600 bg-yellow-100 rounded-lg hover:bg-yellow-200"
                             title="Edit"
                           >
