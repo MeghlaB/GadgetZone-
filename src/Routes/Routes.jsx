@@ -30,7 +30,7 @@ import AllProduct from "../Dashboard/AdminDashboard/AdminFeauter/AllProduct";
 import SellerDashboard from "../Dashboard/SellerDashboard/SellerDashboard";
 import SellerHome from "../Dashboard/SellerDashboard/SellerFeature/SellerHome";
 import Checkoutoders from "../Components/Checkout/Checkoutoders";
-import PaymentSucces from "../Components/PaymentSucces/PaymentSucces";
+
 import UserHome from "../Dashboard/UserDashboard/UserFeature/UserHome";
 import Mycarts from "../Dashboard/UserDashboard/UserFeature/Mycarts";
 import MyProfile from "../Dashboard/UserDashboard/UserFeature/Myprofile";
@@ -127,25 +127,18 @@ export const router = createBrowserRouter([
         path: '/product/:id',
         element: <ProductDetails />
       },
-      {
-        path: '/checkout/checkoders/:id',
-        element: <Checkoutoders />
-      },
-      {
-
-        path: '/payment/success/:tranId',
-        element: <PaymentSucces />
-      },
+    
+     
       {
         path: '/search',
         element: <SearchResults />
       },
       // <Route path="/search" element={<SearchResults />} />
-
-      {
-        path: '/payment/success/:tranId',
-        element: <PaymentSucces />
-      }
+  {
+        path: '/checkout/checkoders/:id',
+        element: <Checkoutoders />
+      },
+   
 
     ],
   },
