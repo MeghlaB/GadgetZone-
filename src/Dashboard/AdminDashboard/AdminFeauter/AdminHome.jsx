@@ -135,11 +135,11 @@ export default function AdminHome() {
           <Statistic title="Customers" value={businessMetrics.customers} valueStyle={{ color: "#722ed1" }}
             suffix={<span className="text-green-500"><RiseOutlined /> {businessMetrics.customersChange}%</span>} />
         </Card>
-        <Card className="shadow-sm">
+        {/* <Card className="shadow-sm">
           <Statistic title="Conversion" value={businessMetrics.conversion} precision={2} suffix="%"
             valueStyle={{ color: "#cf1322" }}
             suffix={<span className="text-red-500"><FallOutlined /> {businessMetrics.conversionChange}%</span>} />
-        </Card>
+        </Card> */}
       </div>
 
       {/* Charts */}
