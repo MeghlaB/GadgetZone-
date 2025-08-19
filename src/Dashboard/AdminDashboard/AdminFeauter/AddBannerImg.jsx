@@ -20,7 +20,7 @@ const AddBannerImg = () => {
     const fetchBanners = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:5000/bannerImgs");
+            const res = await axios.get("https://gadgetzone-server.onrender.com/bannerImg");
             setBannerImgs(res.data);
         } catch (err) {
             console.error("Error fetching banner images:", err);
@@ -43,7 +43,7 @@ const AddBannerImg = () => {
         try {
             if (editingId) {
                 // Update existing banner
-                const res = await axios.put(`http://localhost:5000/bannerImg/${editingId}`, {
+                const res = await axios.put(`https://gadgetzone-server.onrender.com/bannerImg/${editingId}`, {
                     title,
                     url: link,
                 });
@@ -62,7 +62,7 @@ const AddBannerImg = () => {
                 setEditingId(null);
             } else {
                 // Add new banner
-                const res = await axios.post("http://localhost:5000/bannerImg", {
+                const res = await axios.post("https://gadgetzone-server.onrender.com/bannerImg", {
                     title,
                     url: link,
                 });
@@ -105,7 +105,7 @@ const AddBannerImg = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`http://localhost:5000/bannerImg/${id}`);
+                    await axios.delete(`https://gadgetzone-server.onrender.com/bannerImg/${id}`);
                     setBannerImgs(bannerImgs.filter((banner) => banner._id !== id));
 
                     Swal.fire("Deleted!", "The banner has been removed.", "success");

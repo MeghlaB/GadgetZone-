@@ -185,7 +185,7 @@ export const router = createBrowserRouter([
         element: <EditProduct />,
         loader: async ({ params }) => {
           // params.id contains the dynamic :id from URL
-          const res = await fetch(`http://localhost:5000/products/${params.id}`);
+          const res = await fetch(`https://gadgetzone-server.onrender.com/products/${params.id}`);
           if (!res.ok) {
             throw new Error("Failed to load product");
           }
