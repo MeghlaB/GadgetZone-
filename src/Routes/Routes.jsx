@@ -39,7 +39,7 @@ import SearchResults from "../Pages/SearchResults";
 
 import AllUsers from "../Dashboard/AdminDashboard/AdminFeauter/AllUsers";
 import AddBannerImg from "../Dashboard/AdminDashboard/AdminFeauter/AddBannerImg";
-import AllBannerImg from "../Dashboard/AdminDashboard/AdminFeauter/AllBannerImg";
+
 
 
 
@@ -180,10 +180,6 @@ export const router = createBrowserRouter([
       {
         path: "addbannerimg",
         element: <AddBannerImg></AddBannerImg>
-      },
-      {
-        path: "allbannerimg",
-        element: <AllBannerImg></AllBannerImg>
       },
       {
         path: "users",

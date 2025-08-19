@@ -1,20 +1,41 @@
-
-import React, { useRef } from 'react';
-// Import Swiper React components
+import React, { useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import './styles.css';
-
-// import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function BannerCarousel() {
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
+
+  const [bannerImgs, setBannerImgs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch banner images
+  useEffect(() => {
+    fetchBanners();
+  }, []);
+
+  const fetchBanners = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get("http://localhost:5000/bannerImgs");
+      setBannerImgs(res.data);
+    } catch (err) {
+      console.error("Error fetching banner images:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to fetch banners. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onAutoplayTimeLeft = (s, time, progress) => {
     if (progressCircle.current && progressContent.current) {
@@ -32,35 +53,21 @@ export default function BannerCarousel() {
           delay: 3500,
           disableOnInteraction: false,
         }}
-        pagination={{
-          clickable: true,
-        }}
+        pagination={{ clickable: true }}
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
         onAutoplayTimeLeft={onAutoplayTimeLeft}
         className="overflow-hidden rounded-lg shadow-md"
       >
-        <SwiperSlide>
-          <img
-            src="https://www.startech.com.bd/image/cache/catalog/home/banner/2025/home-appliance-banner-982x500.webp"
-            alt="Slide 1"
-            className="w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] object-cover"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src="https://www.startech.com.bd/image/cache/catalog/home/banner/2025/logitech-offer-home-banner-982x500.webp"
-            alt="Slide 2"
-            className="w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] object-cover"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src="https://www.startech.com.bd/image/cache/catalog/home/banner/2025/deli-offer-982x500.webp"
-            alt="Slide 3"
-            className="w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] object-cover"
-          />
-        </SwiperSlide>
+        {bannerImgs.map((currBanner) => (
+          <SwiperSlide key={currBanner._id}>
+            <img
+              src={currBanner.url}
+              alt={currBanner.title}
+              className="w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] object-cover"
+            />
+          </SwiperSlide>
+        ))}
 
         <div className="autoplay-progress" slot="container-end">
           <svg viewBox="0 0 48 48" ref={progressCircle}>

@@ -45,10 +45,6 @@ function AdminDashboard() {
           <RiImageEditFill size={20} />
           Add Banner Image
         </Link>
-        <Link to="/dashboard/allbannerimg" className="flex items-center gap-3 hover:text-gray-300">
-          <IoImages size={20} />
-          All Banner Image
-        </Link>
         <Link to="/" className="relative flex items-center gap-3 hover:text-gray-301 ">
           <Home size={20} />
           Go Home
