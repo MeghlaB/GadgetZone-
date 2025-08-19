@@ -181,8 +181,17 @@ export const router = createBrowserRouter([
         element: <AddProduct></AddProduct>,
       },
       {
-        path: "editproduct",
-        element: <EditProduct></EditProduct>
+        path: "editproduct/:id",
+        element: <EditProduct />,
+        loader: async ({ params }) => {
+          // params.id contains the dynamic :id from URL
+          const res = await fetch(`http://localhost:5000/products/${params.id}`);
+          if (!res.ok) {
+            throw new Error("Failed to load product");
+          }
+          const product = await res.json();
+          return product; // this will be available via useLoaderData()
+        },
       },
       {
         path: "addbannerimg",
