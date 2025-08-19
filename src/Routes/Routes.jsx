@@ -39,9 +39,8 @@ import SearchResults from "../Pages/SearchResults";
 
 import AllUsers from "../Dashboard/AdminDashboard/AdminFeauter/AllUsers";
 import AddBannerImg from "../Dashboard/AdminDashboard/AdminFeauter/AddBannerImg";
-
-
-
+import PaymentSucces from "../Components/PaymentSuccess/PaymentSuccess";
+import PaymentFailed from "../Components/PaymentFailed/PaymentFailed";
 
 export const router = createBrowserRouter([
   {
@@ -114,32 +113,35 @@ export const router = createBrowserRouter([
         element: <Gadget />,
       },
       {
-        path: '/accessories',
-        element: <Accessories />
-      }
-      ,
-      {
-        path: '/appliance',
-        element: <Accessories />
-      }
-      ,
-      {
-        path: '/product/:id',
-        element: <ProductDetails />
+        path: "/accessories",
+        element: <Accessories />,
       },
-    
-     
       {
-        path: '/search',
-        element: <SearchResults />
+        path: "/appliance",
+        element: <Accessories />,
+      },
+      {
+        path: "/product/:id",
+        element: <ProductDetails />,
+      },
+
+      {
+        path: "/search",
+        element: <SearchResults />,
       },
       // <Route path="/search" element={<SearchResults />} />
-  {
-        path: '/checkout/checkoders/:id',
-        element: <Checkoutoders />
+      {
+        path: "/checkout/checkoders/:id",
+        element: <Checkoutoders />,
       },
-   
-
+      {
+        path: "/payment/success/:tranId",
+        element: <PaymentSucces />,
+      },
+      {
+        path: "/payment/fail/:tranId",
+        element: <PaymentFailed/>,
+      },
     ],
   },
   {
@@ -152,22 +154,22 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element:
+    element: (
       <PrivateRoutes>
         <Dashboard></Dashboard>
       </PrivateRoutes>
-    ,
+    ),
     children: [
       // admin dashboard
       {
         path: "adminhome",
         element: <AdminHome />,
-        loader: () => fetch('https://gadgetzone-server.onrender.com/products')
+        loader: () => fetch("https://gadgetzone-server.onrender.com/products"),
       },
       {
         path: "allproduct",
         element: <AllProduct></AllProduct>,
-        loader: () => fetch('https://gadgetzone-server.onrender.com/products')
+        loader: () => fetch("https://gadgetzone-server.onrender.com/products"),
       },
       {
         path: "addproduct",
@@ -175,44 +177,42 @@ export const router = createBrowserRouter([
       },
       {
         path: "editproduct",
-        element: <EditProduct></EditProduct>
+        element: <EditProduct></EditProduct>,
       },
       {
         path: "addbannerimg",
-        element: <AddBannerImg></AddBannerImg>
+        element: <AddBannerImg></AddBannerImg>,
       },
       {
         path: "users",
-        loader: async () => fetch('https://gadgetzone-server.onrender.com/users'),
+        loader: async () =>
+          fetch("https://gadgetzone-server.onrender.com/users"),
         element: <AllUsers></AllUsers>,
-
       },
-
 
       // seleer dashboard
       {
-        path: 'sellerhome',
-        element: <SellerHome></SellerHome>
+        path: "sellerhome",
+        element: <SellerHome></SellerHome>,
       },
 
       // user dashboard
       {
-        path: 'user-home',
-        element: <UserHome />
+        path: "user-home",
+        element: <UserHome />,
       },
       {
-        path: 'my-carts',
-        element: <Mycarts />
+        path: "my-carts",
+        element: <Mycarts />,
       },
       {
-        path: 'user-profile',
-        element: <MyProfile />
-      }
+        path: "user-profile",
+        element: <MyProfile />,
+      },
     ],
-
   },
   {
-    path: '*',
-    element: <ErrorPage></ErrorPage>
-  }
+    path: "*",
+    element: <ErrorPage></ErrorPage>,
+  },
 ]);

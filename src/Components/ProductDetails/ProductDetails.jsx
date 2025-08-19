@@ -12,7 +12,7 @@ const ProductDetails = () => {
   const axiosPublic = useAxiosPublic();
   const { id } = useParams();
   const { user } = useContext(AuthContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -30,11 +30,6 @@ const ProductDetails = () => {
     },
     enabled: !!id,
   });
-
-
-
-
-
 
   // const handleCart = async () => {
   //   if (!user) {
@@ -68,6 +63,14 @@ const ProductDetails = () => {
   //   }
   // };
 
+  const handleBuyNow = () => {
+    if (!user) {
+      toast.warning("Please login to proceed with purchase");
+      return;
+    }
+    navigate(`/checkout/checkoders/${product?._id}`);
+  };
+
   const handleCart = async () => {
     if (!user) {
       toast.warning("Please login to add to cart");
@@ -99,19 +102,6 @@ const ProductDetails = () => {
       toast.error("Something went wrong!");
     }
   };
-
-
-
-
-  const handleBuy = async () => {
-    if (!user) {
-      toast.warning("Please login to Add to Buy");
-      return;
-    }
-    else {
-      navigate(`/checkout/checkoders/${product._id}`)
-    }
-  }
 
   if (isLoading) {
     return (
@@ -175,8 +165,8 @@ const ProductDetails = () => {
           Oops! Something went wrong.
         </h2>
         <p className="max-w-sm mt-2 text-center text-gray-600">
-          We couldn’t load your products right now.
-          Please check your internet connection or try again.
+          We couldn’t load your products right now. Please check your internet
+          connection or try again.
         </p>
 
         {/* Retry Button */}
@@ -189,7 +179,6 @@ const ProductDetails = () => {
       </div>
     );
   }
-
 
   return (
     <div className="max-w-6xl px-4 py-5 mx-auto mt-28">
@@ -214,7 +203,6 @@ const ProductDetails = () => {
           <h1 className="text-xl font-bold md:text-2xl lg:text-3xl text-primary">
             {product?.title}
           </h1>
-
 
           <div className="mt-4 space-y-2">
             <div className="flex gap-2">
@@ -260,15 +248,14 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {/* <Link to={`/checkout/checkoders/${product._id}`}> */}
           <motion.button
-            onClick={handleBuy}
+            onClick={handleBuyNow}
             whileTap={{ scale: 0.95 }}
             className="mt-6 btn btn-primary"
           >
             Buy Now
           </motion.button>
-          {/* </Link> */}
+
           <motion.button
             onClick={handleCart}
             whileTap={{ scale: 0.95 }}
