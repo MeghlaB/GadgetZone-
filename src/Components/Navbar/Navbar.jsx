@@ -84,22 +84,16 @@ const Navbar = () => {
     { name: "Home", path: "/" },
     { name: "Desktop", path: "/desktop" },
     { name: "Laptop", path: "/laptop" },
-    { name: "Component", path: "/component" },
     { name: "Monitor", path: "/monitor" },
     { name: "UPS", path: "/ups" },
     { name: "Phone", path: "/phone" },
     { name: "Tablet", path: "/tablet" },
-    { name: "Office Equipment", path: "/office-equipment" },
     { name: "Camera", path: "/camera" },
-    { name: "Security", path: "/security" },
-    { name: "Networking", path: "/networking" },
-    { name: "Software", path: "/software" },
     { name: "Server & Storage", path: "/server-storage" },
     { name: "Accessories", path: "/accessories" },
     { name: "Gadget", path: "/gadget" },
     { name: "Gaming", path: "/gaming" },
     { name: "TV", path: "/tv" },
-    { name: "Appliance", path: "/appliance" },
   ];
 
   return (
