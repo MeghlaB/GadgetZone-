@@ -41,6 +41,7 @@ import AllUsers from "../Dashboard/AdminDashboard/AdminFeauter/AllUsers";
 import AddBannerImg from "../Dashboard/AdminDashboard/AdminFeauter/AddBannerImg";
 import PaymentSucces from "../Components/PaymentSuccess/PaymentSuccess";
 import PaymentFailed from "../Components/PaymentFailed/PaymentFailed";
+import ServerStorage from "../Shared/ServerStorage/ServerStorage";
 
 export const router = createBrowserRouter([
   {
@@ -119,6 +120,10 @@ export const router = createBrowserRouter([
       {
         path: "/appliance",
         element: <Accessories />,
+      },
+      {
+        path: "/server-storage",
+        element: <ServerStorage/>,
       },
       {
         path: "/product/:id",
