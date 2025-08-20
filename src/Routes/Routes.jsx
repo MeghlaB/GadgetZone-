@@ -14,7 +14,6 @@ import OfficeEqupment from "../Shared/Office_Equpement/OfficeEqupment";
 import Camera from "../Shared/Camera/Camera";
 import Sequrity from "../Shared/Sequrity/Sequrity";
 import Networking from "../Shared/Networking/Networking";
-import Tv from "../Shared/Tv/Tv";
 import Gamming from "../Shared/Gamming/Gamming";
 import Software from "../Shared/Software/Software";
 import Gadget from "../Shared/Gadget/Gadget";
@@ -42,6 +41,8 @@ import AddBannerImg from "../Dashboard/AdminDashboard/AdminFeauter/AddBannerImg"
 import PaymentSucces from "../Components/PaymentSuccess/PaymentSuccess";
 import PaymentFailed from "../Components/PaymentFailed/PaymentFailed";
 import ServerStorage from "../Shared/ServerStorage/ServerStorage";
+import TV from "../Shared/Tv/Tv";
+
 
 export const router = createBrowserRouter([
   {
@@ -98,10 +99,6 @@ export const router = createBrowserRouter([
         element: <Networking />,
       },
       {
-        path: "/tv",
-        element: <Tv />,
-      },
-      {
         path: "/gaming",
         element: <Gamming />,
       },
@@ -123,7 +120,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/server-storage",
-        element: <ServerStorage/>,
+        element: <ServerStorage />,
+      },
+      {
+        path: "/tv",
+        element: <TV></TV>
       },
       {
         path: "/product/:id",

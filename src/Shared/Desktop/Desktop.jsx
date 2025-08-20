@@ -599,13 +599,13 @@ function Desktops() {
                       </div>
 
                       {/* Discount Badge */}
-                      {discount && (
+                      {/* {discount && (
                         <div className="absolute top-3 left-3">
                           <span className="px-2 py-1 text-xs font-bold text-white bg-red-500 rounded-md shadow-sm">
                             {discount}
                           </span>
                         </div>
-                      )}
+                      )} */}
 
                       {/* Category Badge */}
                       <div className="absolute top-3 right-3">
