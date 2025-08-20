@@ -120,32 +120,32 @@ function Component() {
 
   if (isLoading) {
     return (
-      <p className="text-center mt-10 text-blue-500">Loading products...</p>
+      <p className="mt-10 text-center text-blue-500">Loading products...</p>
     );
   }
 
   if (isError) {
     return (
-      <p className="text-center mt-10 text-red-500">Error loading products.</p>
+      <p className="mt-10 text-center text-red-500">Error loading products.</p>
     );
   }
 
   return (
-    <div className="mt-28 min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold mb-6 text-center">💻 Component Catalog</h1>
+    <div className="min-h-screen p-4 bg-gray-100 mt-28">
+      <h1 className="mb-6 text-2xl font-bold text-center">Component Catalog</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
         {/* Filter Sidebar */}
-        <div className="space-y-6 bg-white p-4 rounded shadow-md">
+        <div className="p-4 space-y-6 bg-white rounded shadow-md">
           {/* Price Range */}
           <div>
-            <h4 className="font-bold mb-2">Price Range (৳)</h4>
-            <div className="flex gap-2 items-center">
+            <h4 className="mb-2 font-bold">Price Range (৳)</h4>
+            <div className="flex items-center gap-2">
               <input
                 type="number"
                 value={priceRange.min}
                 onChange={(e) => handlePriceChange(e, "min")}
-                className="w-full border px-2 py-1 rounded"
+                className="w-full px-2 py-1 border rounded"
                 min={0}
               />
               <span>to</span>
@@ -153,7 +153,7 @@ function Component() {
                 type="number"
                 value={priceRange.max}
                 onChange={(e) => handlePriceChange(e, "max")}
-                className="w-full border px-2 py-1 rounded"
+                className="w-full px-2 py-1 border rounded"
                 min={0}
               />
             </div>
@@ -161,7 +161,7 @@ function Component() {
 
           {/* Processor */}
           <div>
-            <h4 className="font-bold mb-2">Processor</h4>
+            <h4 className="mb-2 font-bold">Processor</h4>
             {["Ryzen 5", "Ryzen 7", "Core i3", "Snapdragon X Plus"].map((item) => (
               <div key={item}>
                 <label>
@@ -178,7 +178,7 @@ function Component() {
 
           {/* RAM */}
           <div>
-            <h4 className="font-bold mb-2">RAM</h4>
+            <h4 className="mb-2 font-bold">RAM</h4>
             {["8GB", "16GB"].map((item) => (
               <div key={item}>
                 <label>
@@ -195,7 +195,7 @@ function Component() {
 
           {/* SSD */}
           <div>
-            <h4 className="font-bold mb-2">SSD</h4>
+            <h4 className="mb-2 font-bold">SSD</h4>
             {["256GB", "512GB", "1TB"].map((item) => (
               <div key={item}>
                 <label>
@@ -214,31 +214,31 @@ function Component() {
         {/* Products */}
         <div className="md:col-span-3">
           {filteredData.length === 0 ? (
-            <p className="text-center text-red-500 font-semibold">
+            <p className="font-semibold text-center text-red-500">
               No Laptops found with selected filters.
             </p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {filteredData.map((pc) => {
                 const { processor, ram, ssd } = extractSpecs(pc.key_features || []);
                 return (
                   <div
                     key={pc._id}
-                    className="border rounded-lg p-4 shadow-md bg-white"
+                    className="p-4 bg-white border rounded-lg shadow-md"
                   >
                     <img
                       src={pc.image || "https://via.placeholder.com/150"}
                       alt={pc.title}
-                      className="w-full h-40 object-cover rounded"
+                      className="object-cover w-full h-40 rounded"
                     />
-                    <h2 className="font-semibold mt-2">{pc.title}</h2>
+                    <h2 className="mt-2 font-semibold">{pc.title}</h2>
                     <p className="text-sm text-gray-600">
                       Processor: {processor || "N/A"}
                     </p>
                     <p className="text-sm text-gray-600">
                       RAM: {ram || "N/A"} | SSD: {ssd || "N/A"}
                     </p>
-                    <p className="text-red-600 font-bold mt-2">
+                    <p className="mt-2 font-bold text-red-600">
                       {Number(pc.price).toLocaleString()} ৳
                     </p>
                   </div>

@@ -18,11 +18,14 @@ function Camera() {
     },
   });
 
+  // Sorting state
+  const [sortOrder, setSortOrder] = useState("asc");
+
   // Filter states
   const [filters, setFilters] = useState({
-    processor: "",
-    ram: "",
-    ssd: "",
+    brand: "",
+    resolution: "",
+    type: "",
   });
 
   const [priceRange, setPriceRange] = useState({
@@ -30,62 +33,45 @@ function Camera() {
     max: 500000,
   });
 
-  // Extract processor, RAM, SSD info from key_features array
+  // Extract camera specs from key_features array
   const extractSpecs = (keyFeatures) => {
-    let processor = "";
-    let ram = "";
-    let ssd = "";
+    let brand = "";
+    let resolution = "";
+    let type = "";
 
     keyFeatures.forEach((feature) => {
       const lower = feature.toLowerCase();
 
-      if (lower.includes("processor")) {
-        // Extract after "Processor: "
-        processor = feature.replace(/processor:\s*/i, "").trim();
-        // Optionally trim to main name like "Ryzen 7"
-        if (processor.toLowerCase().includes("ryzen")) {
-          const match = processor.match(/ryzen \d+/i);
-          if (match) processor = match[0];
-        } else if (processor.toLowerCase().includes("core i")) {
-          const match = processor.match(/core i\d+/i);
-          if (match) processor = match[0];
-        } else if (processor.toLowerCase().includes("snapdragon")) {
-          const match = processor.match(/snapdragon \w+ ?\w*/i);
-          if (match) processor = match[0];
-        }
+      if (lower.includes("brand") || lower.includes("make")) {
+        // Extract brand information
+        if (lower.includes("canon")) brand = "Canon";
+        else if (lower.includes("nikon")) brand = "Nikon";
+        else if (lower.includes("sony")) brand = "Sony";
+        else if (lower.includes("fujifilm")) brand = "Fujifilm";
+        else if (lower.includes("panasonic")) brand = "Panasonic";
+        else if (lower.includes("olympus")) brand = "Olympus";
+        else if (lower.includes("gopro")) brand = "GoPro";
       }
 
-      if (lower.includes("ram")) {
-        // RAM usually like "RAM: 16GB DDR5 6400MHz; Storage: 1TB SSD"
-        // Split by semicolon or comma
-        const parts = feature.split(/[;,]/);
-        parts.forEach((part) => {
-          if (part.toLowerCase().includes("ram")) {
-            const ramMatch = part.match(/\d+GB/i);
-            if (ramMatch) ram = ramMatch[0];
-          }
-          if (
-            part.toLowerCase().includes("storage") ||
-            part.toLowerCase().includes("ssd")
-          ) {
-            const ssdMatch = part.match(/\d+TB|\d+GB/i);
-            if (ssdMatch) ssd = ssdMatch[0];
-          }
-        });
+      if (lower.includes("resolution") || lower.includes("mp") || lower.includes("megapixel")) {
+        const resolutionMatch = feature.match(/\d+\s*MP|\d+\s*mp|\d+\s*megapixel/i);
+        if (resolutionMatch) resolution = resolutionMatch[0];
       }
 
-      // In case Storage/SSD info is in a separate string and ssd not found yet
-      if ((lower.includes("storage") || lower.includes("ssd")) && !ssd) {
-        const ssdMatch = feature.match(/\d+TB|\d+GB/i);
-        if (ssdMatch) ssd = ssdMatch[0];
+      if (lower.includes("type") || lower.includes("dslr") || lower.includes("mirrorless") || 
+          lower.includes("point") || lower.includes("action")) {
+        if (lower.includes("dslr")) type = "DSLR";
+        else if (lower.includes("mirrorless")) type = "Mirrorless";
+        else if (lower.includes("point") && lower.includes("shoot")) type = "Point & Shoot";
+        else if (lower.includes("action")) type = "Action Camera";
       }
     });
 
-    return { processor, ram, ssd };
+    return { brand, resolution, type };
   };
 
-  // Filter only laptops
-  const desktopPCs = products.filter((product) => product.category === "Camera");
+  // Filter only cameras
+  const cameraData = products.filter((product) => product.category === "Camera");
 
   // Handle checkbox filter change
   const handleChange = (type, value) => {
@@ -104,216 +90,221 @@ function Camera() {
     }));
   };
 
-  // Filtered laptops according to filters
-  const filteredData = desktopPCs.filter((pc) => {
-    const priceNumber = Number(pc.price.toString().replace(/,/g, ""));
-
-    const { processor, ram, ssd } = extractSpecs(pc.key_features || []);
+  // Filtered cameras according to filters
+  const filteredData = cameraData.filter((camera) => {
+    const priceNumber = Number(camera.price.toString().replace(/,/g, ""));
+    const { brand, resolution, type } = extractSpecs(camera.key_features || []);
 
     return (
-      (!filters.processor || processor.toLowerCase().includes(filters.processor.toLowerCase())) &&
-      (!filters.ram || ram === filters.ram) &&
-      (!filters.ssd || ssd === filters.ssd) &&
+      (!filters.brand || brand === filters.brand) &&
+      (!filters.resolution || resolution === filters.resolution) &&
+      (!filters.type || type === filters.type) &&
       priceNumber >= priceRange.min &&
       priceNumber <= priceRange.max
     );
   });
 
+  // Sort by price
+  const sortedData = [...filteredData].sort((a, b) => {
+    const priceA = Number(a.price.toString().replace(/,/g, ""));
+    const priceB = Number(b.price.toString().replace(/,/g, ""));
+    return sortOrder === "asc" ? priceA - priceB : priceB - priceA;
+  });
+
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
-        {/* Outer ring */}
-        <div className="relative w-16 h-16">
-          <div className="absolute inset-0 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
-
-          {/* Inner circuit icon */}
-          <div className="absolute flex items-center justify-center bg-white rounded-full shadow-md inset-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6 text-blue-600 animate-pulse"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              {/* Circuit board icon */}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4v16m8-8H4m4-6h.01M16 6h.01M16 18h.01M8 18h.01"
-              />
-            </svg>
-          </div>
-        </div>
-
-        {/* Loading text */}
-        <p className="mt-4 font-medium text-gray-700 animate-pulse">
-          Powering up your gadgets...
-        </p>
+      <div className="flex items-center justify-center h-screen">
+        <div className="w-16 h-16 border-t-4 border-blue-500 border-opacity-75 rounded-full animate-spin"></div>
       </div>
     );
   }
-
 
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
-        {/* Error Icon */}
-        <div className="p-4 bg-red-100 rounded-full shadow-md">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-12 h-12 text-red-600 animate-bounce"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            {/* Broken plug icon (electronics theme) */}
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 3v2m0 14v2m6-6h2m-14 0H4m12.364-7.364l1.414 1.414M6.222 17.778l1.414 1.414m0-12.728L6.222 6.222m10.142 10.142l-1.414 1.414"
-            />
-          </svg>
-        </div>
-
-        {/* Error Message */}
-        <h2 className="mt-4 text-xl font-bold text-red-600">
-          Oops! Something went wrong.
-        </h2>
-        <p className="max-w-sm mt-2 text-center text-gray-600">
-          We couldn’t load your products right now.
-          Please check your internet connection or try again.
-        </p>
-
-        {/* Retry Button */}
-        <button
-          onClick={() => window.location.reload()}
-          className="px-5 py-2 mt-6 font-medium text-white bg-red-600 rounded-lg shadow hover:bg-red-700"
-        >
-          Retry
-        </button>
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-xl text-red-500">Error loading products. Please try again later.</p>
       </div>
     );
   }
 
-
   return (
-    <div className="min-h-screen p-4 bg-gray-100 mt-28">
-      <h1 className="mb-6 text-2xl font-bold text-center">💻 Camera Catalog</h1>
-
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-        {/* Filter Sidebar */}
-        <div className="p-4 space-y-6 bg-white rounded shadow-md">
-          {/* Price Range */}
-          <div>
-            <h4 className="mb-2 font-bold">Price Range (৳)</h4>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                value={priceRange.min}
-                onChange={(e) => handlePriceChange(e, "min")}
-                className="w-full px-2 py-1 border rounded"
-                min={0}
-              />
-              <span>to</span>
-              <input
-                type="number"
-                value={priceRange.max}
-                onChange={(e) => handlePriceChange(e, "max")}
-                className="w-full px-2 py-1 border rounded"
-                min={0}
-              />
+    <div className="min-h-screen px-4 py-8 mt-20 bg-gray-50 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="mb-8 text-3xl font-bold text-center text-gray-900">Camera Catalog</h1>
+        
+        <div className="flex flex-col gap-8 md:flex-row">
+          {/* Filter Sidebar */}
+          <div className="w-full p-6 bg-white rounded-lg shadow-md md:w-1/4 h-fit">
+            <h2 className="pb-2 mb-6 text-xl font-semibold text-gray-800 border-b">Filters</h2>
+            
+            {/* Sorting */}
+            <div className="mb-6">
+              <h4 className="mb-3 font-medium text-gray-700">Sort By</h4>
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="asc">Price: Low to High</option>
+                <option value="desc">Price: High to Low</option>
+              </select>
             </div>
-          </div>
-
-          {/* Processor */}
-          <div>
-            <h4 className="mb-2 font-bold">Processor</h4>
-            {["Ryzen 5", "Ryzen 7", "Core i3", "Snapdragon X Plus"].map((item) => (
-              <div key={item}>
-                <label>
+            
+            {/* Price Range */}
+            <div className="mb-6">
+              <h4 className="mb-3 font-medium text-gray-700">Price Range (৳)</h4>
+              <div className="flex flex-col space-y-3">
+                <div className="flex items-center">
                   <input
-                    type="checkbox"
-                    checked={filters.processor === item}
-                    onChange={() => handleChange("processor", item)}
+                    type="number"
+                    value={priceRange.min}
+                    onChange={(e) => handlePriceChange(e, "min")}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    min={0}
+                    placeholder="Min"
                   />
-                  <span className="ml-2">{item}</span>
-                </label>
-              </div>
-            ))}
-          </div>
-
-          {/* RAM */}
-          <div>
-            <h4 className="mb-2 font-bold">RAM</h4>
-            {["8GB", "16GB"].map((item) => (
-              <div key={item}>
-                <label>
+                </div>
+                <div className="flex items-center">
                   <input
-                    type="checkbox"
-                    checked={filters.ram === item}
-                    onChange={() => handleChange("ram", item)}
+                    type="number"
+                    value={priceRange.max}
+                    onChange={(e) => handlePriceChange(e, "max")}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    min={0}
+                    placeholder="Max"
                   />
-                  <span className="ml-2">{item}</span>
-                </label>
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
 
-          {/* SSD */}
-          <div>
-            <h4 className="mb-2 font-bold">SSD</h4>
-            {["256GB", "512GB", "1TB"].map((item) => (
-              <div key={item}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={filters.ssd === item}
-                    onChange={() => handleChange("ssd", item)}
-                  />
-                  <span className="ml-2">{item}</span>
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Products */}
-        <div className="md:col-span-3">
-          {filteredData.length === 0 ? (
-            <p className="font-semibold text-center text-red-500">
-              No Laptops found with selected filters.
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {filteredData.map((pc) => {
-                const { processor, ram, ssd } = extractSpecs(pc.key_features || []);
-                return (
-                  <Link to={`/product/${pc._id}`}
-                    key={pc._id}
-                    className="p-4 bg-white border rounded-lg shadow-md"
-                  >
-                    <img
-                      src={pc.image || "https://via.placeholder.com/150"}
-                      alt={pc.title}
-                      className="object-cover w-full h-40 rounded"
+            {/* Brand */}
+            <div className="mb-6">
+              <h4 className="mb-3 font-medium text-gray-700">Brand</h4>
+              <div className="space-y-2">
+                {["Canon", "Nikon", "Sony", "Fujifilm", "Panasonic", "GoPro"].map((item) => (
+                  <div key={item} className="flex items-center">
+                    <input
+                      id={`brand-${item}`}
+                      type="checkbox"
+                      checked={filters.brand === item}
+                      onChange={() => handleChange("brand", item)}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <h2 className="mt-2 font-semibold">{pc.title}</h2>
-                    <p className="text-sm text-gray-600">
-                      Processor: {processor || "N/A"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      RAM: {ram || "N/A"} | SSD: {ssd || "N/A"}
-                    </p>
-                    <p className="mt-2 font-bold text-red-600">
-                      {Number(pc.price).toLocaleString()} ৳
-                    </p>
-                  </Link>
-                );
-              })}
+                    <label htmlFor={`brand-${item}`} className="ml-2 text-gray-700">
+                      {item}
+                    </label>
+                  </div>
+                ))}
+              </div>
             </div>
-          )}
+
+            {/* Resolution */}
+            <div className="mb-6">
+              <h4 className="mb-3 font-medium text-gray-700">Resolution</h4>
+              <div className="space-y-2">
+                {["12MP", "16MP", "20MP", "24MP", "30MP", "40MP+"].map((item) => (
+                  <div key={item} className="flex items-center">
+                    <input
+                      id={`resolution-${item}`}
+                      type="checkbox"
+                      checked={filters.resolution === item}
+                      onChange={() => handleChange("resolution", item)}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label htmlFor={`resolution-${item}`} className="ml-2 text-gray-700">
+                      {item}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Type */}
+            <div className="mb-6">
+              <h4 className="mb-3 font-medium text-gray-700">Camera Type</h4>
+              <div className="space-y-2">
+                {["DSLR", "Mirrorless", "Point & Shoot", "Action Camera"].map((item) => (
+                  <div key={item} className="flex items-center">
+                    <input
+                      id={`type-${item}`}
+                      type="checkbox"
+                      checked={filters.type === item}
+                      onChange={() => handleChange("type", item)}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label htmlFor={`type-${item}`} className="ml-2 text-gray-700">
+                      {item}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => {
+                setFilters({ brand: "", resolution: "", type: "" });
+                setPriceRange({ min: 0, max: 500000 });
+                setSortOrder("asc");
+              }}
+              className="w-full px-4 py-2 text-gray-800 transition duration-200 bg-gray-200 rounded-md hover:bg-gray-300"
+            >
+              Clear Filters
+            </button>
+          </div>
+
+          {/* Products */}
+          <div className="w-full md:w-3/4">
+            {sortedData.length === 0 ? (
+              <div className="p-8 text-center bg-white rounded-lg shadow-md">
+                <h3 className="mb-2 text-xl font-medium text-gray-700">No Cameras Found</h3>
+                <p className="text-gray-500">Try adjusting your filters to see more results.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {sortedData.map((camera) => {
+                  const { brand, resolution, type } = extractSpecs(camera.key_features || []);
+                  return (
+                    <Link 
+                      to={`/product/${camera._id}`}
+                      key={camera._id}
+                      className="overflow-hidden transition-shadow duration-300 bg-white rounded-lg shadow-md hover:shadow-lg"
+                    >
+                      <div className="relative h-48 overflow-hidden">
+                        <img
+                          src={camera.image || "https://via.placeholder.com/300"}
+                          alt={camera.title}
+                          className="object-contain w-full h-full p-4"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <h2 className="mb-2 text-lg font-semibold text-gray-800 line-clamp-1">{camera.title}</h2>
+                        <div className="mb-3 space-y-1 text-sm text-gray-600">
+                          <p className="flex items-center">
+                            <span className="mr-1 font-medium">Brand:</span> 
+                            {brand || "N/A"}
+                          </p>
+                          <p className="flex items-center">
+                            <span className="mr-1 font-medium">Resolution:</span> 
+                            {resolution || "N/A"}
+                          </p>
+                          <p className="flex items-center">
+                            <span className="mr-1 font-medium">Type:</span> 
+                            {type || "N/A"}
+                          </p>
+                        </div>
+                        <p className="text-xl font-bold text-red-600">
+                          {Number(camera.price).toLocaleString()} ৳
+                        </p>
+                        <button className="w-full px-4 py-2 mt-4 text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
+                          View Details
+                        </button>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
