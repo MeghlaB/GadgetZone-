@@ -1,26 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import { Link } from "react-router-dom";
 import { 
   FaFilter, 
-  FaMoneyBillWave, 
-  FaSearchDollar, 
-  FaShoppingCart, 
   FaEye,
-  FaStar,
-  FaRegStar,
-  FaHeart,
-  FaShippingFast,
   FaTimes,
-  FaChevronDown,
-  FaChevronUp,
   FaCamera,
+  FaCameraRetro,
   FaVideo,
-  FaPhotoVideo,
+  FaMicrochip,
   FaMemory,
-  FaBatteryFull,
-  FaExpand
+  FaExpand,
+  FaBatteryFull
 } from "react-icons/fa";
 
 function Cameras() {
@@ -53,61 +45,38 @@ function Cameras() {
   // Brand filter state
   const [selectedBrands, setSelectedBrands] = useState([]);
   
-  // Type filter state
+  // Camera type filter state
   const [selectedTypes, setSelectedTypes] = useState([]);
   
   // Resolution filter state
   const [selectedResolutions, setSelectedResolutions] = useState([]);
 
-  // Filter only camera products
-  const cameraProducts = products.filter((product) => 
-    product.category === "Camera" || 
-    product.category === "Photography" ||
-    product.subcategory === "DSLR" ||
-    product.subcategory === "Mirrorless" ||
-    product.subcategory === "Action Camera" ||
-    product.title.toLowerCase().includes("camera") ||
-    product.title.toLowerCase().includes("dslr") ||
-    product.title.toLowerCase().includes("mirrorless") ||
-    product.title.toLowerCase().includes("camcorder") ||
-    product.key_features?.some(feature => 
-      typeof feature === 'string' && (
-        feature.toLowerCase().includes("mp") ||
-        feature.toLowerCase().includes("megapixel") ||
-        feature.toLowerCase().includes("lens") ||
-        feature.toLowerCase().includes("sensor") ||
-        feature.toLowerCase().includes("zoom")
-      )
-    )
+  // Filter only camera category products
+  const cameraProducts = useMemo(() => 
+    products.filter((product) => product.category === "Camera"), 
+    [products]
   );
 
   // Get unique brands for filtering
-  const brands = [...new Set(cameraProducts.map(product => {
-    const title = product.title.toLowerCase();
-    if (title.includes("canon")) return "Canon";
-    if (title.includes("nikon")) return "Nikon";
-    if (title.includes("sony")) return "Sony";
-    if (title.includes("fujifilm") || title.includes("fuji")) return "Fujifilm";
-    if (title.includes("panasonic")) return "Panasonic";
-    if (title.includes("olympus")) return "Olympus";
-    if (title.includes("gopro")) return "GoPro";
-    if (title.includes("dji")) return "DJI";
-    if (title.includes("sigma")) return "Sigma";
-    if (title.includes("tamron")) return "Tamron";
-    return null;
-  }).filter(brand => brand))];
-
-  // Get unique types for filtering
-  const types = [...new Set(cameraProducts.map(product => {
-    const title = product.title.toLowerCase();
-    if (title.includes("dslr")) return "DSLR";
-    if (title.includes("mirrorless")) return "Mirrorless";
-    if (title.includes("action") || title.includes("gopro")) return "Action Camera";
-    if (title.includes("camcorder") || title.includes("video")) return "Camcorder";
-    if (title.includes("compact") || title.includes("point")) return "Compact";
-    if (title.includes("instant")) return "Instant";
-    return null;
-  }).filter(type => type))];
+  const brands = useMemo(() => {
+    const brandSet = new Set();
+    
+    cameraProducts.forEach(product => {
+      const title = product.title.toLowerCase();
+      if (title.includes("canon")) brandSet.add("Canon");
+      else if (title.includes("nikon")) brandSet.add("Nikon");
+      else if (title.includes("sony")) brandSet.add("Sony");
+      else if (title.includes("fujifilm") || title.includes("fuji")) brandSet.add("Fujifilm");
+      else if (title.includes("panasonic") || title.includes("lumix")) brandSet.add("Panasonic");
+      else if (title.includes("olympus")) brandSet.add("Olympus");
+      else if (title.includes("gopro")) brandSet.add("GoPro");
+      else if (title.includes("dji")) brandSet.add("DJI");
+      else if (title.includes("kodak")) brandSet.add("Kodak");
+      else if (product.brand) brandSet.add(product.brand);
+    });
+    
+    return Array.from(brandSet).sort();
+  }, [cameraProducts]);
 
   // Handle price inputs
   const handlePriceChange = (e, type) => {
@@ -132,7 +101,7 @@ function Cameras() {
     }
   };
 
-  // Handle type filter
+  // Handle camera type filter
   const handleTypeFilter = (type) => {
     if (selectedTypes.includes(type)) {
       setSelectedTypes(selectedTypes.filter(t => t !== type));
@@ -154,72 +123,95 @@ function Cameras() {
   const getCameraSpecs = (product) => {
     let resolution = "";
     let sensor = "";
-    let zoom = "";
+    let lens = "";
     let video = "";
+    let storage = "";
     
     if (product.key_features && Array.isArray(product.key_features)) {
       product.key_features.forEach(feature => {
         const lowerFeature = feature.toLowerCase();
-        if ((lowerFeature.includes("mp") || lowerFeature.includes("megapixel")) && !resolution) {
+        if ((lowerFeature.includes("mp") || 
+             lowerFeature.includes("megapixel") || 
+             lowerFeature.includes("resolution")) && !resolution) {
           resolution = feature;
-        } else if (lowerFeature.includes("sensor") && !sensor) {
+        } else if ((lowerFeature.includes("sensor") || 
+                   lowerFeature.includes("cmos") || 
+                   lowerFeature.includes("ccd")) && !sensor) {
           sensor = feature;
-        } else if ((lowerFeature.includes("zoom") || lowerFeature.includes("x")) && !zoom) {
-          zoom = feature;
-        } else if ((lowerFeature.includes("video") || lowerFeature.includes("4k") || lowerFeature.includes("1080p")) && !video) {
+        } else if ((lowerFeature.includes("lens") || 
+                   lowerFeature.includes("zoom") || 
+                   lowerFeature.includes("mm")) && !lens) {
+          lens = feature;
+        } else if ((lowerFeature.includes("video") || 
+                   lowerFeature.includes("4k") || 
+                   lowerFeature.includes("1080p") || 
+                   lowerFeature.includes("fhd")) && !video) {
           video = feature;
+        } else if ((lowerFeature.includes("gb") || 
+                   lowerFeature.includes("storage") || 
+                   lowerFeature.includes("memory")) && !storage) {
+          storage = feature;
         }
       });
     }
     
-    return { resolution, sensor, zoom, video };
+    return { resolution, sensor, lens, video, storage };
   };
 
   // Filtered and sorted camera products
-  const filteredData = cameraProducts
-    .filter((item) => {
-      const priceNumber = Number(item.price.toString().replace(/,/g, ""));
-      const priceInRange = priceNumber >= priceRange.min && priceNumber <= priceRange.max;
-      
-      // Brand filter
-      const title = item.title.toLowerCase();
-      let brandMatch = true;
-      if (selectedBrands.length > 0) {
-        brandMatch = selectedBrands.some(brand => title.includes(brand.toLowerCase()));
-      }
-      
-      // Type filter
-      let typeMatch = true;
-      if (selectedTypes.length > 0) {
-        typeMatch = selectedTypes.some(type => title.includes(type.toLowerCase()));
-      }
-      
-      // Resolution filter (simplified)
-      let resolutionMatch = true;
-      if (selectedResolutions.length > 0) {
-        const specs = getCameraSpecs(item);
-        resolutionMatch = selectedResolutions.some(res => specs.resolution.includes(res));
-      }
-      
-      return priceInRange && brandMatch && typeMatch && resolutionMatch;
-    })
-    .sort((a, b) => {
-      const priceA = Number(a.price.toString().replace(/,/g, ""));
-      const priceB = Number(b.price.toString().replace(/,/g, ""));
-      
-      switch (sortOption) {
-        case "price-low":
-          return priceA - priceB;
-        case "price-high":
-          return priceB - priceA;
-        case "discount":
-          const discountA = a.discount ? parseInt(a.discount) : 0;
-          const discountB = b.discount ? parseInt(b.discount) : 0;
-          return discountB - discountA;
-        default:
-          return 0;
-      }
-    });
+  const filteredData = useMemo(() => {
+    return cameraProducts
+      .filter((item) => {
+        const priceNumber = Number(item.price.toString().replace(/,/g, ""));
+        const priceInRange = priceNumber >= priceRange.min && priceNumber <= priceRange.max;
+        
+        // Brand filter
+        const title = item.title.toLowerCase();
+        let brandMatch = true;
+        if (selectedBrands.length > 0) {
+          brandMatch = selectedBrands.some(brand => title.includes(brand.toLowerCase()));
+        }
+        
+        // Camera type filter
+        let typeMatch = true;
+        if (selectedTypes.length > 0) {
+          const titleLower = title;
+          typeMatch = selectedTypes.some(type => {
+            if (type === "DSLR") return titleLower.includes("dslr");
+            if (type === "Mirrorless") return titleLower.includes("mirrorless");
+            if (type === "Point & Shoot") return titleLower.includes("point") && titleLower.includes("shoot");
+            if (type === "Action") return titleLower.includes("action") || titleLower.includes("gopro");
+            return titleLower.includes(type.toLowerCase());
+          });
+        }
+        
+        // Resolution filter
+        let resolutionMatch = true;
+        if (selectedResolutions.length > 0) {
+          const specs = getCameraSpecs(item);
+          resolutionMatch = selectedResolutions.some(res => specs.resolution.includes(res));
+        }
+        
+        return priceInRange && brandMatch && typeMatch && resolutionMatch;
+      })
+      .sort((a, b) => {
+        const priceA = Number(a.price.toString().replace(/,/g, ""));
+        const priceB = Number(b.price.toString().replace(/,/g, ""));
+        
+        switch (sortOption) {
+          case "price-low":
+            return priceA - priceB;
+          case "price-high":
+            return priceB - priceA;
+          case "discount":
+            const discountA = a.discount ? parseInt(a.discount) : 0;
+            const discountB = b.discount ? parseInt(b.discount) : 0;
+            return discountB - discountA;
+          default:
+            return 0;
+        }
+      });
+  }, [cameraProducts, priceRange, selectedBrands, selectedTypes, selectedResolutions, sortOption]);
 
   // Calculate discount percentage if not provided
   const calculateDiscount = (product) => {
@@ -242,9 +234,9 @@ function Cameras() {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
         <div className="relative w-16 h-16">
-          <div className="absolute inset-0 border-4 border-indigo-500 rounded-full border-t-transparent animate-spin"></div>
+          <div className="absolute inset-0 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
           <div className="absolute flex items-center justify-center bg-white rounded-full shadow-md inset-2">
-            <FaCamera className="w-6 h-6 text-indigo-600 animate-pulse" />
+            <FaCamera className="w-6 h-6 text-blue-600 animate-pulse" />
           </div>
         </div>
         <p className="mt-4 font-medium text-gray-700 animate-pulse">
@@ -281,9 +273,9 @@ function Cameras() {
     <div className="min-h-screen p-4 bg-gray-50 mt-28">
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 text-center">
-          <h1 className="mb-3 text-4xl font-bold text-gray-900">Cameras & Photography</h1>
+          <h1 className="mb-3 text-4xl font-bold text-gray-900">Cameras</h1>
           <p className="max-w-2xl mx-auto text-gray-600">
-            Capture life's moments with professional cameras and photography equipment
+            Discover professional cameras and gear for photography and videography
           </p>
         </div>
 
@@ -292,7 +284,7 @@ function Cameras() {
           <h2 className="text-xl font-semibold text-gray-800">Cameras</h2>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center px-4 py-2 text-white bg-indigo-600 rounded-lg"
+            className="flex items-center px-4 py-2 text-white bg-blue-600 rounded-lg"
           >
             <FaFilter className="mr-2" />
             {showFilters ? 'Hide Filters' : 'Show Filters'}
@@ -330,7 +322,7 @@ function Cameras() {
                         name="sortOption"
                         checked={sortOption === option.value}
                         onChange={() => handleSortChange(option.value)}
-                        className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                       />
                       <label htmlFor={`sort-${option.value}`} className="ml-2 text-sm text-gray-700">
                         {option.label}
@@ -352,7 +344,7 @@ function Cameras() {
                           id={`brand-${brand}`}
                           checked={selectedBrands.includes(brand)}
                           onChange={() => handleBrandFilter(brand)}
-                          className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
                         <label htmlFor={`brand-${brand}`} className="ml-2 text-sm text-gray-700">
                           {brand}
@@ -363,28 +355,26 @@ function Cameras() {
                 </div>
               )}
 
-              {/* Type Filter */}
-              {types.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="mb-3 font-medium text-gray-700">Camera Type</h3>
-                  <div className="space-y-2">
-                    {types.map((type) => (
-                      <div key={type} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={`type-${type}`}
-                          checked={selectedTypes.includes(type)}
-                          onChange={() => handleTypeFilter(type)}
-                          className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                        />
-                        <label htmlFor={`type-${type}`} className="ml-2 text-sm text-gray-700">
-                          {type}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
+              {/* Camera Type Filter */}
+              <div className="mb-6">
+                <h3 className="mb-3 font-medium text-gray-700">Camera Type</h3>
+                <div className="space-y-2">
+                  {['DSLR', 'Mirrorless', 'Point & Shoot', 'Action', 'Bridge'].map((type) => (
+                    <div key={type} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={`type-${type}`}
+                        checked={selectedTypes.includes(type)}
+                        onChange={() => handleTypeFilter(type)}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <label htmlFor={`type-${type}`} className="ml-2 text-sm text-gray-700">
+                        {type}
+                      </label>
+                    </div>
+                  ))}
                 </div>
-              )}
+              </div>
 
               {/* Resolution Filter */}
               <div className="mb-6">
@@ -397,7 +387,7 @@ function Cameras() {
                         id={`resolution-${resolution}`}
                         checked={selectedResolutions.includes(resolution)}
                         onChange={() => handleResolutionFilter(resolution)}
-                        className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <label htmlFor={`resolution-${resolution}`} className="ml-1 text-sm text-gray-700">
                         {resolution}
@@ -417,7 +407,7 @@ function Cameras() {
                       type="number"
                       value={priceRange.min}
                       onChange={(e) => handlePriceChange(e, "min")}
-                      className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                      className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                       min={0}
                       max={priceRange.max}
                     />
@@ -428,7 +418,7 @@ function Cameras() {
                       type="number"
                       value={priceRange.max}
                       onChange={(e) => handlePriceChange(e, "max")}
-                      className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                      className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                       min={priceRange.min}
                       max={500000}
                     />
@@ -444,7 +434,7 @@ function Cameras() {
                       ...prev,
                       max: Number(e.target.value)
                     }))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-thumb:bg-indigo-600"
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-thumb:bg-blue-600"
                   />
                   <div className="flex justify-between mt-1 text-xs text-gray-500">
                     <span>0৳</span>
@@ -469,7 +459,7 @@ function Cameras() {
                     setSelectedResolutions([]);
                     setPriceRange({ min: 0, max: 500000 });
                   }}
-                  className="w-full px-4 py-2 mt-4 text-sm font-medium text-indigo-600 rounded-lg bg-indigo-50 hover:bg-indigo-100"
+                  className="w-full px-4 py-2 mt-4 text-sm font-medium text-blue-600 rounded-lg bg-blue-50 hover:bg-blue-100"
                 >
                   Clear All Filters
                 </button>
@@ -485,7 +475,7 @@ function Cameras() {
               <select
                 value={sortOption}
                 onChange={(e) => handleSortChange(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="featured">Featured</option>
                 <option value="price-low">Price: Low to High</option>
@@ -500,17 +490,17 @@ function Cameras() {
                 <h3 className="mb-2 text-sm font-medium text-gray-700">Active Filters</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedBrands.map(brand => (
-                    <span key={brand} className="px-2 py-1 text-xs text-indigo-800 bg-indigo-100 rounded-full">
+                    <span key={brand} className="px-2 py-1 text-xs text-blue-800 bg-blue-100 rounded-full">
                       {brand} ×
                     </span>
                   ))}
                   {selectedTypes.map(type => (
-                    <span key={type} className="px-2 py-1 text-xs text-indigo-800 bg-indigo-100 rounded-full">
+                    <span key={type} className="px-2 py-1 text-xs text-blue-800 bg-blue-100 rounded-full">
                       {type} ×
                     </span>
                   ))}
                   {selectedResolutions.map(resolution => (
-                    <span key={resolution} className="px-2 py-1 text-xs text-indigo-800 bg-indigo-100 rounded-full">
+                    <span key={resolution} className="px-2 py-1 text-xs text-blue-800 bg-blue-100 rounded-full">
                       {resolution} ×
                     </span>
                   ))}
@@ -520,7 +510,7 @@ function Cameras() {
                       setSelectedTypes([]);
                       setSelectedResolutions([]);
                     }}
-                    className="text-xs text-indigo-600 hover:text-indigo-800"
+                    className="text-xs text-blue-600 hover:text-blue-800"
                   >
                     Clear All
                   </button>
@@ -543,7 +533,7 @@ function Cameras() {
                     setSelectedResolutions([]);
                     setPriceRange({ min: 0, max: 500000 });
                   }}
-                  className="px-6 py-2 text-white transition-colors bg-indigo-600 rounded-lg hover:bg-indigo-700"
+                  className="px-6 py-2 text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
                 >
                   Reset Filters
                 </button>
@@ -584,8 +574,8 @@ function Cameras() {
 
                         {/* Category Badge */}
                         <div className="absolute top-3 right-3">
-                          <span className="px-2 py-1 text-xs font-medium text-white bg-indigo-600 rounded-md shadow-sm">
-                            {item.category || "Camera"}
+                          <span className="px-2 py-1 text-xs font-medium text-white bg-blue-600 rounded-md shadow-sm">
+                            Camera
                           </span>
                         </div>
                       </div>
@@ -594,7 +584,7 @@ function Cameras() {
                       <div className="p-5">
                         {/* Title */}
                         <Link to={`/product/${item._id}`} className="block mb-3 group">
-                          <h3 className="text-base font-semibold leading-tight text-gray-900 transition-colors duration-200 line-clamp-2 group-hover:text-indigo-600">
+                          <h3 className="text-base font-semibold leading-tight text-gray-900 transition-colors duration-200 line-clamp-2 group-hover:text-blue-600">
                             {item.title}
                           </h3>
                         </Link>
@@ -604,26 +594,32 @@ function Cameras() {
                           <ul className="space-y-2 text-sm text-gray-700">
                             {specs.resolution && (
                               <li className="flex items-center">
-                                <FaCamera className="w-3.5 h-3.5 mr-2 text-indigo-500 flex-shrink-0" />
+                                <FaCameraRetro className="w-3.5 h-3.5 mr-2 text-blue-500 flex-shrink-0" />
                                 <span className="truncate">{specs.resolution}</span>
                               </li>
                             )}
                             {specs.sensor && (
                               <li className="flex items-center">
-                                <FaExpand className="w-3.5 h-3.5 mr-2 text-indigo-500 flex-shrink-0" />
+                                <FaMicrochip className="w-3.5 h-3.5 mr-2 text-blue-500 flex-shrink-0" />
                                 <span className="truncate">{specs.sensor}</span>
                               </li>
                             )}
-                            {specs.zoom && (
+                            {specs.lens && (
                               <li className="flex items-center">
-                                <FaPhotoVideo className="w-3.5 h-3.5 mr-2 text-indigo-500 flex-shrink-0" />
-                                <span className="truncate">{specs.zoom}</span>
+                                <FaExpand className="w-3.5 h-3.5 mr-2 text-blue-500 flex-shrink-0" />
+                                <span className="truncate">{specs.lens}</span>
                               </li>
                             )}
                             {specs.video && (
                               <li className="flex items-center">
-                                <FaVideo className="w-3.5 h-3.5 mr-2 text-indigo-500 flex-shrink-0" />
+                                <FaVideo className="w-3.5 h-3.5 mr-2 text-blue-500 flex-shrink-0" />
                                 <span className="truncate">{specs.video}</span>
+                              </li>
+                            )}
+                            {specs.storage && (
+                              <li className="flex items-center">
+                                <FaMemory className="w-3.5 h-3.5 mr-2 text-blue-500 flex-shrink-0" />
+                                <span className="truncate">{specs.storage}</span>
                               </li>
                             )}
                           </ul>
@@ -644,7 +640,7 @@ function Cameras() {
 
                           <Link
                             to={`/product/${item._id}`}
-                            className="flex items-center px-4 py-2 text-sm font-medium text-white transition-all duration-200 bg-indigo-600 rounded-lg hover:bg-indigo-700 hover:shadow-md"
+                            className="flex items-center px-4 py-2 text-sm font-medium text-white transition-all duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 hover:shadow-md"
                           >
                             <FaEye className="w-3.5 h-3.5 mr-1.5" />
                             Details
