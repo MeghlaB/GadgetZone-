@@ -140,17 +140,17 @@ export const router = createBrowserRouter([
       },
       {
         path: "/payment/fail/:tranId",
-        element: <PaymentFailed/>,
+        element: <PaymentFailed />,
+      },
+      {
+        path: "account/login",
+        element: <Login></Login>,
+      },
+      {
+        path: "account/register",
+        element: <Register></Register>,
       },
     ],
-  },
-  {
-    path: "account/login",
-    element: <Login></Login>,
-  },
-  {
-    path: "account/register",
-    element: <Register></Register>,
   },
   {
     path: "/dashboard",
@@ -177,7 +177,7 @@ export const router = createBrowserRouter([
       },
       {
 
-        
+
 
         path: "editproduct/:id",
         element: <EditProduct />,

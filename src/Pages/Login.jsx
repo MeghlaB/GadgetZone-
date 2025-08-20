@@ -5,36 +5,51 @@ import axios from "axios";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaGoogle, FaSpinner, FaSignInAlt } from "react-icons/fa";
 
 function Login() {
   const { signIn, GoogleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm();
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
       await signIn(data.email, data.password);
-      toast.success("Logged in successfully!");
-      setTimeout(() => navigate("/"), 1000);
+      toast.success("Logged in successfully! Redirecting...");
+      setTimeout(() => navigate("/"), 1500);
     } catch (error) {
-
       const errorCode = error.code;
 
       if (errorCode === "auth/user-not-found") {
-        toast.error("No user found with this email");
+        setError("email", { 
+          type: "manual", 
+          message: "No account found with this email" 
+        });
+        toast.error("No account found with this email");
       } else if (errorCode === "auth/wrong-password") {
+        setError("password", { 
+          type: "manual", 
+          message: "Incorrect password" 
+        });
         toast.error("Incorrect password");
+      } else if (errorCode === "auth/invalid-email") {
+        setError("email", { 
+          type: "manual", 
+          message: "Invalid email format" 
+        });
+        toast.error("Please enter a valid email address");
       } else {
-        toast.error("Login failed");
+        toast.error("Login failed. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -42,6 +57,7 @@ function Login() {
   };
 
   const handleGoogleSign = async () => {
+    setGoogleLoading(true);
     try {
       const result = await GoogleLogin();
       const user = result.user;
@@ -54,110 +70,204 @@ function Login() {
         status: "active",
       };
 
-      // Check if user already exists before posting
       await axios.post("https://gadgetzone-server.onrender.com/users", userInfo);
-
-      toast.success("Logged in with Google");
+      toast.success("Logged in with Google successfully!");
       navigate("/");
     } catch (error) {
-      toast.error("Google login failed");
+      if (error.code !== "auth/popup-closed-by-user") {
+        toast.error("Google login failed. Please try again.");
+      }
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-md p-10 mx-auto bg-white rounded-lg shadow-lg my-28">
-      <h1 className="mb-6 text-xl font-bold text-center">Login</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Email */}
-        <div className="space-y-1 text-sm">
-          <label htmlFor="email" className="block font-medium">Email</label>
-          <input
-            id="email"
-            type="email"
-            {...register("email", { required: "Email is required" })}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-teal-500"
-          />
-          {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+    <div className="flex items-center justify-center min-h-screen px-4 mt-12 bg-gradient-to-br from-blue-50 to-teal-50 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md p-10 space-y-8 bg-white border border-gray-100 shadow-xl rounded-2xl">
+        {/* Header Section */}
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            Welcome back
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Sign in to access your account
+          </p>
         </div>
-
-        {/* Password */}
-        {/* <div className="space-y-1 text-sm">
-          <label htmlFor="password" className="block font-medium">Password*</label>
-          <input
-            id="password"
-            type="password"
-            {...register("password", { required: "Password is required" })}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-teal-500"
-          />
-          <span className="absolute top-52 left-8" >adf</span>
-          {errors.password && <span className="text-red-500">{errors.password.message}</span>}
-        </div> */}
-        <div className="relative space-y-1 text-sm">
-          <label htmlFor="password" className="block font-medium">
-            Password
-          </label>
-          <input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            {...register("password", { required: "Password is required" })}
-            className="w-full px-3 py-2 pr-10 border rounded focus:outline-none focus:ring focus:border-teal-500"
-          />
-          {/* Eye Icon */}
-          <div
-            className="absolute text-[18px] cursor-pointer text--gray-500 text top-8 right-3"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+        
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-4">
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-700">
+                Email address
+              </label>
+              <div className="relative">
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  className={`appearance-none relative block w-full px-4 py-3 border placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition-all duration-200 ${
+                    errors.email ? "border-red-500 pr-10" : "border-gray-300"
+                  }`}
+                  placeholder="you@example.com"
+                  {...register("email", { 
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address"
+                    }
+                  })}
+                />
+                {errors.email && (
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
+              )}
+            </div>
+            
+            {/* Password Field */}
+            <div>
+              <label htmlFor="password" className="block mb-1 text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  className={`appearance-none relative block w-full px-4 py-3 border placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition-all duration-200 ${
+                    errors.password ? "border-red-500 pr-10" : "border-gray-300"
+                  }`}
+                  placeholder="••••••••"
+                  {...register("password", { 
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters"
+                    }
+                  })}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition-colors hover:text-gray-600"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="w-5 h-5" />
+                  ) : (
+                    <FaEye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="mt-2 text-sm text-red-600">{errors.password.message}</p>
+              )}
+            </div>
           </div>
-          {errors.password && (
-            <span className="text-red-500">{errors.password.message}</span>
-          )}
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+              />
+              <label
+                htmlFor="remember-me"
+                className="block ml-2 text-sm text-gray-700"
+              >
+                Remember me
+              </label>
+            </div>
+
+            <div className="text-sm">
+              <NavLink
+                to="/forgot-password"
+                className="font-medium text-teal-600 transition-colors hover:text-teal-500"
+              >
+                Forgot password?
+              </NavLink>
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200 shadow-md hover:shadow-lg ${
+                loading ? "opacity-80 cursor-not-allowed" : ""
+              }`}
+            >
+              {loading ? (
+                <>
+                  <FaSpinner className="w-5 h-5 mr-2 -ml-1 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign in"
+              )}
+            </button>
+          </div>
+          
+          <div className="text-sm text-center">
+            <span className="text-gray-600">Don't have an account? </span>
+            <Link
+              to="/account/register"
+              className="font-medium text-teal-600 transition-colors hover:text-teal-500"
+            >
+              Sign up now
+            </Link>
+          </div>
+        </form>
+
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 text-gray-500 bg-white">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <button
+              onClick={handleGoogleSign}
+              disabled={googleLoading}
+              className={`w-full inline-flex justify-center items-center py-3 px-4 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200 shadow-sm hover:shadow-md ${
+                googleLoading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
+            >
+              {googleLoading ? (
+                <FaSpinner className="w-5 h-5 mr-2 -ml-1 animate-spin" />
+              ) : (
+                <FaGoogle className="w-5 h-5 mr-2 text-red-600" />
+              )}
+              {googleLoading ? "Signing in..." : "Sign in with Google"}
+            </button>
+          </div>
         </div>
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded transition ${loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-
-      {/* Register link */}
-      <p className="mt-4 text-sm text-center">
-        Don&apos;t have an account?{" "}
-        <Link to="/account/register" className="text-blue-600 underline">Register</Link>
-      </p>
-
-      {/* Forget password */}
-      <div className="mt-3 text-xs text-center ">
-        <NavLink to={'/'} className="text-gray-600 underline cursor-pointer ">Forgot password</NavLink>
       </div>
-
-      {/* Divider */}
-      <div className="flex items-center my-6">
-        <hr className="flex-1 border-gray-300" />
-        <span className="px-2 text-gray-500">OR</span>
-        <hr className="flex-1 border-gray-300" />
-      </div>
-
-      {/* Google Login */}
-      <div className="flex justify-center">
-        <button
-          onClick={handleGoogleSign}
-          className="flex items-center gap-2 px-4 py-2 transition border rounded-full hover:bg-gray-100"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5">
-            <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z" fill="#4285F4" />
-          </svg>
-          <span>Login with Google</span>
-        </button>
-      </div>
-
-      <ToastContainer position="top-center" autoClose={1500} hideProgressBar />
+      <ToastContainer 
+        position="top-center" 
+        autoClose={3000} 
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        theme="colored"
+        toastClassName="rounded-lg shadow-md"
+      />
     </div>
   );
 }

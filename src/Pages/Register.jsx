@@ -5,17 +5,14 @@ import axios from "axios";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-
-
-const image_hosting_key = import.meta.env.VITE_IMAGEHOSTING; // ✅ .env file এ রাখতে হবে
-const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+import { FaEye, FaEyeSlash, FaGoogle, FaSpinner, FaUserPlus } from "react-icons/fa";
 
 function Register() {
   const { createUser, updateUserprofile, GoogleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -28,25 +25,17 @@ function Register() {
     setLoading(true);
 
     try {
-      // 1. Upload image to imgBB
-      const imageFile = data.photo[0];
-      const formData = new FormData();
-      formData.append("image", imageFile);
-
-      const imgRes = await axios.post(image_hosting_api, formData);
-      const photoURL = imgRes.data.data.display_url;
-
-      // 2. Create Firebase user
+      // 1. Create Firebase user
       const result = await createUser(data.email, data.password);
 
-      // 3. Update Firebase user profile
-      await updateUserprofile(data.name, photoURL);
+      // 2. Update Firebase user profile with name
+      await updateUserprofile(data.name, "https://i.ibb.co.com/4pDNDk1/avatar.png");
 
-      // 4. Save user info to database
+      // 3. Save user info to database
       const userInfo = {
         name: data.name,
         email: data.email,
-        photo: photoURL,
+        photo: "https://i.ibb.co.com/4pDNDk1/avatar.png",
         role: "user",
         status: "active",
       };
@@ -56,20 +45,29 @@ function Register() {
       if (dbRes.data.insertedId || dbRes.data.acknowledged) {
         toast.success("Account created successfully!");
         reset();
-        navigate("/");
+        setTimeout(() => navigate("/"), 1500);
       } else {
         toast.error("User creation failed in database");
       }
 
     } catch (error) {
-      const msg = error.response?.data?.message || error.message || "Registration failed";
-      toast.error(msg);
+      const errorCode = error.code;
+      let errorMessage = error.response?.data?.message || error.message || "Registration failed";
+      
+      if (errorCode === "auth/email-already-in-use") {
+        errorMessage = "This email is already registered";
+      } else if (errorCode === "auth/weak-password") {
+        errorMessage = "Password is too weak";
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleSign = async () => {
+    setGoogleLoading(true);
     try {
       const result = await GoogleLogin();
       const user = result.user;
@@ -84,123 +82,220 @@ function Register() {
 
       await axios.post("https://gadgetzone-server.onrender.com/users", userInfo);
 
-      toast.success("Logged in with Google");
+      toast.success("Account created with Google successfully!");
       navigate("/");
     } catch (error) {
-      toast.error("Google login failed");
+      if (error.code !== "auth/popup-closed-by-user") {
+        toast.error("Google registration failed");
+      }
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-md p-10 mx-auto bg-white shadow-lg my-28">
-      <h1 className="mb-6 text-xl font-bold text-center">Register Account</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Name */}
-        <div className="space-y-1 text-sm">
-          <label htmlFor="name" className="block font-medium">Name*</label>
-          <input
-            id="name"
-            type="text"
-            {...register("name", { required: true })}
-            className="w-full px-3 py-2 border rounded"
-          />
-          {errors.name && <span className="text-red-500">Name is required</span>}
+    <div className="flex items-center justify-center min-h-screen px-4 py-8 bg-gradient-to-br from-blue-50 to-teal-50 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md p-10 mt-20 space-y-8 bg-white border border-gray-100 shadow-xl rounded-2xl">
+        {/* Header Section */}
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            Create your account
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Join us to get started
+          </p>
         </div>
-
-        {/* Photo (File Upload) */}
-        <div className="space-y-1 text-sm">
-          <label htmlFor="photo" className="block font-medium">Photo*</label>
-          <input
-            id="photo"
-            type="file"
-            accept="image/*"
-            {...register("photo", { required: true })}
-            className="w-full px-3 py-2 border rounded"
-          />
-          {errors.photo && <span className="text-red-500">Photo is required</span>}
-        </div>
-
-        {/* Email */}
-        <div className="space-y-1 text-sm">
-          <label htmlFor="email" className="block font-medium">Email*</label>
-          <input
-            id="email"
-            type="email"
-            {...register("email", { required: true })}
-            className="w-full px-3 py-2 border rounded"
-          />
-          {errors.email && <span className="text-red-500">Email is required</span>}
-        </div>
-
-        {/* Password */}
-        <div className="relative space-y-1 text-sm">
-          <label htmlFor="password" className="block font-medium">Password*</label>
-          <input
-            id="password"
-            type={showPassword ? 'text': 'password'}
-            {...register("password", {
-              required: true,
-              minLength: 6,
-              maxLength: 20,
-              pattern: /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?!.*\W)(?!.* )/,
-            })}
-            className="w-full px-3 py-2 border rounded"
-          />
-          {/* Eye Icon */}
-          <div
-            className="absolute text-[18px] cursor-pointer text--gray-500 text top-8 right-3"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+        
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-4">
+            {/* Name Field */}
+            <div>
+              <label htmlFor="name" className="block mb-1 text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <div className="relative">
+                <input
+                  id="name"
+                  type="text"
+                  autoComplete="name"
+                  className={`appearance-none relative block w-full px-4 py-3 border placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition-all duration-200 ${
+                    errors.name ? "border-red-500 pr-10" : "border-gray-300"
+                  }`}
+                  placeholder="John Doe"
+                  {...register("name", { 
+                    required: "Name is required",
+                    minLength: {
+                      value: 2,
+                      message: "Name must be at least 2 characters"
+                    }
+                  })}
+                />
+                {errors.name && (
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              {errors.name && (
+                <p className="mt-2 text-sm text-red-600">{errors.name.message}</p>
+              )}
+            </div>
+            
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-700">
+                Email address
+              </label>
+              <div className="relative">
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  className={`appearance-none relative block w-full px-4 py-3 border placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition-all duration-200 ${
+                    errors.email ? "border-red-500 pr-10" : "border-gray-300"
+                  }`}
+                  placeholder="you@example.com"
+                  {...register("email", { 
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address"
+                    }
+                  })}
+                />
+                {errors.email && (
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
+              )}
+            </div>
+            
+            {/* Password Field */}
+            <div>
+              <label htmlFor="password" className="block mb-1 text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  className={`appearance-none relative block w-full px-4 py-3 border placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition-all duration-200 ${
+                    errors.password ? "border-red-500 pr-10" : "border-gray-300"
+                  }`}
+                  placeholder="••••••••"
+                  {...register("password", { 
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters"
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: "Password cannot exceed 20 characters"
+                    },
+                    pattern: {
+                      value: /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?!.*\W)(?!.* )/,
+                      message: "Must include uppercase, lowercase, number, no special characters or spaces"
+                    }
+                  })}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition-colors hover:text-gray-600"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="w-5 h-5" />
+                  ) : (
+                    <FaEye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="mt-2 text-sm text-red-600">{errors.password.message}</p>
+              )}
+            </div>
           </div>
-          {errors.password && (
-            <span className="text-red-500">{errors.password.message}</span>
-          )}
-          {errors.password?.type === "required" && <span className="text-red-500">Password is required</span>}
-          {errors.password?.type === "minLength" && <span className="text-red-500">Minimum 6 characters</span>}
-          {errors.password?.type === "maxLength" && <span className="text-red-500">Maximum 20 characters</span>}
-          {errors.password?.type === "pattern" && (
-            <span className="text-red-500">
-              Must include uppercase, lowercase, number, no special char or space
-            </span>
-          )}
+
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200 shadow-md hover:shadow-lg ${
+                loading ? "opacity-80 cursor-not-allowed" : ""
+              }`}
+            >
+              {loading ? (
+                <>
+                  <FaSpinner className="w-5 h-5 mr-2 -ml-1 animate-spin" />
+                  Creating account...
+                </>
+              ) : (
+                "Create account"
+              )}
+            </button>
+          </div>
+          
+          <div className="text-sm text-center">
+            <span className="text-gray-600">Already have an account? </span>
+            <Link
+              to="/account/login"
+              className="font-medium text-teal-600 transition-colors hover:text-teal-500"
+            >
+              Sign in
+            </Link>
+          </div>
+        </form>
+
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 text-gray-500 bg-white">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <button
+              onClick={handleGoogleSign}
+              disabled={googleLoading}
+              className={`w-full inline-flex justify-center items-center py-3 px-4 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200 shadow-sm hover:shadow-md ${
+                googleLoading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
+            >
+              {googleLoading ? (
+                <FaSpinner className="w-5 h-5 mr-2 -ml-1 animate-spin" />
+              ) : (
+                <FaGoogle className="w-5 h-5 mr-2 text-red-600" />
+              )}
+              {googleLoading ? "Creating account..." : "Sign up with Google"}
+            </button>
+          </div>
         </div>
-
-        {/* Submit Button */}
-        <input
-          type="submit"
-          value={loading ? "Signing Up..." : "Sign Up"}
-          disabled={loading}
-          className={`w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded transition ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
-        />
-      </form>
-
-      {/* Already have account */}
-      <p className="mt-4 text-sm text-center">
-        Already have an account?{" "}
-        <Link to="/account/login" className="text-blue-600 underline">Sign In</Link>
-      </p>
-
-      {/* Divider */}
-      <div className="flex items-center my-6">
-        <hr className="flex-1 border-gray-300" />
-        <span className="px-2 text-gray-500">OR</span>
-        <hr className="flex-1 border-gray-300" />
       </div>
-
-      {/* Google Sign-in */}
-      <div className="flex justify-center">
-        <button
-          onClick={handleGoogleSign}
-          className="p-3 border rounded-full hover:bg-gray-100"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5">
-            <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z" />
-          </svg>
-        </button>
-      </div>
-
-      <ToastContainer position="top-center" autoClose={1500} hideProgressBar />
+      <ToastContainer 
+        position="top-center" 
+        autoClose={3000} 
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        theme="colored"
+        toastClassName="rounded-lg shadow-md"
+      />
     </div>
   );
 }
