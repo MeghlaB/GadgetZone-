@@ -31,38 +31,6 @@ const ProductDetails = () => {
     enabled: !!id,
   });
 
-  // const handleCart = async () => {
-  //   if (!user) {
-  //     toast.warning("Please login to add to cart");
-  //     return;
-  //   }
-
-  //   const cartItems = {
-  //     productId: product._id,
-  //     title: product.title,
-  //     image: product.image,
-  //     price: product.price,
-  //     userEmail: user.email,
-  //     status: "pending",
-  //     quantity: 1,
-  //   };
-
-  //   try {
-  //     const res = await axiosPublic.post("/cart", cartItems);
-
-  //     if (res.data.insertedId) {
-  //       toast.success("Product added to cart!");
-  //     } else if (res.data.message === "Product already in cart") {
-  //       toast.warning("This product is already in your cart.");
-  //     } else {
-  //       toast.error("Failed to add to cart.");
-  //     }
-  //   } catch (error) {
-
-  //     toast.error("Something went wrong!");
-  //   }
-  // };
-
   const handleBuyNow = () => {
     if (!user) {
       toast.warning("Please login to proceed with purchase");

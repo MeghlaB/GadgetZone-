@@ -14,12 +14,12 @@ const FeaturedCategory = () => {
     }, []);
 
     return (
-        <div className='my-10 w-10/12 mx-auto relative top-16'>
+        <div className='relative w-10/12 mx-auto my-10 top-16 md:top-24'>
             <h1 className='text-lg text-center md:text-2xl'>Featured Category</h1>
-            <p className='text text-center text-gray-600'>
+            <p className='text-center text-gray-600 text'>
                 Get Your Desired Product from Featured Category!
             </p>
-            <div className='flex flex-wrap justify-center my-4 mx-auto gap-2 md:gap-4'>
+            <div className='flex flex-wrap justify-center gap-2 mx-auto my-4 md:gap-4'>
                 {
                     categories.map((category, idx) => (
                         <SingleFeaturedCategory category={category} key={idx} />

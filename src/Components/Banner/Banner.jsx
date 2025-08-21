@@ -3,7 +3,7 @@ import BannerCarousel from '../BannerCarousel/BannerCarousel';
 
 const Banner = () => {
     return (
-        <div className='relative top-24'>
+        <div className='relative top-16 md:top-32'>
             <BannerCarousel></BannerCarousel>
         </div>
     );
