@@ -546,8 +546,8 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import { Link } from "react-router-dom";
-import { 
-  FaFilter, 
+import {
+  FaFilter,
   FaEye,
   FaTimes,
   FaBatteryFull,
@@ -571,6 +571,8 @@ function UPS() {
     },
   });
 
+  console.log(products)
+
   // Price range state
   const [priceRange, setPriceRange] = useState({
     min: 0,
@@ -579,21 +581,21 @@ function UPS() {
 
   // Sort option state
   const [sortOption, setSortOption] = useState("featured");
-  
+
   // Mobile filter visibility
   const [showFilters, setShowFilters] = useState(false);
 
   // Brand filter state
   const [selectedBrands, setSelectedBrands] = useState([]);
-  
+
   // Capacity filter state
   const [selectedCapacities, setSelectedCapacities] = useState([]);
-  
+
   // Type filter state
   const [selectedTypes, setSelectedTypes] = useState([]);
 
   // Filter only UPS category products
-  const upsProducts = products.filter((product) => 
+  const upsProducts = products.filter((product) =>
     product.category === "UPS"
   );
 
@@ -659,32 +661,32 @@ function UPS() {
     let runtime = "";
     let type = "";
     let outlets = "";
-    
+
     if (product.key_features && Array.isArray(product.key_features)) {
       product.key_features.forEach(feature => {
         const lowerFeature = feature.toLowerCase();
-        if ((lowerFeature.includes("va") || 
-             lowerFeature.includes("kva") || 
-             lowerFeature.includes("volt") || 
-             lowerFeature.includes("watt")) && !capacity) {
+        if ((lowerFeature.includes("va") ||
+          lowerFeature.includes("kva") ||
+          lowerFeature.includes("volt") ||
+          lowerFeature.includes("watt")) && !capacity) {
           capacity = feature;
-        } else if ((lowerFeature.includes("min") || 
-                   lowerFeature.includes("minute") || 
-                   lowerFeature.includes("runtime") || 
-                   lowerFeature.includes("backup")) && !runtime) {
+        } else if ((lowerFeature.includes("min") ||
+          lowerFeature.includes("minute") ||
+          lowerFeature.includes("runtime") ||
+          lowerFeature.includes("backup")) && !runtime) {
           runtime = feature;
-        } else if ((lowerFeature.includes("line-interactive") || 
-                   lowerFeature.includes("online") || 
-                   lowerFeature.includes("standby")) && !type) {
+        } else if ((lowerFeature.includes("line-interactive") ||
+          lowerFeature.includes("online") ||
+          lowerFeature.includes("standby")) && !type) {
           type = feature;
-        } else if ((lowerFeature.includes("outlet") || 
-                   lowerFeature.includes("socket") || 
-                   lowerFeature.includes("port")) && !outlets) {
+        } else if ((lowerFeature.includes("outlet") ||
+          lowerFeature.includes("socket") ||
+          lowerFeature.includes("port")) && !outlets) {
           outlets = feature;
         }
       });
     }
-    
+
     return { capacity, runtime, type, outlets };
   };
 
@@ -693,34 +695,34 @@ function UPS() {
     .filter((item) => {
       const priceNumber = Number(item.price.toString().replace(/,/g, ""));
       const priceInRange = priceNumber >= priceRange.min && priceNumber <= priceRange.max;
-      
+
       // Brand filter
       const title = item.title.toLowerCase();
       let brandMatch = true;
       if (selectedBrands.length > 0) {
         brandMatch = selectedBrands.some(brand => title.includes(brand.toLowerCase()));
       }
-      
+
       // Capacity filter (simplified)
       let capacityMatch = true;
       if (selectedCapacities.length > 0) {
         const specs = getUPSSpecs(item);
         capacityMatch = selectedCapacities.some(capacity => specs.capacity.includes(capacity));
       }
-      
+
       // Type filter (simplified)
       let typeMatch = true;
       if (selectedTypes.length > 0) {
         const specs = getUPSSpecs(item);
         typeMatch = selectedTypes.some(type => specs.type.includes(type));
       }
-      
+
       return priceInRange && brandMatch && capacityMatch && typeMatch;
     })
     .sort((a, b) => {
       const priceA = Number(a.price.toString().replace(/,/g, ""));
       const priceB = Number(b.price.toString().replace(/,/g, ""));
-      
+
       switch (sortOption) {
         case "price-low":
           return priceA - priceB;
@@ -738,17 +740,17 @@ function UPS() {
   // Calculate discount percentage if not provided
   const calculateDiscount = (product) => {
     if (product.discount) return product.discount;
-    
+
     if (product.previous_price && product.price) {
       const currentPrice = Number(product.price.toString().replace(/,/g, ""));
       const previousPrice = Number(product.previous_price.toString().replace(/,/g, ""));
-      
+
       if (previousPrice > currentPrice) {
         const discount = Math.round(((previousPrice - currentPrice) / previousPrice) * 100);
         return `${discount}% OFF`;
       }
     }
-    
+
     return null;
   };
 
@@ -819,8 +821,8 @@ function UPS() {
             <div className="p-5 mb-6 bg-white border border-gray-100 shadow-sm rounded-xl">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-lg font-semibold text-gray-800">Sort & Filter</h2>
-                <button 
-                  onClick={() => setShowFilters(false)} 
+                <button
+                  onClick={() => setShowFilters(false)}
                   className="p-1 text-gray-500 lg:hidden hover:text-gray-700"
                 >
                   <FaTimes />
@@ -1048,7 +1050,7 @@ function UPS() {
                 <p className="mt-2 mb-6 text-gray-500">
                   Try adjusting your filters to see more products.
                 </p>
-                <button 
+                <button
                   onClick={() => {
                     setSelectedBrands([]);
                     setSelectedCapacities([]);

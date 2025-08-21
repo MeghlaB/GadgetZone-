@@ -95,7 +95,7 @@ function Register() {
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4 py-8 bg-gradient-to-br from-blue-50 to-teal-50 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md p-10 mt-20 space-y-8 bg-white border border-gray-100 shadow-xl rounded-2xl">
+      <div className="w-full max-w-md p-10 mt-12 space-y-8 bg-white border border-gray-100 shadow-xl rounded-2xl md:mt-28">
         {/* Header Section */}
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-bold text-gray-900">

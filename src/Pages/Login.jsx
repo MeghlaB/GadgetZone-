@@ -83,8 +83,8 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 mt-12 bg-gradient-to-br from-blue-50 to-teal-50 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md p-10 space-y-8 bg-white border border-gray-100 shadow-xl rounded-2xl">
+    <div className="flex items-center justify-center min-h-screen px-4 mt-4 md:mt-10 bg-gradient-to-br from-blue-50 to-teal-50 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md p-10 space-y-8 bg-white border border-gray-100 shadow-xl rounded-2xl md:mt-16">
         {/* Header Section */}
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
