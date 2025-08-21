@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "../../Hooks/useAxiosPublic";
+
 import { Link } from "react-router-dom";
 import {
     FaFilter,
@@ -20,6 +20,7 @@ import {
     FaMemory,
     FaNetworkWired
 } from "react-icons/fa";
+import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 
 function ServerStorage() {
     const axiosPublic = useAxiosPublic();
@@ -31,12 +32,12 @@ function ServerStorage() {
     } = useQuery({
         queryKey: ["products"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/products");
+            const res = await useAxiosPublic.get("/products");
             return res.data;
         },
     });
 
-    console.log(products)
+    // console.log(products)
     // Price range state
     const [priceRange, setPriceRange] = useState({
         min: 0,

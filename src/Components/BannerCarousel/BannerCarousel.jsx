@@ -23,7 +23,7 @@ export default function BannerCarousel() {
   const fetchBanners = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/bannerImgs");
+      const res = await axios.get("https://gadgetzone-server.onrender.com/bannerImgs");
       setBannerImgs(res.data);
     } catch (err) {
       console.error("Error fetching banner images:", err);
