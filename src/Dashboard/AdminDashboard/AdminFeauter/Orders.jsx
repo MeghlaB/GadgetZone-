@@ -1,43 +1,76 @@
 import React, { useState, useEffect } from "react";
-import { FaEye, FaCheck, FaTimes, FaTrash, FaSearch, FaFilter, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaEye, FaCheck, FaTimes, FaTrash, FaSearch, FaFilter, FaChevronLeft, FaChevronRight, FaChartBar } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 function Orders() {
     const [orders, setOrders] = useState([]);
-    const [filteredOrders, setFilteredOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalOrders, setTotalOrders] = useState(0);
+    const [stats, setStats] = useState(null);
     const ordersPerPage = 40;
 
     // Fetch orders from API
-    useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch("http://localhost:5000/orders");
+    const fetchOrders = async (page = 1) => {
+        try {
+            setLoading(true);
+            const params = new URLSearchParams({
+                page: page,
+                limit: ordersPerPage,
+                ...(statusFilter !== 'all' && { status: statusFilter }),
+                ...(searchTerm && { search: searchTerm })
+            });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+            const response = await fetch(`http://localhost:5000/orders?${params}`);
 
-                const data = await response.json();
-                setOrders(Array.isArray(data) ? data : []);
-                setFilteredOrders(Array.isArray(data) ? data : []);
-            } catch (error) {
-                console.error("Error fetching orders:", error);
-                Swal.fire("Error!", "Failed to load orders.", "error");
-                setOrders([]);
-                setFilteredOrders([]);
-            } finally {
-                setLoading(false);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        };
 
-        fetchOrders();
-    }, []);
+            const data = await response.json();
+            setOrders(data.orders || []);
+            setTotalPages(data.pagination?.totalPages || 1);
+            setTotalOrders(data.pagination?.totalOrders || 0);
+        } catch (error) {
+            console.error("Error fetching orders:", error);
+            Swal.fire("Error!", "Failed to load orders.", "error");
+            setOrders([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Fetch order statistics
+    const fetchStats = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/orders-stats');
+            if (response.ok) {
+                const data = await response.json();
+                setStats(data);
+            }
+        } catch (error) {
+            console.error('Error fetching stats:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchOrders(currentPage);
+        fetchStats();
+    }, [currentPage]);
+
+    useEffect(() => {
+        // Debounce search and filter changes
+        const handler = setTimeout(() => {
+            setCurrentPage(1);
+            fetchOrders(1);
+        }, 500);
+
+        return () => clearTimeout(handler);
+    }, [searchTerm, statusFilter]);
 
     // Safe value access with fallbacks
     const safeToString = (value, fallback = '') => {
@@ -45,7 +78,7 @@ function Orders() {
         return String(value);
     };
 
-    // Handle sorting
+    // Handle sorting locally
     const handleSort = (key) => {
         let direction = 'ascending';
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
@@ -54,42 +87,15 @@ function Orders() {
         setSortConfig({ key, direction });
     };
 
-    // Apply sorting and filtering
-    useEffect(() => {
+    // Apply local sorting
+    const sortedOrders = React.useMemo(() => {
         let result = [...orders];
 
-        // Apply search filter with safe value access
-        if (searchTerm) {
-            const searchTermLower = searchTerm.toLowerCase();
-            result = result.filter(order => {
-                const productTitle = safeToString(order.product?.title).toLowerCase();
-                const orderId = safeToString(order._id).toLowerCase();
-                const transactionId = safeToString(order.transjectionId).toLowerCase();
-
-                return (
-                    productTitle.includes(searchTermLower) ||
-                    orderId.includes(searchTermLower) ||
-                    transactionId.includes(searchTermLower)
-                );
-            });
-        }
-
-        // Apply status filter
-        if (statusFilter !== "all") {
-            result = result.filter(order => {
-                if (statusFilter === "paid") return order.paidStatus === true;
-                if (statusFilter === "unpaid") return order.paidStatus === false;
-                return true;
-            });
-        }
-
-        // Apply sorting with safe value access
         if (sortConfig.key) {
             result.sort((a, b) => {
                 let aValue, bValue;
 
                 if (sortConfig.key.includes('.')) {
-                    // Handle nested properties like 'product.price'
                     const keys = sortConfig.key.split('.');
                     aValue = a[keys[0]]?.[keys[1]] || '';
                     bValue = b[keys[0]]?.[keys[1]] || '';
@@ -98,7 +104,6 @@ function Orders() {
                     bValue = b[sortConfig.key] || '';
                 }
 
-                // Convert to string for consistent comparison
                 aValue = safeToString(aValue);
                 bValue = safeToString(bValue);
 
@@ -112,18 +117,15 @@ function Orders() {
             });
         }
 
-        setFilteredOrders(result);
-        setCurrentPage(1); // Reset to first page when filters change
-    }, [orders, searchTerm, statusFilter, sortConfig]);
-
-    // Get current orders for pagination
-    const indexOfLastOrder = currentPage * ordersPerPage;
-    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-    const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
-    const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+        return result;
+    }, [orders, sortConfig]);
 
     // Change page
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const paginate = (pageNumber) => {
+        if (pageNumber < 1 || pageNumber > totalPages) return;
+        setCurrentPage(pageNumber);
+        window.scrollTo(0, 0);
+    };
 
     // Update order status
     const updateOrderStatus = async (orderId, newStatus) => {
@@ -141,6 +143,7 @@ function Orders() {
                 setOrders(orders.map(order =>
                     order._id === orderId ? updatedOrder : order
                 ));
+                fetchStats(); // Refresh stats
                 Swal.fire("Success!", `Order marked as ${newStatus ? "paid" : "unpaid"}.`, "success");
             } else {
                 throw new Error("Failed to update order");
@@ -170,6 +173,7 @@ function Orders() {
 
                     if (response.ok) {
                         setOrders(orders.filter(order => order._id !== orderId));
+                        fetchStats(); // Refresh stats
                         Swal.fire("Deleted!", "Order has been deleted.", "success");
                     } else {
                         throw new Error("Failed to delete order");
@@ -191,7 +195,7 @@ function Orders() {
           <div class="mb-3">
             <strong>Product:</strong> ${order.product?.title || 'N/A'}<br>
             <strong>Category:</strong> ${order.product?.category || 'N/A'}<br>
-            <strong>Price:</strong> ₹${order.product?.price || 'N/A'}<br>
+            <strong>Price:</strong> ৳${order.product?.price || 'N/A'}<br>
             <strong>Quantity:</strong> ${order.product?.quantity || 'N/A'}
           </div>
           <div class="mb-3">
@@ -220,16 +224,10 @@ function Orders() {
         return <FaFilter className="ml-1" size={12} />;
     };
 
-    // Generate page numbers for pagination
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i);
-    }
-
     // Display limited page numbers with ellipsis
     const getDisplayedPages = () => {
         if (totalPages <= 7) {
-            return pageNumbers;
+            return Array.from({ length: totalPages }, (_, i) => i + 1);
         }
 
         const delta = 2;
@@ -272,6 +270,59 @@ function Orders() {
                 <p className="text-gray-600">Manage and track customer orders</p>
             </div>
 
+            {/* Statistics Cards */}
+            {stats && (
+                <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-2 lg:grid-cols-4">
+                    <div className="p-4 bg-white rounded-lg shadow-md">
+                        <div className="flex items-center">
+                            <div className="p-3 bg-blue-100 rounded-full">
+                                <FaChartBar className="text-blue-600" size={20} />
+                            </div>
+                            <div className="ml-4">
+                                <h3 className="text-sm font-medium text-gray-600">Total Orders</h3>
+                                <p className="text-2xl font-bold text-gray-800">{stats.totalOrders}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-lg shadow-md">
+                        <div className="flex items-center">
+                            <div className="p-3 bg-green-100 rounded-full">
+                                <FaCheck className="text-green-600" size={20} />
+                            </div>
+                            <div className="ml-4">
+                                <h3 className="text-sm font-medium text-gray-600">Paid Orders</h3>
+                                <p className="text-2xl font-bold text-gray-800">{stats.paidOrders}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-lg shadow-md">
+                        <div className="flex items-center">
+                            <div className="p-3 bg-red-100 rounded-full">
+                                <FaTimes className="text-red-600" size={20} />
+                            </div>
+                            <div className="ml-4">
+                                <h3 className="text-sm font-medium text-gray-600">Unpaid Orders</h3>
+                                <p className="text-2xl font-bold text-gray-800">{stats.unpaidOrders}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-lg shadow-md">
+                        <div className="flex items-center">
+                            <div className="p-3 bg-purple-100 rounded-full">
+                                <FaChartBar className="text-purple-600" size={20} />
+                            </div>
+                            <div className="ml-4">
+                                <h3 className="text-sm font-medium text-gray-600">Total Revenue</h3>
+                                <p className="text-2xl font-bold text-gray-800">৳{stats.totalRevenue}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="overflow-hidden bg-white rounded-lg shadow-md">
                 {/* Filters and Search */}
                 <div className="p-4 border-b border-gray-200">
@@ -307,7 +358,7 @@ function Orders() {
                             </div>
 
                             <div className="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-md">
-                                {filteredOrders.length} orders found
+                                {totalOrders} orders found
                             </div>
                         </div>
                     </div>
@@ -363,7 +414,7 @@ function Orders() {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {currentOrders.length === 0 ? (
+                            {sortedOrders.length === 0 ? (
                                 <tr>
                                     <td colSpan="7" className="px-4 py-4 text-center sm:px-6">
                                         <div className="flex flex-col items-center justify-center py-8">
@@ -383,7 +434,7 @@ function Orders() {
                                     </td>
                                 </tr>
                             ) : (
-                                currentOrders.map((order) => (
+                                sortedOrders.map((order) => (
                                     <tr key={order._id || Math.random()} className="hover:bg-gray-50">
                                         <td className="px-4 py-4 whitespace-nowrap sm:px-6">
                                             <div className="text-sm font-medium text-gray-900 truncate max-w-[120px] sm:max-w-[150px]">
@@ -411,7 +462,7 @@ function Orders() {
                                             </div>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap sm:px-6">
-                                            <div className="text-sm text-gray-900">₹{order.product?.price || 'N/A'}</div>
+                                            <div className="text-sm text-gray-900">৳{order.product?.price || 'N/A'}</div>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap sm:px-6">
                                             <div className="text-sm text-gray-900">{order.product?.quantity || 'N/A'}</div>
@@ -473,20 +524,20 @@ function Orders() {
                 </div>
 
                 {/* Pagination */}
-                {filteredOrders.length > ordersPerPage && (
+                {totalPages > 1 && (
                     <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 sm:px-6">
                         <div className="flex flex-col items-center justify-between space-y-3 sm:flex-row sm:space-y-0">
                             <div className="text-sm text-gray-700">
-                                Showing <span className="font-medium">{indexOfFirstOrder + 1}</span> to{" "}
+                                Showing <span className="font-medium">{(currentPage - 1) * ordersPerPage + 1}</span> to{" "}
                                 <span className="font-medium">
-                                    {Math.min(indexOfLastOrder, filteredOrders.length)}
+                                    {Math.min(currentPage * ordersPerPage, totalOrders)}
                                 </span>{" "}
-                                of <span className="font-medium">{filteredOrders.length}</span> results
+                                of <span className="font-medium">{totalOrders}</span> results
                             </div>
 
                             <nav className="relative z-0 inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
                                 <button
-                                    onClick={() => paginate(Math.max(1, currentPage - 1))}
+                                    onClick={() => paginate(currentPage - 1)}
                                     disabled={currentPage === 1}
                                     className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
                                         }`}
@@ -516,7 +567,7 @@ function Orders() {
                                 ))}
 
                                 <button
-                                    onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+                                    onClick={() => paginate(currentPage + 1)}
                                     disabled={currentPage === totalPages}
                                     className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
                                         }`}
