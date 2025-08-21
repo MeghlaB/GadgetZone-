@@ -19,8 +19,8 @@ const UserHome = () => {
 
       // Using Promise.all for parallel requests
       Promise.all([
-        axios.get(`http://localhost:5000/carts?email=${user.email}`),
-        axios.get(`http://localhost:5000/orders?email=${user.email}`),
+        axios.get(`https://gadgetzone-server.onrender.com/carts?email=${user.email}`),
+        axios.get(`https://gadgetzone-server.onrender.com/orders?email=${user.email}`),
       ])
         .then(([cartRes, ordersRes]) => {
           // Handle potential API response variations
@@ -342,7 +342,7 @@ const UserHome = () => {
       // Safely extract product data
       
       const product = item.product || {};
-      console.log(product)
+      {/* console.log(product) */}
       const image = product.image || item.image || "";
       const category = product.category || item.category || "Unnamed Category";
       const price = product.price || item.price || 0;

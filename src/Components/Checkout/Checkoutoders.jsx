@@ -21,9 +21,9 @@ const CheckoutOrders = () => {
   });
 
   const onSubmit = async (data) => {
-   console.log(data)
+  //  console.log(data)
    data.productId=id;
-   fetch('http://localhost:5000/order',{
+   fetch('https://gadgetzone-server.onrender.com/order',{
     method:"POST",
     headers:{"Content-type":"application/json"},
     body:JSON.stringify(data)
@@ -31,7 +31,7 @@ const CheckoutOrders = () => {
    .then((res)=>res.json())
    .then((result)=>{
     window.location.replace(result.url)
-    console.log(result)
+    // console.log(result)
    })
   };
 
