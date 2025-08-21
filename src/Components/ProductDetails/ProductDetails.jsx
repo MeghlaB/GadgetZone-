@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 import { motion } from "framer-motion";
@@ -102,6 +102,46 @@ const ProductDetails = () => {
       toast.error("Something went wrong!");
     }
   };
+
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + 3);
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Timer effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        clearInterval(timer);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      } else {
+        setTimeLeft({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          ),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000),
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   if (isLoading) {
     return (
@@ -266,7 +306,6 @@ const ProductDetails = () => {
           </motion.button>
         </motion.div>
       </div>
-
       {/* Countdown Timer Section */}
       <motion.div
         className="mt-16 text-center"
@@ -279,19 +318,19 @@ const ProductDetails = () => {
         </p>
         <div className="flex justify-center gap-4 text-xl font-bold">
           <div className="px-4 py-2 text-white bg-neutral rounded-xl">
-            <span>00</span>
+            <span>{timeLeft.days}</span>
             <p className="text-sm">Days</p>
           </div>
           <div className="px-4 py-2 text-white bg-neutral rounded-xl">
-            <span>07</span>
+            <span>{timeLeft.hours}</span>
             <p className="text-sm">Hours</p>
           </div>
           <div className="px-4 py-2 text-white bg-neutral rounded-xl">
-            <span>29</span>
+            <span>{timeLeft.minutes}</span>
             <p className="text-sm">Minutes</p>
           </div>
           <div className="px-4 py-2 text-white bg-neutral rounded-xl">
-            <span>12</span>
+            <span>{timeLeft.seconds}</span>
             <p className="text-sm">Seconds</p>
           </div>
         </div>
