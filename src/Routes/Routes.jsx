@@ -42,6 +42,7 @@ import PaymentSucces from "../Components/PaymentSuccess/PaymentSuccess";
 import PaymentFailed from "../Components/PaymentFailed/PaymentFailed";
 import ServerStorage from "../Shared/ServerStorage/ServerStorage";
 import TV from "../Shared/Tv/Tv";
+import Orders from "../Dashboard/AdminDashboard/AdminFeauter/Orders";
 
 
 export const router = createBrowserRouter([
@@ -182,9 +183,6 @@ export const router = createBrowserRouter([
         element: <AddProduct></AddProduct>,
       },
       {
-
-
-
         path: "editproduct/:id",
         element: <EditProduct />,
         loader: async ({ params }) => {
@@ -201,6 +199,10 @@ export const router = createBrowserRouter([
       {
         path: "addbannerimg",
         element: <AddBannerImg></AddBannerImg>,
+      },
+      {
+        path: "orders",
+        element:<Orders></Orders>,
       },
       {
         path: "users",
