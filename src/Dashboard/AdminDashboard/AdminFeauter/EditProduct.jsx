@@ -41,7 +41,7 @@ const EditProduct = () => {
         key_features: data.key_features.filter(feature => feature.trim() !== "")
       };
 
-      const res = await axiosPublic.patch(`http://localhost:5000/products/${productId}`, filteredData);
+      const res = await axiosPublic.patch(`https://gadgetzone-server.onrender.com/products/${productId}`, filteredData);
       if (res.data.modifiedCount > 0) {
         Swal.fire({
           title: "Success!",
