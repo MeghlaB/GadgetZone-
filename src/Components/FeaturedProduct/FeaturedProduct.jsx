@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 function FeaturedProduct() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15; 
+
   const {
     isLoading,
     error,
@@ -15,13 +18,10 @@ function FeaturedProduct() {
       const res = await axios.get(
         "https://gadgetzone-server.onrender.com/products"
       );
-      
       return res.data;
     },
   });
 
-  useEffect
-  
   // Skeleton Loader
   const SkeletonCard = () => (
     <div className="p-4 bg-white shadow rounded-xl animate-pulse">
@@ -71,6 +71,11 @@ function FeaturedProduct() {
     );
   }
 
+  // Pagination Logic
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const startIdx = (currentPage - 1) * itemsPerPage;
+  const currentProducts = products.slice(startIdx, startIdx + itemsPerPage);
+
   return (
     <div className="relative w-11/12 mx-auto my-10 top-16">
       <h1 className="text-lg font-bold text-center md:text-2xl">
@@ -81,7 +86,7 @@ function FeaturedProduct() {
       </p>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-        {products.map((product, idx) => (
+        {currentProducts.map((product, idx) => (
           <div
             key={product._id || idx}
             className="relative overflow-hidden transition-all duration-300 bg-white shadow-lg rounded-xl hover:shadow-2xl"
@@ -122,6 +127,39 @@ function FeaturedProduct() {
             </Link>
           </div>
         ))}
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="flex items-center justify-center mt-8 space-x-2">
+        <button
+          className="px-3 py-1 text-sm bg-gray-200 rounded disabled:opacity-50"
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+
+        {Array.from({ length: totalPages }).map((_, idx) => (
+          <button
+            key={idx}
+            className={`px-3 py-1 text-sm rounded ${
+              currentPage === idx + 1
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+            onClick={() => setCurrentPage(idx + 1)}
+          >
+            {idx + 1}
+          </button>
+        ))}
+
+        <button
+          className="px-3 py-1 text-sm bg-gray-200 rounded disabled:opacity-50"
+          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
