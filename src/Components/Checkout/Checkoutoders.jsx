@@ -46,11 +46,10 @@ const CheckoutOrders = () => {
     customerName: data.name,
     customerEmail: data.email,
     userEmail: user?.email || "",
-    shippingAddress: {
-      street: data.street,
-      city: data.city,
-      country: data.country,
-    },
+    street: data.street,
+    city: data.city,
+    country: data.country,
+
     phone: data.phone,
     orderDate: new Date().toISOString(),
     status: 'pending'
