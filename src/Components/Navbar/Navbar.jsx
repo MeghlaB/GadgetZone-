@@ -1,3 +1,4 @@
+
 import { useCallback, useContext, useState, useRef, useEffect } from "react";
 import {
   FaSearch,
@@ -26,11 +27,8 @@ import { GiPowerGenerator } from "react-icons/gi";
 import userAdmin from "../../Hooks/userAdmin";
 import userSeller from "../../Hooks/userSeller";
 import { ShoppingCart } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 
 const Navbar = () => {
-  const axiosPublic = useAxiosPublic();
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -46,6 +44,9 @@ const Navbar = () => {
 
   // Search state
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Cart state
+  const [cartCount, setCartCount] = useState(0);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -63,15 +64,51 @@ const Navbar = () => {
     };
   }, []);
 
-  // Get cart data
-  const { data: cartItems } = useQuery({
-    queryKey: ["cart", user?.email],
-    queryFn: async () => {
-      const res = await axiosPublic.get(`/carts?email=${user.email}`);
-      return res.data;
-    },
-    enabled: !!user?.email,
-  });
+  // Get cart data from localStorage
+  useEffect(() => {
+    const loadCartCount = () => {
+      if (user?.email) {
+        try {
+          const cartData = localStorage.getItem(`cart_${user.email}`);
+          if (cartData) {
+            const cartItems = JSON.parse(cartData);
+            const count = cartItems.reduce((total, item) => total + item.quantity, 0);
+            setCartCount(count);
+          } else {
+            setCartCount(0);
+          }
+        } catch (error) {
+          console.error('Error loading cart data:', error);
+          setCartCount(0);
+        }
+      } else {
+        setCartCount(0);
+      }
+    };
+
+    // Load initial cart count
+    loadCartCount();
+
+    // Listen for storage events (changes from other tabs/windows)
+    const handleStorageChange = (e) => {
+      if (user?.email && e.key === `cart_${user.email}`) {
+        loadCartCount();
+      }
+    };
+
+    // Listen for custom events (changes in the same tab)
+    const handleCartUpdated = () => {
+      loadCartCount();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('cartUpdated', handleCartUpdated);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('cartUpdated', handleCartUpdated);
+    };
+  }, [user]);
 
   // Get dashboard link based on role
   const getDashboardLink = useCallback(() => {
@@ -93,10 +130,14 @@ const Navbar = () => {
 
     try {
       // This would be replaced with your actual API call
-      const res = await axiosPublic.get(
-        `/search-suggestions?q=${encodeURIComponent(query)}`
-      );
-      setSearchSuggestions(res.data);
+      // For now, we'll use a mock implementation
+      const mockSuggestions = [
+        `${query} laptop`,
+        `${query} phone`,
+        `${query} accessories`,
+        `${query} gaming`
+      ];
+      setSearchSuggestions(mockSuggestions);
       setShowSearchSuggestions(true);
     } catch (error) {
       console.error("Error fetching search suggestions:", error);
@@ -280,7 +321,7 @@ const Navbar = () => {
                     logOut();
                     setShowDropdown(false);
                   }}
-                  className="hidden md:flex items-center w-full px-4 py-2 text-sm font-semibold text-white transition-all rounded-md shadow-md hover:from-purple-700 hover:to-blue-700 hover:shadow-lg"
+                  className="items-center hidden w-full px-4 py-2 text-sm font-semibold text-white transition-all rounded-md shadow-md md:flex hover:from-purple-700 hover:to-blue-700 hover:shadow-lg"
                 >
                   <MdLogout className="mr-2" />
                   Sign Out
@@ -294,9 +335,9 @@ const Navbar = () => {
                 aria-label="Shopping cart"
               >
                 <ShoppingCart className="w-6 h-6" />
-                {cartItems?.length > 0 && (
+                {cartCount > 0 && (
                   <span className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-600 rounded-full -top-1 -right-1">
-                    {cartItems.length > 9 ? "9+" : cartItems.length}
+                    {cartCount > 9 ? "9+" : cartCount}
                   </span>
                 )}
               </Link>
@@ -329,9 +370,8 @@ const Navbar = () => {
                     {user.displayName?.split(" ")[0] || "User"}
                   </span>
                   <FaChevronDown
-                    className={`text-xs transition-transform ${
-                      showDropdown ? "rotate-180" : ""
-                    }`}
+                    className={`text-xs transition-transform ${showDropdown ? "rotate-180" : ""
+                      }`}
                   />
                 </div>
 
@@ -393,11 +433,11 @@ const Navbar = () => {
                   className="w-8 h-8 border-2 border-white rounded-full cursor-pointer"
                   onError={(e) => {
                     e.target.src =
-                      "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";
+                      "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCA0IDAgMC00LTQgNEg5YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==";
                   }}
                 />
                 {showDropdown && (
-                  <div className="absolute right-0 z-50 w-50 py-2 mt-2 text-black bg-white rounded-md shadow-md">
+                  <div className="absolute right-0 z-50 py-2 mt-2 text-black bg-white rounded-md shadow-md w-50">
                     <div className="px-4 py-2 border-b border-gray-100">
                       <p className="text-sm font-medium">
                         Hello, {user.displayName?.split(" ")[0] || "User"}
@@ -482,9 +522,8 @@ const Navbar = () => {
 
       {/* Categories Navigation */}
       <div
-        className={`bg-white border-b border-gray-200 ${
-          menuOpen ? "block" : "hidden md:block"
-        }`}
+        className={`bg-white border-b border-gray-200 ${menuOpen ? "block" : "hidden md:block"
+          }`}
       >
         <div className="flex flex-col md:flex-row">
           {/* Desktop Categories */}
@@ -493,11 +532,10 @@ const Navbar = () => {
               <Link
                 to={cat.path}
                 key={index}
-                className={`flex items-center text-sm font-medium transition-colors whitespace-nowrap ${
-                  isActivePath(cat.path)
+                className={`flex items-center text-sm font-medium transition-colors whitespace-nowrap ${isActivePath(cat.path)
                     ? "text-blue-600 border-b-2 border-blue-600"
                     : "text-gray-700 hover:text-blue-600"
-                }`}
+                  }`}
               >
                 <span className="mr-1.5">{cat.icon}</span>
                 {cat.name}
@@ -517,11 +555,10 @@ const Navbar = () => {
                   <Link
                     to={cat.path}
                     key={index}
-                    className={`flex items-center px-3 py-2.5 rounded-md transition-colors ${
-                      isActivePath(cat.path)
+                    className={`flex items-center px-3 py-2.5 rounded-md transition-colors ${isActivePath(cat.path)
                         ? "bg-blue-50 text-blue-700"
                         : "text-gray-700 hover:bg-gray-100"
-                    }`}
+                      }`}
                     onClick={() => setMenuOpen(false)}
                   >
                     <span className="mr-3 text-blue-600">{cat.icon}</span>
