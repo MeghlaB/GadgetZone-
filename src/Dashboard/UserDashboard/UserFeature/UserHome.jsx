@@ -87,20 +87,20 @@ const UserHome = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-12 h-12 border-t-2 border-b-2 rounded-full animate-spin border-primary"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-sm p-6 max-w-md text-center">
-          <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="max-w-md p-6 text-center bg-white shadow-sm rounded-xl">
+          <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8 text-red-600"
+              className="w-8 h-8 text-red-600"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -113,13 +113,13 @@ const UserHome = () => {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-gray-800 mb-2">
+          <h2 className="mb-2 text-xl font-bold text-gray-800">
             Something went wrong
           </h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="mb-4 text-gray-600">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+            className="px-4 py-2 text-white transition-colors rounded-lg bg-primary hover:bg-primary-dark"
           >
             Try Again
           </button>
@@ -129,16 +129,16 @@ const UserHome = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen p-6 bg-gray-50">
+      <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header with User Info */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="p-6 bg-white shadow-sm rounded-xl">
           <div className="flex items-center space-x-4">
             <div className="relative">
               <img
                 src={user?.photoURL || "https://via.placeholder.com/80"}
                 alt="avatar"
-                className="w-16 h-16 rounded-full object-cover ring-4 ring-gray-100"
+                className="object-cover w-16 h-16 rounded-full ring-4 ring-gray-100"
               />
               <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full ring-2 ring-white"></div>
             </div>
@@ -152,12 +152,12 @@ const UserHome = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white rounded-xl shadow-sm p-6 flex items-center">
-            <div className="rounded-full bg-blue-100 p-3 mr-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="flex items-center p-6 bg-white shadow-sm rounded-xl">
+            <div className="p-3 mr-4 bg-blue-100 rounded-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-blue-600"
+                className="w-6 h-6 text-blue-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -176,11 +176,11 @@ const UserHome = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6 flex items-center">
-            <div className="rounded-full bg-green-100 p-3 mr-4">
+          <div className="flex items-center p-6 bg-white shadow-sm rounded-xl">
+            <div className="p-3 mr-4 bg-green-100 rounded-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-green-600"
+                className="w-6 h-6 text-green-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -199,11 +199,11 @@ const UserHome = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6 flex items-center">
-            <div className="rounded-full bg-purple-100 p-3 mr-4">
+          <div className="flex items-center p-6 bg-white shadow-sm rounded-xl">
+            <div className="p-3 mr-4 bg-purple-100 rounded-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-purple-600"
+                className="w-6 h-6 text-purple-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -222,11 +222,11 @@ const UserHome = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6 flex items-center">
-            <div className="rounded-full bg-yellow-100 p-3 mr-4">
+          <div className="flex items-center p-6 bg-white shadow-sm rounded-xl">
+            <div className="p-3 mr-4 bg-yellow-100 rounded-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-yellow-600"
+                className="w-6 h-6 text-yellow-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -246,10 +246,10 @@ const UserHome = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Recent Cart Items */}
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div className="border-b border-gray-100 px-6 py-4">
+          <div className="overflow-hidden bg-white shadow-sm rounded-xl">
+            <div className="px-6 py-4 border-b border-gray-100">
               <h3 className="text-lg font-semibold text-gray-800">
                 Recent Cart Items
               </h3>
@@ -259,20 +259,20 @@ const UserHome = () => {
                 recentCart.map((item) => (
                   <div
                     key={item._id || item.id}
-                    className="px-6 py-4 flex items-center justify-between"
+                    className="flex items-center justify-between px-6 py-4"
                   >
                     <div className="flex items-center">
-                      <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center mr-3">
+                      <div className="flex items-center justify-center w-10 h-10 mr-3 bg-gray-200 rounded-md">
                         {item.image ? (
                           <img
                             src={item.image}
                             alt={item.name}
-                            className="w-8 h-8 object-contain"
+                            className="object-contain w-8 h-8"
                           />
                         ) : (
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-400"
+                            className="w-5 h-5 text-gray-400"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -304,7 +304,7 @@ const UserHome = () => {
                 <div className="px-6 py-8 text-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-12 w-12 mx-auto text-gray-400"
+                    className="w-12 h-12 mx-auto text-gray-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -321,7 +321,7 @@ const UserHome = () => {
               )}
             </div>
             {recentCart && recentCart.length > 0 && (
-              <div className="border-t border-gray-100 px-6 py-3 bg-gray-50">
+              <div className="px-6 py-3 border-t border-gray-100 bg-gray-50">
                 <button className="text-sm font-medium text-primary hover:text-primary-dark">
                   View Full Cart →
                 </button>
@@ -330,8 +330,8 @@ const UserHome = () => {
           </div>
 
           {/* Recent Orders */}
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div className="border-b border-gray-100 px-6 py-4">
+          <div className="overflow-hidden bg-white shadow-sm rounded-xl">
+            <div className="px-6 py-4 border-b border-gray-100">
               <h3 className="text-lg font-semibold text-gray-800">
                 Recent Orders
               </h3>
@@ -342,7 +342,7 @@ const UserHome = () => {
       // Safely extract product data
       
       const product = item.product || {};
-      {/* console.log(product) */}
+    
       const image = product.image || item.image || "";
       const category = product.category || item.category || "Unnamed Category";
       const price = product.price || item.price || 0;
@@ -351,20 +351,20 @@ const UserHome = () => {
       return (
         <div
           key={item._id || item.id}
-          className="px-6 py-4 flex items-center justify-between"
+          className="flex items-center justify-between px-6 py-4"
         >
           <div className="flex items-center">
-            <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center mr-3">
+            <div className="flex items-center justify-center w-10 h-10 mr-3 bg-gray-200 rounded-md">
               {image ? (
                 <img
                   src={image}
                   alt={category}
-                  className="w-8 h-8 object-contain"
+                  className="object-contain w-8 h-8"
                 />
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gray-400"
+                  className="w-5 h-5 text-gray-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -393,7 +393,7 @@ const UserHome = () => {
     <div className="px-6 py-8 text-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-12 w-12 mx-auto text-gray-400"
+        className="w-12 h-12 mx-auto text-gray-400"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -411,7 +411,7 @@ const UserHome = () => {
 </div>
 
             {recentOrders && recentOrders.length > 0 && (
-              <div className="border-t border-gray-100 px-6 py-3 bg-gray-50">
+              <div className="px-6 py-3 border-t border-gray-100 bg-gray-50">
                 <button className="text-sm font-medium text-primary hover:text-primary-dark">
                   View Order History →
                 </button>
@@ -421,16 +421,16 @@ const UserHome = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+        <div className="p-6 bg-white shadow-sm rounded-xl">
+          <h3 className="mb-4 text-lg font-semibold text-gray-800">
             Quick Actions
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <button className="flex flex-col items-center justify-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-2">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <button className="flex flex-col items-center justify-center p-4 transition-colors rounded-lg bg-gray-50 hover:bg-gray-100">
+              <div className="flex items-center justify-center w-10 h-10 mb-2 bg-blue-100 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-blue-600"
+                  className="w-5 h-5 text-blue-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -446,11 +446,11 @@ const UserHome = () => {
               <span className="text-sm font-medium">New Order</span>
             </button>
 
-            <button className="flex flex-col items-center justify-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-2">
+            <button className="flex flex-col items-center justify-center p-4 transition-colors rounded-lg bg-gray-50 hover:bg-gray-100">
+              <div className="flex items-center justify-center w-10 h-10 mb-2 bg-green-100 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-green-600"
+                  className="w-5 h-5 text-green-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -466,11 +466,11 @@ const UserHome = () => {
               <span className="text-sm font-medium">My Cart</span>
             </button>
 
-            <button className="flex flex-col items-center justify-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-              <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-2">
+            <button className="flex flex-col items-center justify-center p-4 transition-colors rounded-lg bg-gray-50 hover:bg-gray-100">
+              <div className="flex items-center justify-center w-10 h-10 mb-2 bg-purple-100 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-purple-600"
+                  className="w-5 h-5 text-purple-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -486,11 +486,11 @@ const UserHome = () => {
               <span className="text-sm font-medium">Profile</span>
             </button>
 
-            <button className="flex flex-col items-center justify-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-              <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mb-2">
+            <button className="flex flex-col items-center justify-center p-4 transition-colors rounded-lg bg-gray-50 hover:bg-gray-100">
+              <div className="flex items-center justify-center w-10 h-10 mb-2 bg-yellow-100 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-yellow-600"
+                  className="w-5 h-5 text-yellow-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

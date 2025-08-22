@@ -87,7 +87,7 @@ function FeaturedProduct() {
             className="relative overflow-hidden transition-all duration-300 bg-white shadow-lg rounded-xl hover:shadow-2xl"
           >
             {/* Save Badge */}
-            {product.discount && (
+            {product.discount>0 && (
               <div className="absolute z-10 px-2 py-1 text-xs text-white bg-purple-600 rounded-md top-3 left-2">
                 Save: {product.save_amount}৳ ({product.discount})
               </div>

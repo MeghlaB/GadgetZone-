@@ -37,7 +37,7 @@ function ServerStorage() {
         },
     });
 
-    // console.log(products)
+  
     // Price range state
     const [priceRange, setPriceRange] = useState({
         min: 0,

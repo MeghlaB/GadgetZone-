@@ -3,15 +3,15 @@ import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
 import { useParams, Link } from "react-router-dom";
-import { FaArrowLeft, FaShoppingCart, FaUser, FaMapMarkerAlt, FaPhone, FaMoneyBillWave, FaLock } from "react-icons/fa";
+import { FaArrowLeft, FaShoppingCart, FaUser, FaMapMarkerAlt, FaPhone, FaMoneyBillWave, FaLock, FaEnvelope, FaCalendarAlt, FaHashtag } from "react-icons/fa";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const CheckoutOrders = () => {
   const { id } = useParams();
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors }, watch } = useForm();
   const axiosPublic = useAxiosPublic();
   const [submitting, setSubmitting] = useState(false);
-
+  
   const { isLoading, isError, data: product = {} } = useQuery({
     queryKey: ["product", id],
     queryFn: async () => {
@@ -21,9 +21,15 @@ const CheckoutOrders = () => {
     enabled: !!id,
   });
 
+  // Watch quantity to update total price - moved after useQuery
+  const quantity = watch("quantity", 1);
+  const totalPrice = product?.price ? (product.price * quantity).toFixed(2) : 0;
+
   const onSubmit = async (data) => {
     setSubmitting(true);
     data.productId = id;
+    data.price = totalPrice; // Use calculated total price
+    data.orderDate = new Date().toISOString(); // Add current date
     
     fetch('https://gadgetzone-server.onrender.com/order', {
       method: "POST",
@@ -108,13 +114,34 @@ const CheckoutOrders = () => {
                   <span className="text-gray-600">Subtotal</span>
                   <span className="font-semibold">৳{Number(product?.price).toLocaleString()}</span>
                 </div>
+                
+                {/* Quantity Field in Summary */}
+                <div className="flex items-center justify-between py-2">
+                  <span className="text-gray-600">Quantity</span>
+                  <div className="flex items-center border border-gray-300 rounded-md">
+                    <input
+                      {...register("quantity", { 
+                        required: "Quantity is required",
+                        min: { value: 1, message: "Minimum quantity is 1" },
+                        max: { value: 10, message: "Maximum quantity is 10" },
+                        valueAsNumber: true
+                      })}
+                      type="number"
+                      min="1"
+                      max="10"
+                      defaultValue="1"
+                      className="w-16 py-1 text-center border-0 rounded-md focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+                
                 <div className="flex justify-between">
                   <span className="text-gray-600">Shipping</span>
                   <span className="font-semibold text-green-600">Free</span>
                 </div>
                 <div className="flex justify-between pt-3 text-lg font-bold border-t border-gray-200">
                   <span>Total</span>
-                  <span className="text-green-700">৳{Number(product?.price).toLocaleString()}</span>
+                  <span className="text-green-700">৳{Number(totalPrice).toLocaleString()}</span>
                 </div>
               </div>
 
@@ -157,39 +184,78 @@ const CheckoutOrders = () => {
                 {/* Email Field */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">Email Address *</label>
-                  <input
-                    {...register("email", { 
-                      required: "Email is required",
-                      pattern: {
-                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        message: "Invalid email address"
-                      }
-                    })}
-                    type="email"
-                    placeholder="your.email@example.com"
-                    className="w-full px-4 py-3 text-gray-800 placeholder-gray-400 transition-colors border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
-                </div>
-
-                {/* Address Field */}
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700">Delivery Address *</label>
                   <div className="relative">
-                    <FaMapMarkerAlt className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
+                    <FaEnvelope className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
                     <input
-                      {...register("address", { 
-                        required: "Address is required",
-                        minLength: {
-                          value: 10,
-                          message: "Please provide a complete address"
+                      {...register("email", { 
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Invalid email address"
                         }
                       })}
-                      placeholder="Full delivery address with area and city"
+                      type="email"
+                      placeholder="your.email@example.com"
                       className="w-full py-3 pl-10 pr-4 text-gray-800 placeholder-gray-400 transition-colors border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
-                  {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address.message}</p>}
+                  {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+                </div>
+
+                {/* Address Fields */}
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">Street Address *</label>
+                    <div className="relative">
+                      <FaMapMarkerAlt className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
+                      <input
+                        {...register("street", { 
+                          required: "Street address is required"
+                        })}
+                        placeholder="Street address"
+                        className="w-full py-3 pl-10 pr-4 text-gray-800 placeholder-gray-400 transition-colors border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    {errors.street && <p className="mt-1 text-sm text-red-500">{errors.street.message}</p>}
+                  </div>
+                  
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">City *</label>
+                    <input
+                      {...register("city", { 
+                        required: "City is required"
+                      })}
+                      placeholder="City"
+                      className="w-full px-4 py-3 text-gray-800 placeholder-gray-400 transition-colors border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    {errors.city && <p className="mt-1 text-sm text-red-500">{errors.city.message}</p>}
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">Postal Code</label>
+                    <div className="relative">
+                      <FaHashtag className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
+                      <input
+                        {...register("postalCode")}
+                        placeholder="Postal code"
+                        className="w-full py-3 pl-10 pr-4 text-gray-800 placeholder-gray-400 transition-colors border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">Country *</label>
+                    <input
+                      {...register("country", { 
+                        required: "Country is required"
+                      })}
+                      placeholder="Country"
+                      className="w-full px-4 py-3 text-gray-800 placeholder-gray-400 transition-colors border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    {errors.country && <p className="mt-1 text-sm text-red-500">{errors.country.message}</p>}
+                  </div>
                 </div>
 
                 {/* Phone Field */}
@@ -213,11 +279,10 @@ const CheckoutOrders = () => {
                   {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>}
                 </div>
 
-                {/* Price Field (Hidden but included in form) */}
+                {/* Order Date (Hidden but included in form) */}
                 <input
-                  {...register("price", { required: true })}
+                  {...register("orderDate")}
                   type="hidden"
-                  value={product?.price}
                 />
 
                 {/* Submit Button */}
@@ -238,7 +303,7 @@ const CheckoutOrders = () => {
                   ) : (
                     <>
                       <FaMoneyBillWave className="mr-2" />
-                      Pay ৳{Number(product?.price).toLocaleString()}
+                      Pay ৳{Number(totalPrice).toLocaleString()}
                     </>
                   )}
                 </button>

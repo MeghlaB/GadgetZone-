@@ -571,7 +571,7 @@ function UPS() {
     },
   });
 
-  console.log(products)
+ 
 
   // Price range state
   const [priceRange, setPriceRange] = useState({
