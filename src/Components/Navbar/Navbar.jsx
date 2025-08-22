@@ -33,7 +33,6 @@ const Navbar = () => {
   const axiosPublic = useAxiosPublic();
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logOut } = useContext(AuthContext);
-  console.log(user)
   const navigate = useNavigate();
   const location = useLocation();
   const [isAdmin] = userAdmin();
