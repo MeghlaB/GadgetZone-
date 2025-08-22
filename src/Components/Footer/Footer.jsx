@@ -53,7 +53,7 @@ function Footer() {
           </p>
           <p className="text-sm text-gray-300 mb-2">Developer : Meghla Biswas, Joy Halder</p>
           <p className="text-sm text-gray-300 mb-2">Email: </p>
-          <p className="text-sm text-red-400 mb-4">webteam@startechbd.com</p>
+          <p className="text-sm text-red-400 mb-4">joyhalder00113355@gmail.com</p>
 
           {/* Social Icons */}
           <div className="flex gap-4 text-xl text-white">
@@ -80,7 +80,7 @@ function Footer() {
             className="h-10"
           />
         </div>
-        <p className="text-xs w-full md:w-auto text-center">© 2025 Star Tech Ltd | All rights reserved</p>
+        <p className="text-xs w-full md:w-auto text-center">© 2025 ORYON Ltd | All rights reserved</p>
         <p className="text-xs w-full md:w-auto text-center">এইটা  তৈরি করতে অনেক সময়  লাগছে আমাদের </p>
       </div>
     </footer>
