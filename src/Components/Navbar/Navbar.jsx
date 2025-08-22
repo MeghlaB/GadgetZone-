@@ -1,4 +1,3 @@
-
 import { useCallback, useContext, useState, useRef, useEffect } from "react";
 import {
   FaSearch,
@@ -15,7 +14,7 @@ import {
   FaTv,
   FaHome,
   FaBatteryFull,
-  FaChevronDown
+  FaChevronDown,
 } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -28,12 +27,13 @@ import userAdmin from "../../Hooks/userAdmin";
 import userSeller from "../../Hooks/userSeller";
 import { ShoppingCart } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 
 const Navbar = () => {
   const axiosPublic = useAxiosPublic();
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logOut } = useContext(AuthContext);
+  console.log(user)
   const navigate = useNavigate();
   const location = useLocation();
   const [isAdmin] = userAdmin();
@@ -94,7 +94,9 @@ const Navbar = () => {
 
     try {
       // This would be replaced with your actual API call
-      const res = await axiosPublic.get(`/search-suggestions?q=${encodeURIComponent(query)}`);
+      const res = await axiosPublic.get(
+        `/search-suggestions?q=${encodeURIComponent(query)}`
+      );
       setSearchSuggestions(res.data);
       setShowSearchSuggestions(true);
     } catch (error) {
@@ -142,23 +144,70 @@ const Navbar = () => {
   // Categories with icons
   const categories = [
     { name: "Home", path: "/", icon: <FaHome className="text-lg" /> },
-    { name: "Desktop", path: "/desktop", icon: <FaDesktop className="text-lg" /> },
+    {
+      name: "Desktop",
+      path: "/desktop",
+      icon: <FaDesktop className="text-lg" />,
+    },
     { name: "Laptop", path: "/laptop", icon: <FaLaptop className="text-lg" /> },
-    { name: "Monitor", path: "/monitor", icon: <MdMonitor className="text-lg" /> },
-    { name: "UPS", path: "/ups", icon: <GiPowerGenerator className="text-lg" /> },
-    { name: "Phone", path: "/phone", icon: <FaMobileAlt className="text-lg" /> },
-    { name: "Tablet", path: "/tablet", icon: <FaTabletAlt className="text-lg" /> },
+    {
+      name: "Monitor",
+      path: "/monitor",
+      icon: <MdMonitor className="text-lg" />,
+    },
+    {
+      name: "UPS",
+      path: "/ups",
+      icon: <GiPowerGenerator className="text-lg" />,
+    },
+    {
+      name: "Phone",
+      path: "/phone",
+      icon: <FaMobileAlt className="text-lg" />,
+    },
+    {
+      name: "Tablet",
+      path: "/tablet",
+      icon: <FaTabletAlt className="text-lg" />,
+    },
     { name: "Camera", path: "/camera", icon: <FaCamera className="text-lg" /> },
-    { name: "Server & Storage", path: "/server-storage", icon: <FaServer className="text-lg" /> },
-    { name: "Accessories", path: "/accessories", icon: <FaKeyboard className="text-lg" /> },
-    { name: "Gadget", path: "/gadget", icon: <FaBatteryFull className="text-lg" /> },
-    { name: "Gaming", path: "/gaming", icon: <RiGamepadLine className="text-lg" /> },
+    {
+      name: "Server & Storage",
+      path: "/server-storage",
+      icon: <FaServer className="text-lg" />,
+    },
+    {
+      name: "Accessories",
+      path: "/accessories",
+      icon: <FaKeyboard className="text-lg" />,
+    },
+    {
+      name: "Gadget",
+      path: "/gadget",
+      icon: <FaBatteryFull className="text-lg" />,
+    },
+    {
+      name: "Gaming",
+      path: "/gaming",
+      icon: <RiGamepadLine className="text-lg" />,
+    },
     { name: "TV", path: "/tv", icon: <FaTv className="text-lg" /> },
   ];
 
   // Check if current path is active
   const isActivePath = (path) => {
     return location.pathname === path;
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      setShowDropdown(false);
+      setMenuOpen(false);
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -179,7 +228,10 @@ const Navbar = () => {
         </Link>
 
         {/* Search Bar - Desktop with suggestions */}
-        <div className="relative flex-1 hidden max-w-2xl mx-6 md:flex" ref={searchRef}>
+        <div
+          className="relative flex-1 hidden max-w-2xl mx-6 md:flex"
+          ref={searchRef}
+        >
           <div className="relative flex w-full">
             <input
               type="text"
@@ -187,7 +239,9 @@ const Navbar = () => {
               className="w-full px-4 py-3 text-gray-800 outline-none rounded-l-md focus:ring-2 focus:ring-blue-500"
               value={searchTerm}
               onChange={handleSearchChange}
-              onFocus={() => searchTerm.length >= 2 && setShowSearchSuggestions(true)}
+              onFocus={() =>
+                searchTerm.length >= 2 && setShowSearchSuggestions(true)
+              }
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
             <button
@@ -221,9 +275,17 @@ const Navbar = () => {
           {user ? (
             <div className="flex items-center gap-4">
               {/* Happy Hour */}
-              <div className="items-center hidden gap-1 transition-colors cursor-pointer md:flex hover:text-yellow-300">
-                <FaBolt className="text-yellow-400" />
-                <span className="text-sm font-medium">Happy Hour</span>
+              <div className="">
+                <button
+                  onClick={() => {
+                    logOut();
+                    setShowDropdown(false);
+                  }}
+                  className="hidden md:flex items-center w-full px-4 py-2 text-sm font-semibold text-white transition-all rounded-md shadow-md hover:from-purple-700 hover:to-blue-700 hover:shadow-lg"
+                >
+                  <MdLogout className="mr-2" />
+                  Sign Out
+                </button>
               </div>
 
               {/* Cart with badge */}
@@ -235,7 +297,7 @@ const Navbar = () => {
                 <ShoppingCart className="w-6 h-6" />
                 {cartItems?.length > 0 && (
                   <span className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-600 rounded-full -top-1 -right-1">
-                    {cartItems.length > 9 ? '9+' : cartItems.length}
+                    {cartItems.length > 9 ? "9+" : cartItems.length}
                   </span>
                 )}
               </Link>
@@ -256,38 +318,34 @@ const Navbar = () => {
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
                   <img
-                    src={user.photoURL || "/default-avatar.png"}
+                    src={user?.photoURL || "/default-avatar.png"}
                     alt="Profile"
                     className="w-8 h-8 border-2 border-white rounded-full"
                     onError={(e) => {
-                      e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";
+                      e.target.src =
+                        "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";
                     }}
                   />
                   <span className="text-sm font-medium max-w-[80px] truncate">
-                    {user.displayName?.split(' ')[0] || 'User'}
+                    {user.displayName?.split(" ")[0] || "User"}
                   </span>
-                  <FaChevronDown className={`text-xs transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
+                  <FaChevronDown
+                    className={`text-xs transition-transform ${
+                      showDropdown ? "rotate-180" : ""
+                    }`}
+                  />
                 </div>
 
                 {showDropdown && (
                   <div className="absolute right-0 z-50 w-48 py-2 mt-2 text-gray-800 bg-white rounded-md shadow-lg">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium truncate">Hello, {user.displayName?.split(' ')[0] || 'User'}</p>
-                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                      <p className="text-sm font-medium truncate">
+                        Hello, {user.displayName?.split(" ")[0] || "User"}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">
+                        {user.email}
+                      </p>
                     </div>
-
-                    
-
-                    <button
-                      onClick={() => {
-                        logOut();
-                        setShowDropdown(false);
-                      }}
-                      className="flex items-center w-full px-4 py-2 text-sm text-left transition-colors hover:bg-gray-100"
-                    >
-                      <MdLogout className="mr-2" />
-                      Sign Out
-                    </button>
                   </div>
                 )}
               </div>
@@ -319,7 +377,7 @@ const Navbar = () => {
           {/* Mobile Search Button */}
           <button
             className="p-2 text-xl transition-colors rounded-full md:hidden hover:bg-white/10"
-            onClick={() => setMenuOpen(prev => !prev)}
+            onClick={() => setMenuOpen((prev) => !prev)}
             aria-label="Search"
           >
             <FaSearch />
@@ -335,13 +393,16 @@ const Navbar = () => {
                   onClick={() => setShowDropdown(!showDropdown)}
                   className="w-8 h-8 border-2 border-white rounded-full cursor-pointer"
                   onError={(e) => {
-                    e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";
+                    e.target.src =
+                      "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";
                   }}
                 />
                 {showDropdown && (
-                  <div className="absolute right-0 z-50 w-48 py-2 mt-2 text-black bg-white rounded-md shadow-md">
+                  <div className="absolute right-0 z-50 w-50 py-2 mt-2 text-black bg-white rounded-md shadow-md">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium">Hello, {user.displayName?.split(' ')[0] || 'User'}</p>
+                      <p className="text-sm font-medium">
+                        Hello, {user.displayName?.split(" ")[0] || "User"}
+                      </p>
                     </div>
                     <Link
                       to={getDashboardLink()}
@@ -351,13 +412,9 @@ const Navbar = () => {
                       <LuLayoutDashboard className="mr-2" />
                       Dashboard
                     </Link>
-
                     <button
-                      onClick={() => {
-                        logOut();
-                        setShowDropdown(false);
-                      }}
-                      className="flex items-center w-full px-4 py-2 text-sm text-left transition-colors hover:bg-gray-200"
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-2 text-sm text-left transition-colors hover:bg-gray-100"
                     >
                       <MdLogout className="mr-2" />
                       Sign Out
@@ -381,7 +438,10 @@ const Navbar = () => {
 
       {/* Mobile Search Bar - Only shown when menu is open on mobile */}
       {menuOpen && (
-        <div className="px-4 py-3 bg-white border-b border-gray-200 md:hidden" ref={searchRef}>
+        <div
+          className="px-4 py-3 bg-white border-b border-gray-200 md:hidden"
+          ref={searchRef}
+        >
           <div className="relative flex">
             <input
               type="text"
@@ -389,7 +449,9 @@ const Navbar = () => {
               className="w-full px-4 py-2 text-gray-800 border border-gray-300 outline-none rounded-l-md focus:ring-2 focus:ring-blue-500"
               value={searchTerm}
               onChange={handleSearchChange}
-              onFocus={() => searchTerm.length >= 2 && setShowSearchSuggestions(true)}
+              onFocus={() =>
+                searchTerm.length >= 2 && setShowSearchSuggestions(true)
+              }
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
             <button
@@ -420,7 +482,11 @@ const Navbar = () => {
       )}
 
       {/* Categories Navigation */}
-      <div className={`bg-white border-b border-gray-200 ${menuOpen ? "block" : "hidden md:block"}`}>
+      <div
+        className={`bg-white border-b border-gray-200 ${
+          menuOpen ? "block" : "hidden md:block"
+        }`}
+      >
         <div className="flex flex-col md:flex-row">
           {/* Desktop Categories */}
           <div className="hidden px-6 py-3 overflow-x-auto md:flex gap-7">
@@ -428,7 +494,11 @@ const Navbar = () => {
               <Link
                 to={cat.path}
                 key={index}
-                className={`flex items-center text-sm font-medium transition-colors whitespace-nowrap ${isActivePath(cat.path) ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-700 hover:text-blue-600"}`}
+                className={`flex items-center text-sm font-medium transition-colors whitespace-nowrap ${
+                  isActivePath(cat.path)
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-700 hover:text-blue-600"
+                }`}
               >
                 <span className="mr-1.5">{cat.icon}</span>
                 {cat.name}
@@ -448,7 +518,11 @@ const Navbar = () => {
                   <Link
                     to={cat.path}
                     key={index}
-                    className={`flex items-center px-3 py-2.5 rounded-md transition-colors ${isActivePath(cat.path) ? "bg-blue-50 text-blue-700" : "text-gray-700 hover:bg-gray-100"}`}
+                    className={`flex items-center px-3 py-2.5 rounded-md transition-colors ${
+                      isActivePath(cat.path)
+                        ? "bg-blue-50 text-blue-700"
+                        : "text-gray-700 hover:bg-gray-100"
+                    }`}
                     onClick={() => setMenuOpen(false)}
                   >
                     <span className="mr-3 text-blue-600">{cat.icon}</span>
@@ -461,7 +535,9 @@ const Navbar = () => {
               <div className="pt-4 mt-6 border-t border-gray-200">
                 {user ? (
                   <>
-                    <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Account</div>
+                    <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase">
+                      Account
+                    </div>
                     <Link
                       to="/profile"
                       className="flex items-center px-3 py-2.5 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
@@ -471,13 +547,10 @@ const Navbar = () => {
                       My Account
                     </Link>
                     <button
-                      onClick={() => {
-                        logOut();
-                        setMenuOpen(false);
-                      }}
-                      className="flex items-center w-full px-3 py-2.5 text-left rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-2 text-sm text-left transition-colors hover:bg-gray-100"
                     >
-                      <MdLogout className="mr-3" />
+                      <MdLogout className="mr-2" />
                       Sign Out
                     </button>
                   </>
@@ -492,7 +565,9 @@ const Navbar = () => {
                   </Link>
                 )}
 
-                <div className="px-3 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase">Tools</div>
+                <div className="px-3 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase">
+                  Tools
+                </div>
                 <Link
                   to="/pc-builder"
                   className="flex items-center justify-center px-4 py-2.5 text-white rounded-md bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 transition-colors"

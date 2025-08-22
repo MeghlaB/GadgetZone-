@@ -15,7 +15,7 @@ const FeaturedCategory = () => {
 
     return (
         <div className='relative w-10/12 mx-auto my-10 top-16 md:top-24'>
-            <h1 className='text-lg text-center md:text-2xl'>Featured Category</h1>
+            <h1 className='text-lg text-center md:text-2xl font-bold'>Featured Category</h1>
             <p className='text-center text-gray-600 text'>
                 Get Your Desired Product from Featured Category!
             </p>
