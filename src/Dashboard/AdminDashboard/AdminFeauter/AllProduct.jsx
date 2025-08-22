@@ -15,17 +15,17 @@ function AllProduct() {
 
   // Get unique categories for filter dropdown
   const categories = ["All Categories", ...new Set(products.map(product => product.category))];
-  
+
   // Filter products based on search term and filters
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.category.toLowerCase().includes(searchTerm.toLowerCase());
-    
+      product.category.toLowerCase().includes(searchTerm.toLowerCase());
+
     const matchesCategory = categoryFilter === "All Categories" || product.category === categoryFilter;
-    
-    const matchesStatus = statusFilter === "All Status" || 
-                         (statusFilter === "In Stock" ? product.status === "In Stock" : product.status !== "In Stock");
-    
+
+    const matchesStatus = statusFilter === "All Status" ||
+      (statusFilter === "In Stock" ? product.status === "In Stock" : product.status !== "In Stock");
+
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
@@ -134,7 +134,7 @@ function AllProduct() {
 
             {/* Mobile filter toggle */}
             <div className="md:hidden">
-              <button 
+              <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
                 className="flex items-center justify-center w-full px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
@@ -145,7 +145,7 @@ function AllProduct() {
 
             {/* Desktop filters */}
             <div className="hidden gap-2 md:flex">
-              <select 
+              <select
                 className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
@@ -155,7 +155,7 @@ function AllProduct() {
                 ))}
               </select>
 
-              <select 
+              <select
                 className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
@@ -164,7 +164,7 @@ function AllProduct() {
                 <option value="In Stock">In Stock</option>
                 <option value="Out of Stock">Out of Stock</option>
               </select>
-              
+
               {(searchTerm !== "" || categoryFilter !== "All Categories" || statusFilter !== "All Status") && (
                 <button
                   onClick={resetFilters}
@@ -179,7 +179,7 @@ function AllProduct() {
           {/* Mobile filters dropdown */}
           {isFilterOpen && (
             <div className="mt-4 space-y-3 md:hidden">
-              <select 
+              <select
                 className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
@@ -189,7 +189,7 @@ function AllProduct() {
                 ))}
               </select>
 
-              <select 
+              <select
                 className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
@@ -198,7 +198,7 @@ function AllProduct() {
                 <option value="In Stock">In Stock</option>
                 <option value="Out of Stock">Out of Stock</option>
               </select>
-              
+
               {(searchTerm !== "" || categoryFilter !== "All Categories" || statusFilter !== "All Status") && (
                 <button
                   onClick={resetFilters}
@@ -215,7 +215,7 @@ function AllProduct() {
         <div className="mb-4">
           <p className="text-sm text-gray-600">
             Showing {filteredProducts.length} of {products.length} products
-            {(searchTerm || categoryFilter !== "All Categories" || statusFilter !== "All Status") && 
+            {(searchTerm || categoryFilter !== "All Categories" || statusFilter !== "All Status") &&
               " (filtered)"}
           </p>
         </div>
@@ -257,8 +257,8 @@ function AllProduct() {
                     <div className="flex items-center mt-2">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${p.status === "In Stock"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
                           }`}
                       >
                         {p.status}
@@ -358,8 +358,8 @@ function AllProduct() {
                       <td className="px-4 py-4 whitespace-nowrap md:px-6">
                         <span
                           className={`inline-flex px-2 py-1 text-xs font-semibold leading-5 rounded-full ${p.status === "In Stock"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
                             }`}
                         >
                           {p.status}

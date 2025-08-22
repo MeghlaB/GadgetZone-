@@ -3,6 +3,7 @@ import Banner from '../Components/Banner/Banner';
 import FeaturedCategory from '../Components/FeaturedCategory/FeaturedCategory';
 import FeaturedProduct from '../Components/FeaturedProduct/FeaturedProduct';
 import WhatsAppButton from '../Components/WhatsAppButton/WhatsAppButton';
+import PolicyComponent from '../Components/Policies/Policies';
 
 const Home = () => {
     return (
@@ -12,9 +13,12 @@ const Home = () => {
             </div>
             <div>
                 <FeaturedCategory></FeaturedCategory>
-                <FeaturedProduct/>
+                <FeaturedProduct />
             </div>
-              <WhatsAppButton />
+            <div>
+                <PolicyComponent></PolicyComponent>
+            </div>
+            <WhatsAppButton />
         </div>
     );
 };

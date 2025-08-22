@@ -44,6 +44,7 @@ import ServerStorage from "../Shared/ServerStorage/ServerStorage";
 import TV from "../Shared/Tv/Tv";
 import Orders from "../Dashboard/AdminDashboard/AdminFeauter/Orders";
 import Myorders from "../Dashboard/UserDashboard/UserFeature/Myorders";
+import ProductGrid from "../Components/AllProducts/AllProducts";
 
 
 export const router = createBrowserRouter([
@@ -56,6 +57,12 @@ export const router = createBrowserRouter([
         element: <Home></Home>,
       },
       // submenu category
+      {
+        path: "/allproducts",
+        element: <ProductGrid></ProductGrid>,
+        loader: () => fetch("https://gadgetzone-server.onrender.com/products"),
+        
+      },
       {
         path: "/desktop",
         element: <Desktop />,
