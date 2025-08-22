@@ -453,8 +453,8 @@ const ProductDetails = () => {
 
       if (existingItemIndex !== -1) {
         // Update quantity if product already exists
-        cartItems[existingItemIndex].quantity += 1;
-        toast.info("Product quantity increased in cart!");
+        // cartItems[existingItemIndex].quantity += 1;
+        toast.warning("Product already exist into cart!");
       } else {
         // Add new item to cart
         cartItems.push(cartItem);
