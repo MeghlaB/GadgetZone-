@@ -43,6 +43,7 @@ import PaymentFailed from "../Components/PaymentFailed/PaymentFailed";
 import ServerStorage from "../Shared/ServerStorage/ServerStorage";
 import TV from "../Shared/Tv/Tv";
 import Orders from "../Dashboard/AdminDashboard/AdminFeauter/Orders";
+import Myorders from "../Dashboard/UserDashboard/UserFeature/Myorders";
 
 
 export const router = createBrowserRouter([
@@ -229,6 +230,10 @@ export const router = createBrowserRouter([
       {
         path: "user-profile",
         element: <MyProfile />,
+      },
+      {
+        path: "current-orders",
+        element: <Myorders />,
       },
     ],
   },

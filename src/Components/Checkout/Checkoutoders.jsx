@@ -2,17 +2,22 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "react-router-dom";
-import { FaArrowLeft, FaShoppingCart, FaUser, FaMapMarkerAlt, FaPhone, FaMoneyBillWave, FaLock, FaEnvelope, FaHashtag } from "react-icons/fa";
+import { 
+  FaArrowLeft, 
+  FaShoppingCart, 
+  FaUser, 
+  FaLock 
+} from "react-icons/fa";
 
 import useAxiosPublic from "../../Hooks/UseAxiosPublic";
 import { AuthContext } from "../../Provider/AuthProvider";
 
 const CheckoutOrders = () => {
   const { id } = useParams();
-  const { register, handleSubmit, reset, formState: { errors }, watch } = useForm();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const axiosPublic = useAxiosPublic();
-  const [submitting, setSubmitting] = useState(false);
   const { user } = useContext(AuthContext);
+  const [submitting, setSubmitting] = useState(false);
 
   // Fetch product data
   const { isLoading, isError, data: product = {} } = useQuery({
@@ -25,64 +30,60 @@ const CheckoutOrders = () => {
   });
 
   const quantity = watch("quantity", 1);
-  const totalPrice = product?.price ? (product.price * quantity).toFixed(2) : 0;
+  const totalPrice = product?.price ? (Number(product.price) * Number(quantity)).toFixed(2) : 0;
+
 
   const onSubmit = async (data) => {
-    setSubmitting(true);
+  setSubmitting(true);
 
-    // Prepare order data
-    const orderData = {
-      productId: id,
-      productName: product?.name || "",
-      productImage: product?.image || "",
-      quantity: parseInt(data.quantity),
-      unitPrice: product?.price || 0,
-      totalPrice: parseFloat(totalPrice),
-      customerName: data.name,
-      customerEmail: data.email,
-      userEmail: user?.email || "",
-      shippingAddress: {
-        street: data.street,
-        city: data.city,
-        postalCode: data.postalCode || "",
-        country: data.country
-      },
-      phone: data.phone,
-      orderDate: new Date().toISOString(),
-      status: 'pending'
-    };
-
-    console.log("Order Data:", orderData);
-
-    try {
-      const response = await fetch("http://localhost:5000/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      const result = await response.json();
-      console.log("Server response:", result);
-
-      if (response.ok) {
-        if (result.url) {
-          window.location.replace(result.url);
-        } else {
-          alert("Order placed successfully!");
-          reset();
-        }
-      } else {
-        alert(`Order failed: ${result.message || "Please try again"}`);
-      }
-    } catch (error) {
-      console.error("Error submitting order:", error);
-      alert("Failed to place order. Check your connection or server.");
-    } finally {
-      setSubmitting(false);
-    }
+  const orderData = {
+    productId: id,
+    productName: product?.name || "",
+    productImage: product?.image || "",
+    quantity: Number(data.quantity),
+    unitPrice: Number(product?.price) || 0,
+    totalPrice: Number(totalPrice),
+    customerName: data.name,
+    customerEmail: data.email,
+    userEmail: user?.email || "",
+    shippingAddress: {
+      street: data.street,
+      city: data.city,
+      country: data.country,
+    },
+    phone: data.phone,
+    orderDate: new Date().toISOString(),
+    status: 'pending'
   };
+
+  try {
+    const response = await fetch("https://gadgetzone-server.onrender.com/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    // Redirect to SSLCommerz if URL exists
+  if (result.url) {
+      window.location.href = result.url; 
+    } else {
+      alert("Order placed successfully!");
+    }
+  } catch (error) {
+    // console.error("Error submitting order:", error);
+    alert("Failed to place order. Check your connection or server.");
+  } finally {
+    setSubmitting(false);
+  }
+};
+
+
 
   const LoadingAnimation = () => (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -114,8 +115,7 @@ const CheckoutOrders = () => {
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <Link to={`/product/${id}`} className="inline-flex items-center mb-4 text-blue-600 hover:text-blue-800">
-            <FaArrowLeft className="mr-2" />
-            Back to Product
+            <FaArrowLeft className="mr-2" /> Back to Product
           </Link>
           <h1 className="text-3xl font-bold text-gray-800">Checkout</h1>
           <p className="mt-2 text-gray-600">Complete your purchase securely</p>
@@ -126,8 +126,7 @@ const CheckoutOrders = () => {
           <div className="lg:w-2/5">
             <div className="sticky p-6 bg-white shadow-md rounded-xl top-32">
               <h2 className="flex items-center mb-4 text-xl font-semibold text-gray-800">
-                <FaShoppingCart className="mr-2 text-green-600" />
-                Order Summary
+                <FaShoppingCart className="mr-2 text-green-600" /> Order Summary
               </h2>
 
               <div className="flex items-center p-4 mb-6 space-x-4 rounded-lg bg-gray-50">
@@ -147,12 +146,7 @@ const CheckoutOrders = () => {
                 <div className="flex items-center justify-between py-2">
                   <span className="text-gray-600">Quantity</span>
                   <input
-                    {...register("quantity", {
-                      required: true,
-                      min: 1,
-                      max: 10,
-                      valueAsNumber: true
-                    })}
+                    {...register("quantity", { required: true, min: 1, max: 10, valueAsNumber: true })}
                     type="number"
                     min="1"
                     max="10"
@@ -181,30 +175,24 @@ const CheckoutOrders = () => {
           {/* Payment Form */}
           <div className="lg:w-3/5">
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 bg-white shadow-md rounded-xl md:p-8" noValidate>
-              {/* Customer Info */}
               <h2 className="flex items-center mb-6 text-xl font-semibold text-gray-800">
                 <FaUser className="mr-2 text-blue-600" /> Customer Information
               </h2>
 
               <div className="space-y-6">
-                {/* Name */}
                 <input {...register("name", { required: true })} placeholder="Full Name" className="w-full px-4 py-3 border rounded-md" />
                 {errors.name && <p className="text-red-500 text-sm">Name is required</p>}
 
-                {/* Email */}
                 <input {...register("email", { required: true })} placeholder="Email" className="w-full px-4 py-3 border rounded-md" />
                 {errors.email && <p className="text-red-500 text-sm">Email is required</p>}
 
-                {/* Address */}
                 <input {...register("street", { required: true })} placeholder="Street" className="w-full px-4 py-3 border rounded-md" />
                 <input {...register("city", { required: true })} placeholder="City" className="w-full px-4 py-3 border rounded-md" />
                 <input {...register("country", { required: true })} placeholder="Country" className="w-full px-4 py-3 border rounded-md" />
 
-                {/* Phone */}
                 <input {...register("phone", { required: true })} placeholder="Phone" className="w-full px-4 py-3 border rounded-md" />
                 {errors.phone && <p className="text-red-500 text-sm">Phone is required</p>}
 
-                {/* Submit */}
                 <button
                   type="submit"
                   disabled={submitting}
