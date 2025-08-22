@@ -13,49 +13,57 @@ import {
 import { FaBox, FaMoneyBillWave, FaUserCheck } from 'react-icons/fa';
 
 function AdminHome() {
-  const [stats, setStats] = useState({
-    totalOrders: 0,
-    totalRevenue: 0,
-    totalProducts: 0,
-    totalUsers: 0,
-    pendingOrders: 0,
-    completedOrders: 0
-  });
+  const [stats, setStats] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('month');
 
+  // recent data 
+    useEffect(() => {
+    fetch("https://gadgetzone-server.onrender.com/orders")
+      .then((res) => res.json())
+      .then((data) => {
+        setRecentOrders(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching orders:", err);
+        setLoading(false);
+      });
+  }, []);
+
+
+
+
+
   // Fetch dashboard data
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch stats
-        const statsResponse = await fetch('http://localhost:5000/admin-stats');
-        const statsData = await statsResponse.json();
-        
-        // Fetch recent orders
-        const ordersResponse = await fetch('http://localhost:5000/recent-orders?limit=5');
-        const ordersData = await ordersResponse.json();
-        
-        setStats(statsData);
-        setRecentOrders(ordersData);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-      } finally {
+    setLoading(true);
+    fetch("https://gadgetzone-server.onrender.com/admin/stats?range=" + timeRange)
+      .then((res) => res.json())
+      .then((data) => {
+        setStats(data);
         setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   }, [timeRange]);
 
-  // Stats cards data
+  if (loading || !stats) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-12 h-12 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // Stats cards data - using the actual stats from state
   const statCards = [
     {
       title: 'Total Revenue',
-      value: `৳${stats.totalRevenue?.toLocaleString() || 0}`,
+      value: `৳${(stats.totalRevenue || 0).toLocaleString()}`,
       icon: <DollarSign size={20} />,
       change: '+12.5%',
       trend: 'up',
@@ -63,7 +71,7 @@ function AdminHome() {
     },
     {
       title: 'Total Orders',
-      value: stats.totalOrders?.toLocaleString() || 0,
+      value: (stats.totalOrders || 0).toLocaleString(),
       icon: <ShoppingCart size={20} />,
       change: '+8.2%',
       trend: 'up',
@@ -71,7 +79,7 @@ function AdminHome() {
     },
     {
       title: 'Total Products',
-      value: stats.totalProducts?.toLocaleString() || 0,
+      value: (stats.totalProducts || 0).toLocaleString(),
       icon: <Package size={20} />,
       change: '+3.1%',
       trend: 'up',
@@ -79,7 +87,7 @@ function AdminHome() {
     },
     {
       title: 'Total Users',
-      value: stats.totalUsers?.toLocaleString() || 0,
+      value: (stats.totalUsers || 0).toLocaleString(),
       icon: <Users size={20} />,
       change: '+5.7%',
       trend: 'up',
@@ -181,7 +189,7 @@ function AdminHome() {
                   <p className="text-xs text-gray-500">Awaiting processing</p>
                 </div>
               </div>
-              <span className="text-lg font-bold text-gray-800">{stats.pendingOrders || 0}</span>
+              <span className="text-lg font-bold text-gray-800">{stats.pendingOrders}</span>
             </div>
             
             <div className="flex items-center justify-between">
@@ -194,7 +202,7 @@ function AdminHome() {
                   <p className="text-xs text-gray-500">Successfully delivered</p>
                 </div>
               </div>
-              <span className="text-lg font-bold text-gray-800">{stats.completedOrders || 0}</span>
+              <span className="text-lg font-bold text-gray-800">{stats.completedOrders}</span>
             </div>
             
             <div className="flex items-center justify-between">
@@ -207,7 +215,7 @@ function AdminHome() {
                   <p className="text-xs text-gray-500">This {timeRange}</p>
                 </div>
               </div>
-              <span className="text-lg font-bold text-gray-800">৳{stats.totalRevenue?.toLocaleString() || 0}</span>
+              <span className="text-lg font-bold text-gray-800">৳{stats.totalRevenue.toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -304,7 +312,7 @@ function AdminHome() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">৳{order.totalAmount || 0}</div>
+                      <div className="text-sm text-gray-900">৳{order.totalPrice || 0}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
